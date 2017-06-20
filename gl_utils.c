@@ -8,6 +8,11 @@ void setPixel(GLint x, GLint y) {
     glEnd();
 }
 
+inline GLint round(const GLfloat a) {
+    return GLint(a + 0.5);
+}
+
+//DDA画线算法
 void lineDDA(GLint x0, GLint y0, GLint xEnd, GLint yEnd) {
     GLint dx = xEnd - x0, dy = yEnd - y0;
     GLint steps, k;
@@ -18,5 +23,14 @@ void lineDDA(GLint x0, GLint y0, GLint xEnd, GLint yEnd) {
     else
     {
         steps = fabs(dy);
+    }
+
+    xInc = GLfloat(dx) / GLfloat(steps);
+    yInc = GLfloat(dy) / GLfloat(steps);
+    setPixel(round(x), round(y));
+    for (k = 0; k < steps; k++) {
+        x += xInc;
+        y += yInc;
+        setPixel(round(x), round(y));
     }
 }

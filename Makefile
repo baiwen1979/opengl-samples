@@ -1,5 +1,5 @@
 OBJS = gl_utils.o gl_labs.o gl_main.o
-CC = gcc
+CC = g++
 CFLAGS = -Wall -O -g
 LIB_FLAGS = -lGL -lGLU -lglut
 

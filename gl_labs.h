@@ -1,2 +1,1 @@
-
-void gl_lab01();
+void gl_lab();

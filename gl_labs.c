@@ -1,5 +1,6 @@
 #include <GL/glut.h>
 
+#include "gl_utils.h"
 #include "gl_labs.h"
 
 void init2D() {
@@ -39,6 +40,15 @@ void drawLineSegment() {
       glVertex2i(20, 180); //顶点2
     glEnd(); //结束绘制
     glFlush(); //强制清空所有缓存，并处理OpenGL函数
+}
+
+void drawLineDDA() {
+    glClear(GL_COLOR_BUFFER_BIT); //清除窗口
+    glColor3f(0.0, 0.0, 1.0); //蓝色线段
+    lineDDA(280, 20, 20, 180);
+    glColor3f(0.0, 1.0, 0.0); //绿色线段
+    lineDDA(20, 20, 280, 180);
+    glFlush();
 }
 
 void drawPoints() {
@@ -119,6 +129,6 @@ void gl_lab() {
     glutInitWindowSize(600, 400);
     glutCreateWindow("OpenGL #D View");
     init2D();
-    glutDisplayFunc(drawTriangle);
+    glutDisplayFunc(drawLineDDA);
     glutMainLoop();
 }
