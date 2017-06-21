@@ -103,7 +103,7 @@ inline void circlePlotPoints(GLint xc, GLint yc, GLint px, GLint py) {
     setPixel(xc - py, yc - px);
 }
 
-// 中点画园算法
+// 中点画圆算法
 void circleMidPoint(GLint xc, GLint yc, GLint radius) {
     // 先以圆心在原点的圆进行绘制，从点(0, radius)开始
     GLint x = 0, y = radius;
@@ -127,5 +127,62 @@ void circleMidPoint(GLint xc, GLint yc, GLint radius) {
         // 绘制当前像素点及其所有对称点
         circlePlotPoints(xc, yc, x, y);
     }
+}
 
+// 以指定中心点坐标绘制所有1/4椭圆弧上点(x,y)及其对称点
+inline void ellipsePlotPoints(GLint xc, GLint yc, GLint x, GLint y) {
+    setPixel(xc + x, yc + y);
+    setPixel(xc - x, yc + y);
+    setPixel(xc + x, yc - y);
+    setPixel(xc - x, yc - y);
+}
+
+// 中点椭圆绘制算法
+void ellipseMidPoint(GLint xc, GLint yc, GLint rx, GLint ry) {
+    //为了减少计算量，预先计算的迭代不变量
+    GLint rx2 = rx * rx;  // rx^2
+    GLint ry2 = ry * ry;  // ry^2
+    GLint dblRx2 = 2 * rx2; // 2rx^2
+    GLint dblRy2 = 2 * ry2; // 2ry^2
+    GLint p; //决策参数
+    // (x0,y0) = (0, ry)
+    GLint x = 0; 
+    GLint y = ry;
+    //用于增量计算，对于起始位置(0,ry),px=2(ry^2)*x=0, py=2(rx^2)*y=2(rx^2)*ry
+    GLint px = 0; 
+    GLint py = dblRx2 * y;
+    //绘制每1/4椭圆的第一个点
+    ellipsePlotPoints(xc, yc, x, y);
+
+    //区域1
+    p = round (ry2 - (rx2 * ry) + (0.25 * rx2));
+    while (px < py) {
+        x++;
+        px += dblRy2;
+        if (p < 0) {
+            p += ry2 + px;
+        }
+        else {
+            y--;
+            py -= dblRx2;
+            p += ry2 + px - py;
+        }
+        ellipsePlotPoints(xc, yc, x, y);
+    }
+
+    //区域2
+    p = round(ry2 * (x + 0.5) * (x + 0.5) + rx2 * (y - 1) * (y - 1) - rx2 * ry2);
+    while (y > 0) {
+        y--;
+        py -= dblRx2;
+        if (p > 0) {
+            p += rx2 - py;
+        }
+        else {
+            x++;
+            px += dblRy2;
+            p += rx2 - py + px;
+        }
+        ellipsePlotPoints(xc, yc, x, y);
+    }
 }

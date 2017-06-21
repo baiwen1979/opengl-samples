@@ -57,11 +57,21 @@ void lineDDA(GLint x0, GLint y0, GLint xEnd, GLint yEnd);
 void lineBres(GLint x0, GLint y0, GLint xEnd, GLint yEnd);
 
 /**
- * 使用中点画园算法在屏幕上绘制圆形
+ * 使用中点画圆算法在屏幕上绘制圆形
  * @param xc {GLint} 圆心的x坐标
  * @param yc {GLint} 圆心的y坐标
  * @param radius {GLint} 半径
  * @return {void} 无 
  */
 void circleMidPoint(GLint xc, GLint yc, GLint radius);
+
+/**
+ * 使用中点椭圆算法在屏幕上绘制椭圆
+ * @param xc {GLint} 椭圆中心的x坐标
+ * @param yc {GLint} 椭圆中心的y坐标
+ * @param rx {GLint} x轴半径
+ * @param ry {GLint} y轴半径
+ * @return {void} 无 
+ */
+void ellipseMidPoint(GLint xc, GLint yc, GLint rx, GLint ry);
 

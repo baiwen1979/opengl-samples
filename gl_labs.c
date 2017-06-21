@@ -134,6 +134,13 @@ void drawCircleMidPoint() {
     glFlush();
 }
 
+void drawEllipseMidPoint() {
+    glClear(GL_COLOR_BUFFER_BIT); //清除窗口
+    glColor3f(0.5, 0.0, 0.0); //深红色线条
+    ellipseMidPoint(150, 100, 120, 80);
+    glFlush();
+}
+
 void gl_lab() {
     int argc = 0;
     char** argv = NULL;
@@ -143,6 +150,6 @@ void gl_lab() {
     glutInitWindowSize(600, 400);
     glutCreateWindow("OpenGL #D View");
     init2D();
-    glutDisplayFunc(drawCircleMidPoint);
+    glutDisplayFunc(drawEllipseMidPoint);
     glutMainLoop();
 }
