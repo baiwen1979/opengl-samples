@@ -2,12 +2,14 @@
 #include <math.h>
 #include "gl_utils.h"
 
+// 绘制像素
 void setPixel(GLint x, GLint y) {
     glBegin(GL_POINTS);
       glVertex2f(x, y);
     glEnd();
 }
 
+// 四舍五入
 inline GLint round(const GLfloat a) {
     return GLint(a + 0.5);
 }
@@ -85,6 +87,45 @@ void lineBres (GLint x0, GLint y0, GLint xEnd, GLint yEnd) {
         }
         // 画出当前像素点
         setPixel(x, y);
+    }
+
+}
+
+// 以指定的圆心坐标绘制圆的八个对称点
+inline void circlePlotPoints(GLint xc, GLint yc, GLint px, GLint py) {
+    setPixel(xc + px, yc + py);
+    setPixel(xc - px, yc + py);
+    setPixel(xc + px, yc - py);
+    setPixel(xc - px, yc - py);
+    setPixel(xc + py, yc + px);
+    setPixel(xc - py, yc + px);
+    setPixel(xc + py, yc - px);
+    setPixel(xc - py, yc - px);
+}
+
+// 中点画园算法
+void circleMidPoint(GLint xc, GLint yc, GLint radius) {
+    // 先以圆心在原点的圆进行绘制，从点(0, radius)开始
+    GLint x = 0, y = radius;
+    // 计算决策参数的初始值
+    GLint p = 1 - radius;
+    // 绘制所有八分圆的起始点
+    circlePlotPoints(xc, yc, x, y);
+
+    // 计算1/8圆弧的其余点的坐标并绘制其所有对称点,直到x>=y
+    while (x < y) {
+        x++; //下一个要绘制的像素点的x坐标,x=x+1
+        // 如果当前决策参数p的值为负(<0),下一个要绘制的像素点的y坐标不变，即y=y
+        if (p < 0) {
+            p += 2 * x + 1; //并更新决策参数的值为p=p+2(x+1)+1
+        }
+        // 否则，下一个要绘制的像素点的y坐标为当前值减一，即y=y-1
+        else {
+            y--;
+            p += 2 * (x - y) + 1; //并更新决策参数的值为p=p+2(x+1)-2(y-1)+1
+        }
+        // 绘制当前像素点及其所有对称点
+        circlePlotPoints(xc, yc, x, y);
     }
 
 }

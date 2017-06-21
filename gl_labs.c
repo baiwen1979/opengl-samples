@@ -42,22 +42,6 @@ void drawLineSegment() {
     glFlush(); //强制清空所有缓存，并处理OpenGL函数
 }
 
-void drawLineDDA() {
-    glClear(GL_COLOR_BUFFER_BIT); //清除窗口
-    glColor3f(0.0, 0.0, 1.0); //蓝色线段
-    lineDDA(280, 20, 20, 180);
-    glColor3f(0.0, 1.0, 0.0); //绿色线段
-    lineDDA(20, 20, 280, 180);
-    glFlush();
-}
-
-void drawLineBres() {
-    glClear(GL_COLOR_BUFFER_BIT); //清除窗口
-    glColor3f(0.0, 0.0, 0.0); //黑色线段
-    lineBres(20, 20, 280, 180);
-    glFlush();
-}
-
 void drawPoints() {
     glClear(GL_COLOR_BUFFER_BIT);
     glColor3f(0.0, 0.0, 0.0);
@@ -127,6 +111,29 @@ void drawTriangle() {
     glFlush();
 }
 
+void drawLineDDA() {
+    glClear(GL_COLOR_BUFFER_BIT); //清除窗口
+    glColor3f(0.0, 0.0, 1.0); //蓝色线段
+    lineDDA(280, 20, 20, 180);
+    glColor3f(0.0, 1.0, 0.0); //绿色线段
+    lineDDA(20, 20, 280, 180);
+    glFlush();
+}
+
+void drawLineBres() {
+    glClear(GL_COLOR_BUFFER_BIT); //清除窗口
+    glColor3f(0.0, 0.0, 0.0); //黑色线段
+    lineBres(20, 20, 280, 180);
+    glFlush();
+}
+
+void drawCircleMidPoint() {
+    glClear(GL_COLOR_BUFFER_BIT); //清除窗口
+    glColor3f(1.0, 0.0, 1.0); //品红色线条
+    circleMidPoint(150, 100, 98);
+    glFlush();
+}
+
 void gl_lab() {
     int argc = 0;
     char** argv = NULL;
@@ -136,6 +143,6 @@ void gl_lab() {
     glutInitWindowSize(600, 400);
     glutCreateWindow("OpenGL #D View");
     init2D();
-    glutDisplayFunc(drawLineBres);
+    glutDisplayFunc(drawCircleMidPoint);
     glutMainLoop();
 }
