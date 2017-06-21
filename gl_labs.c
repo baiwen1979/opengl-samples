@@ -51,6 +51,13 @@ void drawLineDDA() {
     glFlush();
 }
 
+void drawLineBres() {
+    glClear(GL_COLOR_BUFFER_BIT); //清除窗口
+    glColor3f(0.0, 0.0, 0.0); //黑色线段
+    lineBres(20, 20, 280, 180);
+    glFlush();
+}
+
 void drawPoints() {
     glClear(GL_COLOR_BUFFER_BIT);
     glColor3f(0.0, 0.0, 0.0);
@@ -129,6 +136,6 @@ void gl_lab() {
     glutInitWindowSize(600, 400);
     glutCreateWindow("OpenGL #D View");
     init2D();
-    glutDisplayFunc(drawLineDDA);
+    glutDisplayFunc(drawLineBres);
     glutMainLoop();
 }

@@ -12,11 +12,18 @@ inline GLint round(const GLfloat a) {
     return GLint(a + 0.5);
 }
 
-//DDA画线算法
+// DDA画线算法
 void lineDDA(GLint x0, GLint y0, GLint xEnd, GLint yEnd) {
+    // 计算两端点之间的水平和垂直距离
     GLint dx = xEnd - x0, dy = yEnd - y0;
+    // 步（迭代次）数和迭代变量（循环控制变量）
     GLint steps, k;
-    GLfloat xInc, yInc, x = x0, y = y0;
+    // x和y坐标的增量
+    GLfloat xInc, yInc;
+    // 从第一个端点开始
+    GLfloat x = x0, y = y0;
+
+    // 以水平和垂直距离绝对值的较大值作为各点绘制的步数
     if (fabs(dx) > fabs(dy)) {
         steps = fabs(dx);
     }
@@ -24,13 +31,60 @@ void lineDDA(GLint x0, GLint y0, GLint xEnd, GLint yEnd) {
     {
         steps = fabs(dy);
     }
-
+    // 计算x坐标和y坐标的迭代增量
     xInc = GLfloat(dx) / GLfloat(steps);
     yInc = GLfloat(dy) / GLfloat(steps);
+    // 画出第一个像素点
     setPixel(round(x), round(y));
+    // 画出其余各点
     for (k = 0; k < steps; k++) {
+        // 计算下一个点的坐标
         x += xInc;
         y += yInc;
+        // 画出当前像素点
         setPixel(round(x), round(y));
     }
+}
+
+// Bresenham 画线算法，斜率|m| < 1.0
+void lineBres (GLint x0, GLint y0, GLint xEnd, GLint yEnd) {
+    // 计算两个端点之间的水平和垂直距离的绝对值
+    GLint dx = fabs(xEnd - x0), dy = fabs(yEnd - y0);
+    // 计算用于决策参数计算的迭代不变量dx, dy, 2dy, 2dy-2dx, 以减少每次迭代的计算量
+    GLint doubleDy = 2 * dy, doubleDyMinusDx = 2 * (dy - dx);
+    // 计算决策参数的初始值
+    GLint p = 2 * dy - dx;
+
+    int x, y; 
+    // 较小值端点作为起点,较大者作为终点
+    if (x0 > xEnd) {
+        x = xEnd;
+        y = yEnd;
+        xEnd = x0;
+        yEnd = y0;
+    }
+    else {
+        x = x0;
+        y = y0;
+    }
+    // 画出第一个像素点
+    setPixel(x, y);
+
+    // 画出其余的所有像素点
+    while (x < xEnd) {
+        x++; // 下一个要画出的像素点的x坐标
+
+        // 若当前决策参数的值小于0,则下一个要画出的像素点的y坐标和当前点一样，即y=y
+        if (p < 0) {
+            p += doubleDy; //更新决策参数为p=p+2dy
+        }
+        // 否则，下一个要画出的像素点的y坐标为当前值增一,即y=y+1
+        else {
+            y++;
+            p += doubleDyMinusDx; //更新决策参数为p=2dy-2dx
+        }
+        // 画出当前像素点
+        setPixel(x, y);
+    }
+
 }
