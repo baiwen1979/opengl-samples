@@ -29,6 +29,12 @@ class Color {
 };
 
 /**
+ * 检查并输出OpenGL内部错误
+ * @return {GLenum} 错误编码
+ */
+GLenum errorCheck ();
+
+/**
  * 在屏幕的指定坐标位置绘制像素点
  * @param x {GLint} 像素点的x坐标
  * @param y {GLint} 像素点的y坐标

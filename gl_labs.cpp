@@ -40,6 +40,7 @@ void drawLineSegment() {
       glVertex2i(20, 180); //顶点2
     glEnd(); //结束绘制
     glFlush(); //强制清空所有缓存，并处理OpenGL函数
+    errorCheck();
 }
 
 void drawPoints() {
