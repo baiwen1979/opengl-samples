@@ -1,4 +1,4 @@
-#include <GL/glut.h>
+#include "gl.h"
 
 #include "gl_utils.h"
 #include "gl_labs.h"

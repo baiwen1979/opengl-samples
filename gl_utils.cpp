@@ -1,5 +1,4 @@
-#include <stdlib.h>
-#include <math.h>
+#include "gl.h"
 #include "gl_utils.h"
 
 // 绘制像素
