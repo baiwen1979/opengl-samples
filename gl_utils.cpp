@@ -20,11 +20,6 @@ void setPixel(GLint x, GLint y) {
     glEnd();
 }
 
-// 四舍五入
-inline GLint round(const GLfloat a) {
-    return GLint(a + 0.5);
-}
-
 // DDA画线算法
 void lineDDA(GLint x0, GLint y0, GLint xEnd, GLint yEnd) {
     // 计算两端点之间的水平和垂直距离
@@ -196,4 +191,30 @@ void ellipseMidPoint(GLint xc, GLint yc, GLint rx, GLint ry) {
         }
         ellipsePlotPoints(xc, yc, x, y);
     }
+}
+
+// 辅助函数：生成正多边形显示列表
+GLuint genRegPolyList(Vec2i center, GLint radius, GLint numEdges, Color4f fillColor) {
+    const GLdouble PI = 3.1415926;
+    GLdouble theta = 0.0;
+    GLuint listId = glGenLists(1); //获取可用的显示列表的ID
+    GLint x, y; //顶点坐标
+    glNewList(listId, GL_COMPILE);
+        glColor3f(fillColor.r, fillColor.g, fillColor.b); //设置填充颜色
+        glBegin(GL_POLYGON);
+            for (int i = 0; i < numEdges; i++) {
+                theta = 2 * PI * i / numEdges;
+                x = center.x + radius * cos(theta);
+                y = center.y + radius * sin(theta);
+                glVertex2i(x, y);
+            }
+        glEnd();
+    glEndList();
+    return listId;
+}
+
+// 绘制正多边形
+void regPolygon(Vec2i center, GLint radius, GLint numEdges, Color4f fillColor) {
+    GLuint listId = genRegPolyList(center, radius, numEdges, fillColor);
+    glCallList(listId);
 }

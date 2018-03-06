@@ -1,17 +1,21 @@
 #include "gl.h"
-
 #include "gl_utils.h"
 #include "gl_labs.h"
+// 显示窗口大小
+const GLsizei WinWidth = 600;
+const GLsizei WinHeight = 400;
 
+// 初始化2D绘图上下文
 void init2D() {
     //设置显示窗口的颜色为白色
     glClearColor(1.0, 1.0, 1.0, 0.0);
     //设置矩阵模式为投影矩阵
     glMatrixMode(GL_PROJECTION);
     //使用glu 2D正交投影
-    gluOrtho2D(0.0, 300.0, 0.0, 200.0);
+    gluOrtho2D(0.0, WinWidth, 0.0, WinHeight);
 }
 
+// 初始化3D绘图上下文
 void init3D() {
     //设置显示窗口的颜色为黑色
     glClearColor(0.1, 0.1, 0.1, 0.0);
@@ -142,15 +146,66 @@ void drawEllipseMidPoint() {
     glFlush();
 }
 
+void drawRegPolygon() {
+    glClear(GL_COLOR_BUFFER_BIT);
+    Vec2i c(WinWidth / 2, WinHeight / 2);
+    Color4f color(1.0, 0.0, 1.0, 1.0);
+    regPolygon(c, 200, 12, color);
+    glFlush();
+}
+
+void drawColoredTriangle() {
+    glClear(GL_COLOR_BUFFER_BIT);
+    glShadeModel(GL_SMOOTH);
+
+    //填充模式(默认)
+    glBegin(GL_TRIANGLES);
+        glColor3f(0.0, 0.0, 1.0);
+        glVertex2i(50, 50);
+        glColor3f(1.0, 0.0, 0.0);
+        glVertex2i(WinWidth / 2, WinHeight - 50);
+        glColor3f(0.0, 1.0, 0.0);
+        glVertex2i(WinWidth - 50, 50);
+    glEnd();
+    //线框模式
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glLineWidth(3.0);
+    glBegin(GL_TRIANGLES);
+        glColor3f(0.0, 0.0, 0.0);
+        //第一个顶点
+        glVertex2i(WinWidth / 2, WinHeight - 50);       
+        //glColor3f(1.0, 0.0, 0.0);
+        //消除第二条边
+        glEdgeFlag(GL_FALSE);
+        //第二个顶点 
+        glVertex2i(50, 50);
+        //glColor3f(0.0, 1.0, 0.0);
+        //显示第三条边
+        glEdgeFlag(GL_TRUE);
+        //第三个顶点
+        glVertex2i(WinWidth - 50, 50);
+    glEnd();
+
+    glFlush();
+}
+
+void onReshape(int newWidth, int newHeight) {
+    glMatrixMode (GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(0.0, (GLdouble)newWidth, 0.0, (GLdouble)newHeight);
+    glClear(GL_COLOR_BUFFER_BIT);
+}
+
 void gl_lab() {
     int argc = 0;
     char** argv = NULL;
     glutInit(&argc,argv);
     glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE);
-    glutInitWindowPosition(0, 0);
-    glutInitWindowSize(600, 400);
+    glutInitWindowPosition(100, 100);
+    glutInitWindowSize(WinWidth, WinHeight);
     glutCreateWindow("OpenGL #D View");
     init2D();
-    glutDisplayFunc(drawEllipseMidPoint);
+    glutDisplayFunc(drawColoredTriangle);
+    //glutReshapeFunc(onReshape);
     glutMainLoop();
 }

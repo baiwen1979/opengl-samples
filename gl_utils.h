@@ -1,31 +1,44 @@
 #include "gl.h"
 
 /**
- * 二维向量
- * @member x {GLfloat} 向量的x值
- * @member y {GLfloat} 向量的y值
- * @usage: vec2 v(1.0, 2,0, 3,0);
+ * 整型二维向量
+ * @member x {GLint} 向量的x值
+ * @member y {GLint} 向量的y值
+ * @usage: vec2i v(1, 2, 3);
  */
-class Vec2 {
-    public:
-    GLfloat x, y;
-    Vec2():x(0.0), y(0.0) {}
-    Vec2(GLfloat xx, GLfloat yy): x(xx), y(yy) {}
+class Vec2i {
+public:
+    GLint x, y;
+    Vec2i():x(0), y(0) {}
+    Vec2i(GLint xx, GLint yy): x(xx), y(yy) {}
 };
 
 /**
- * 颜色值
+ * 浮点型二维向量
+ * @member x {GLfloat} 向量的x值
+ * @member y {GLfloat} 向量的y值
+ * @usage: vec2 v(1.0, 2.0, 3.0);
+ */
+class Vec2f {
+    public:
+    GLfloat x, y;
+    Vec2f():x(0.0), y(0.0) {}
+    Vec2f(GLfloat xx, GLfloat yy): x(xx), y(yy) {}
+};
+
+/**
+ * 浮点型颜色值
  * @member r {GLfloat} 红色分量
  * @member g {GLfloat} 绿色分量
  * @member b {GLfloat} 蓝色分量
  * @member a {GLfloat} alpha分量
- * @usage: color c;
+ * @usage: Color4f c;
  */
-class Color {
+class Color4f {
     public:
     GLfloat r, g, b, a;
-    Color(): r(0.0), g(0.0), b(0.0), a(1.0){}
-    Color(GLfloat rr, GLfloat gg, GLfloat bb, GLfloat aa):r(rr), g(gg), b(bb), a(aa) {}
+    Color4f(): r(0.0), g(0.0), b(0.0), a(1.0){}
+    Color4f(GLfloat rr, GLfloat gg, GLfloat bb, GLfloat aa):r(rr), g(gg), b(bb), a(aa) {}
 };
 
 /**
@@ -80,4 +93,16 @@ void circleMidPoint(GLint xc, GLint yc, GLint radius);
  * @return {void} 无 
  */
 void ellipseMidPoint(GLint xc, GLint yc, GLint rx, GLint ry);
+
+
+/**
+ * 绘制正多边形
+ * @param center {Vec2i} 中心点（坐标）
+ * @param radius {GLint} 半径（顶点距离中心点的距离）
+ * @param numEdges {GLint} 边数（默认6条边）
+ * @param fillColor {Color4f} 填充颜色（默认为红色）
+ * @return {void} 无
+ */
+void regPolygon(Vec2i center, GLint radius, GLint numEdges = 6, Color4f fillColor = Color4f(1.0, 0.0, 0.0, 1.0));
+
 
