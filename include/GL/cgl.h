@@ -1,5 +1,5 @@
-#ifndef __GL_H__
-#define __GL_H__
+#ifndef __CGL_H__
+#define __CGL_H__
 
 #ifdef _WIN32
     #include <windows.h>
@@ -14,4 +14,4 @@
 #include <cstdlib>
 #include <cmath>
 
-#endif //__GL_H__
+#endif //__CGL_H__
