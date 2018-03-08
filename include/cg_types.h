@@ -1,4 +1,4 @@
-#include <GL/gl.h>
+#include <GL/cgl.h>
 // CG数据类型
 /**
  * 整型二维向量
