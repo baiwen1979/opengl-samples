@@ -1,1 +1,0 @@
-void gl_lab();

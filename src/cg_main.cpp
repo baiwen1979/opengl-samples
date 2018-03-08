@@ -1,7 +1,6 @@
-#include "gl_labs.h"
-
+#include "cg_test.h"
 
 int main(int argc,char *argv[]){
-    gl_lab();
+    gl_win();
     return 0;
 }
