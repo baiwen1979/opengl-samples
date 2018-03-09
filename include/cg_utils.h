@@ -63,4 +63,16 @@ void ellipseMidPoint(GLint xc, GLint yc, GLint rx, GLint ry);
  */
 void regPolygon(Vec2i center, GLint radius, GLint numEdges = 6, Color4f fillColor = Color4f(1.0, 0.0, 0.0, 1.0));
 
-
+/**
+ * 打开窗口
+ * @param title {char*} 窗口标题
+ * @param mode {GLenum} 图形模式（默认为3D）
+ * @param width {GLsizei} 窗口宽度（默认为800）
+ * @param height {GLsizei} 窗口高度（默认为600）
+ * @param drawCallback {void(*)()} 窗口绘制（回调）函数（默认为空）
+ */
+void openWindow(const char* title, 
+    void(*drawCallback)() = NULL, 
+    GLsizei width = 800, 
+    GLsizei height = 600, 
+    GLenum mode = GL_2D);

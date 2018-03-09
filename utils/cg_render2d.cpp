@@ -1,17 +1,5 @@
 #include <cg_utils.h>
 
-// 错误检查
-GLenum errorCheck () {
-    GLenum code;
-    const GLubyte *errDesc;
-    code = glGetError ();
-    if (code != GL_NO_ERROR) {
-        errDesc = gluErrorString (code);
-        fprintf(stderr, "OpenGL error: %s\n", errDesc);
-    }
-    return code;
-}
-
 // 绘制像素
 void setPixel(GLint x, GLint y) {
     glBegin(GL_POINTS);
