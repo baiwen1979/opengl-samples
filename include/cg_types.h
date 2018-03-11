@@ -1,6 +1,12 @@
+// CG数据类型定义文件
+
+#ifndef _CG_TYPES_H_
+#define _CG_TYPES_H_
+
 #include <GL/cgl.h>
-// CG数据类型
 // 模板类：二维向量
+namespace cg {
+
 template<typename T>
 class Vec2 {
 public:
@@ -53,3 +59,7 @@ typedef Color4<GLfloat> Color4f;
  * @usage: Color4i c;
  */
 typedef Color4<GLubyte> Color4i;
+
+} //namespace cg
+
+#endif //_CG_TYPES_H_

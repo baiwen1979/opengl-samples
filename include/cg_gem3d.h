@@ -32,7 +32,7 @@ public:
     // 下标设值运算符
     T& operator [] (uint8_t i);
     // 向量规范化
-    Vec3& normalize();
+    Vec3<T>& normalize();
     // 成员变量
     T x, y, z;
 };

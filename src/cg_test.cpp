@@ -2,8 +2,9 @@
 #include "cg_test.hpp"
 #include <cg_gem3d.h>
 
-const GLsizei WinWidth = 800;
-const GLsizei WinHeight = 600;
+// 初始窗口大小
+const GLsizei WIN_WIDTH = 800;
+const GLsizei WIN_HEIGHT = 600;
 
 void renderWireTeapot() {
     //glShadeModel(GL_SMOOTH); 
@@ -112,20 +113,20 @@ void renderLineBres() {
 void renderCircleMidPoint() {
     glClear(GL_COLOR_BUFFER_BIT); //清除窗口
     glColor3f(1.0, 0.0, 1.0); //品红色线条
-    circleMidPoint(WinWidth / 2, WinHeight / 2, WinHeight / 2 - 10);
+    circleMidPoint(WIN_WIDTH / 2, WIN_HEIGHT / 2, WIN_HEIGHT / 2 - 10);
     glFlush();
 }
 
 void renderEllipseMidPoint() {
     glClear(GL_COLOR_BUFFER_BIT); //清除窗口
     glColor3f(0.5, 0.0, 0.0); //深红色线条
-    ellipseMidPoint(WinWidth / 2, WinHeight / 2, 300 , 150);
+    ellipseMidPoint(WIN_WIDTH / 2, WIN_HEIGHT / 2, 300 , 150);
     glFlush();
 }
 
 void renderRegPolygon() {
     glClear(GL_COLOR_BUFFER_BIT);
-    Vec2i c(WinWidth / 2, WinHeight / 2);
+    Vec2i c(WIN_WIDTH / 2, WIN_HEIGHT / 2);
     Color4f color(1.0, 0.0, 1.0, 1.0);
     regPolygon(c, 200, 12, color);
     glFlush();
@@ -140,9 +141,9 @@ void renderColoredTriangle() {
         glColor3f(0.0, 0.0, 1.0);
         glVertex2i(50, 50);
         glColor3f(1.0, 0.0, 0.0);
-        glVertex2i(WinWidth / 2, WinHeight - 50);
+        glVertex2i(WIN_WIDTH / 2, WIN_HEIGHT - 50);
         glColor3f(0.0, 1.0, 0.0);
-        glVertex2i(WinWidth - 50, 50);
+        glVertex2i(WIN_WIDTH - 50, 50);
     glEnd();
     //线框模式
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -150,7 +151,7 @@ void renderColoredTriangle() {
     glBegin(GL_TRIANGLES);
         glColor3f(0.0, 0.0, 0.0);
         //第一个顶点
-        glVertex2i(WinWidth / 2, WinHeight - 50);       
+        glVertex2i(WIN_WIDTH / 2, WIN_HEIGHT - 50);       
         //glColor3f(1.0, 0.0, 0.0);
         //消除第二条边
         glEdgeFlag(GL_FALSE);
@@ -160,7 +161,7 @@ void renderColoredTriangle() {
         //显示第三条边
         glEdgeFlag(GL_TRUE);
         //第三个顶点
-        glVertex2i(WinWidth - 50, 50);
+        glVertex2i(WIN_WIDTH - 50, 50);
     glEnd();
 
     glFlush();
@@ -172,5 +173,5 @@ void test2d() {
     //cout << v1 << v2 << endl;
     v1 + v2;
     cout << v1 - v2;
-    openWindow("CG with OpenGL", renderLineDDA, WinWidth, WinHeight);
+    openWindow("CG with OpenGL", renderLineDDA, WIN_WIDTH, WIN_HEIGHT);
 }

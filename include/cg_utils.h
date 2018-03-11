@@ -1,4 +1,5 @@
 #include <cg_types.h>
+using namespace cg;
 /**
  * 检查并输出OpenGL内部错误
  * @return {GLenum} 错误编码

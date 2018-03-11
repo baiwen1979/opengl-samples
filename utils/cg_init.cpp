@@ -9,37 +9,37 @@ int lastx = 0;
 int lasty = 0;  
 unsigned char mouseButtons[3] = {0};
 
-// 初始化2D绘图上下文
+//初始化2D绘图上下文/
 void init2D(GLsizei width, GLsizei height) {
-    // 设置显示窗口的颜色为白色
+    // 设置显示窗口的颜色为白色/
     glClearColor(1.0, 1.0, 1.0, 0.0);
-    // 设置矩阵模式为投影矩阵
+    // 设置矩阵模式为投影矩阵/
     glMatrixMode(GL_PROJECTION);
-    // 使用glu 2D正交投影
+    // 使用glu 2D正交投影/
     gluOrtho2D(0.0, width, 0.0, height);
 }
 
-// 初始化3D绘图上下文
+// 初始化3D绘图上下文/
 void init3D() {
-    // 设置显示窗口的颜色为黑色
+    // 设置显示窗口的颜色为黑色/
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    // 清除深度缓存
+    // 清除深度缓存/
     glClearDepth(1.0f);
-    // 指定深度比较函数为小于等于
+    // 指定深度比较函数为小于等于/
     glDepthFunc(GL_LEQUAL);
-    // 启用深度测试
+    // 启用深度测试/
     glEnable(GL_DEPTH_TEST);  
-    // 启用多边形（面片）剔除  
+    // 启用多边形（面片）剔除/ 
     glEnable(GL_CULL_FACE);  
-    // 启用规格化
+    // 启用规格化/
     glEnable(GL_NORMALIZE); 
-    // 设置矩阵模式为投影矩阵
+    // 设置矩阵模式为投影矩阵/
     glMatrixMode(GL_PROJECTION);
-    // 使用正交投影矩阵
+    // 使用正交投影矩阵/
     glOrtho(-5, 5, -5, 5, 5, 15);
-    // 设置模型视图矩阵模式
+    // 设置模型视图矩阵模式/
     glMatrixMode(GL_MODELVIEW);
-    // 设置摄像机位置
+    // 设置摄像机位置/
     gluLookAt(0,0,10, 0,0,0, 0,1,0);
 }
 
@@ -48,12 +48,12 @@ void reshapeViewPort(int w, int h) {
     glMatrixMode (GL_PROJECTION);
     glLoadIdentity();
 }
-// 窗口调整事件回调函数，2D模式
+// 窗口调整事件回调函数，2D模式/
 void onReshape2D(int w, int h) {
     reshapeViewPort(w, h);
     gluOrtho2D(0.0, (GLdouble)w, 0.0, (GLdouble)h);
 }
-// 窗口调整事件回调函数，3D正交模式
+// 窗口调整事件回调函数，3D正交模式/
 void onReshape3DOrtho(int w, int h) {
     reshapeViewPort(w, h);
     if (w <= h) {
@@ -68,7 +68,7 @@ void onReshape3DOrtho(int w, int h) {
     glLoadIdentity();
 }
 
-// 鼠标移动事件回调函数
+// 鼠标移动事件回调函数/
 void onMotion(int x, int y)  
 {  
     int diffx = x - lastx;  
@@ -97,7 +97,7 @@ void onMotion(int x, int y)
     glutPostRedisplay();  
 } 
 
-// 鼠标按键事件回调函数
+// 鼠标按键事件回调函数/
 void onMouse(int b, int s, int x, int y)  
 {  
     lastx = x;  
@@ -119,7 +119,7 @@ void onMouse(int b, int s, int x, int y)
     glutPostRedisplay();  
 }   
 
-// 按键事件回调函数
+// 按键事件回调函数/
 void onKeyboard(unsigned char key, int x, int y)  
 {  
     switch(key) {  
@@ -131,38 +131,38 @@ void onKeyboard(unsigned char key, int x, int y)
     }  
 }  
 
-// 打开窗口
+// 打开窗口/
 void openWindow(const char* title, void(*renderCallback)(), 
                 GLsizei width, GLsizei height, GLenum mode){
     int argc = 0;
-    // 初始化GLUT
+    // 初始化GLUT/
     glutInit(&argc, NULL);
-    // 显示模式：双缓存、RGBA
+    // 显示模式：双缓存、RGBA/
     glutInitDisplayMode(GLUT_RGBA | GLUT_SINGLE);
-    // 窗口设置
-    glutInitWindowPosition(100, 100);  //窗口位置
-    glutInitWindowSize(width, height); //窗口尺寸
-    glutCreateWindow(title);           //窗口大小
+    // 窗口设置/
+    glutInitWindowPosition(100, 100);  //窗口位置/
+    glutInitWindowSize(width, height); //窗口尺寸/
+    glutCreateWindow(title);           //窗口大小/
     // 开始渲染
     glutDisplayFunc(renderCallback);
-    // 注册键盘按键事件回调函数
+    // 注册键盘按键事件回调函数/
     glutKeyboardFunc(onKeyboard);
-    // 注册鼠标按键事件回调函数
+    // 注册鼠标按键事件回调函数/
     glutMouseFunc(onMouse);
-    // 注册鼠标移动事件回调函数
+    // 注册鼠标移动事件回调函数/
     glutMotionFunc(onMotion);
     if (mode == GL_2D) {
-        // 注册窗口改变事件回调函数
+        // 注册窗口改变事件回调函数/
         glutReshapeFunc(onReshape2D);
-        // 初始化2D渲染上下文
+        // 初始化2D渲染上下文/
         init2D(width, height);
     }
     else {
-        // 注册窗口改变事件回调函数
+        // 注册窗口改变事件回调函数/
         glutReshapeFunc(onReshape3DOrtho);
-        // 初始化3D渲染上下文
+        // 初始化3D渲染上下文/
         init3D();
     }
-    // 开始GLUT内部消息循环
+    // 开始GLUT内部消息循环/
     glutMainLoop();
 }
