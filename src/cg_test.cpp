@@ -1,5 +1,6 @@
 #include <cg_utils.h>
 #include "cg_test.hpp"
+#include <cg_gem3d.h>
 
 const GLsizei WinWidth = 800;
 const GLsizei WinHeight = 600;
@@ -166,5 +167,10 @@ void renderColoredTriangle() {
 }
 
 void test2d() {
-    openWindow("CG with OpenGL", renderCircleMidPoint, WinWidth, WinHeight);
+    cg::Vec3f v1(1.0);
+    cg::Vec3f v2(2);
+    //cout << v1 << v2 << endl;
+    v1 + v2;
+    cout << v1 - v2;
+    openWindow("CG with OpenGL", renderLineDDA, WinWidth, WinHeight);
 }

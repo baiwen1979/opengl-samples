@@ -7,8 +7,7 @@ float tx = 0;
 float ty = 0;
 int lastx = 0;  
 int lasty = 0;  
-unsigned char Buttons[3] = {0};
-GLenum mode = GL_2D;
+unsigned char mouseButtons[3] = {0};
 
 // 初始化2D绘图上下文
 void init2D(GLsizei width, GLsizei height) {
@@ -44,44 +43,51 @@ void init3D() {
     gluLookAt(0,0,10, 0,0,0, 0,1,0);
 }
 
-// 窗口调整事件回调函数
-void onReshape(int w, int h) {
-    // 避免最小化时出现除零错误
-    if (w = 0) h = 1;
-    glViewport(0, 0, w, h);
+void reshapeViewPort(int w, int h) {
+    glViewport(0, 0, (GLsizei)w, (GLsizei)h);
     glMatrixMode (GL_PROJECTION);
     glLoadIdentity();
-    if (mode == GL_2D) {
-        gluOrtho2D(0.0, (GLdouble)w, 0.0, (GLdouble)h);
-        //glClear(GL_COLOR_BUFFER_BIT);
+}
+// 窗口调整事件回调函数，2D模式
+void onReshape2D(int w, int h) {
+    reshapeViewPort(w, h);
+    gluOrtho2D(0.0, (GLdouble)w, 0.0, (GLdouble)h);
+}
+// 窗口调整事件回调函数，3D正交模式
+void onReshape3DOrtho(int w, int h) {
+    reshapeViewPort(w, h);
+    if (w <= h) {
+        glOrtho(-1.5, 1.5, -1.5 * (GLfloat)h / (GLfloat)w, 
+            1.5 * (GLfloat)h / (GLfloat)w, -10.0, 10.0);
     }
     else {
-        gluPerspective(45, (float)w / h, 0.1, 5000);  
-        glMatrixMode(GL_MODELVIEW);  
-        glLoadIdentity(); 
-    }   
+        glOrtho(-1.5 * (GLfloat)w / (GLfloat)h, 
+            1.5 * (GLfloat)w / (GLfloat)h, -1.5, 1.5, -10.0, 10.0);
+    }
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
 }
 
 // 鼠标移动事件回调函数
-void onMotion(int x,int y)  
+void onMotion(int x, int y)  
 {  
     int diffx = x - lastx;  
     int diffy = y - lasty;  
     lastx = x;  
     lasty = y;  
       
-    if(Buttons[2])  
+    if(mouseButtons[2])  
     {  
         zoom -= (float)1 * diffx * 2;  
     }  
     else {
-        if(Buttons[0])  
+        if(mouseButtons[0])  
         {  
             rotx += (float)1 * diffy;  
             roty += (float)1 * diffx;  
         }  
         else {
-            if(Buttons[1])  
+            if(mouseButtons[1])  
             {  
                 tx += (float)1 * diffx;  
                 ty -= (float)1 * diffy;  
@@ -92,20 +98,20 @@ void onMotion(int x,int y)
 } 
 
 // 鼠标按键事件回调函数
-void onMouse(int b,int s,int x,int y)  
+void onMouse(int b, int s, int x, int y)  
 {  
     lastx = x;  
     lasty = y;  
     switch(b)  
     {  
         case GLUT_LEFT_BUTTON:  
-            Buttons[0] = ((GLUT_DOWN == s)?1:0);  
+            mouseButtons[0] = ((GLUT_DOWN == s)? 1: 0);  
             break;  
         case GLUT_MIDDLE_BUTTON:  
-            Buttons[1] = ((GLUT_DOWN == s)?1:0);  
+            mouseButtons[1] = ((GLUT_DOWN == s)? 1: 0);  
             break;  
         case GLUT_RIGHT_BUTTON:  
-            Buttons[2] = ((GLUT_DOWN == s)?1:0);  
+            mouseButtons[2] = ((GLUT_DOWN == s)? 1: 0);  
             break;  
         default:  
             break;  
@@ -139,7 +145,6 @@ void openWindow(const char* title, void(*renderCallback)(),
     glutCreateWindow(title);           //窗口大小
     // 开始渲染
     glutDisplayFunc(renderCallback);
-    //glutReshapeFunc(onReshape);
     // 注册键盘按键事件回调函数
     glutKeyboardFunc(onKeyboard);
     // 注册鼠标按键事件回调函数
@@ -147,9 +152,15 @@ void openWindow(const char* title, void(*renderCallback)(),
     // 注册鼠标移动事件回调函数
     glutMotionFunc(onMotion);
     if (mode == GL_2D) {
+        // 注册窗口改变事件回调函数
+        glutReshapeFunc(onReshape2D);
+        // 初始化2D渲染上下文
         init2D(width, height);
     }
     else {
+        // 注册窗口改变事件回调函数
+        glutReshapeFunc(onReshape3DOrtho);
+        // 初始化3D渲染上下文
         init3D();
     }
     // 开始GLUT内部消息循环
