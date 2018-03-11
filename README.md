@@ -73,4 +73,12 @@
 
 * 点击Github上本项目源码首页的“clone or download"->"Download Zip"下载[本项目源码](https://github.com/baiwen1979/opengl-samples)的压缩包。
 
-* 解压得到opengl-samples-master文件夹，重命名为opengl-samples
+* 解压得到opengl-samples-master文件夹，重命名为opengl-samples作为本项目的文件夹
+
+* 打开cmake-gui，如图所示:
+
+    <img src="https://images2015.cnblogs.com/blog/62720/201605/62720-20160505042020388-810600337.png"/>
+
+* 将本项目opengl-samples文件夹的完整路径（如:d:\workspace\opengl-samples)输入到上图窗口的“Where is the source code"栏。或者点击“Browse source..."按钮浏览到本项目文件夹。
+
+* Where to build the binaries: 可以是任意一个文件夹，用于保存生成的项目文件，这里我选择生成在Build文件夹下。设置后点击 Configure 后你需要选择项目生成器，使用默认选择Visual Studio 15 2017，然后点“Finish"完成项目配置。
