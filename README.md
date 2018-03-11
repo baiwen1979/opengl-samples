@@ -81,4 +81,12 @@
 
 * 将本项目opengl-samples文件夹的完整路径（如:d:\workspace\opengl-samples)输入到上图窗口的“Where is the source code"栏。或者点击“Browse source..."按钮浏览到本项目文件夹。
 
-* Where to build the binaries: 可以是任意一个文件夹，用于保存生成的项目文件，这里我选择生成在Build文件夹下。设置后点击 Configure 后你需要选择项目生成器，使用默认选择Visual Studio 15 2017，然后点“Finish"完成项目配置。
+* Where to build the binaries: 用于保存生成的Visual Studio项目和解决方案文件，最好选择生成在本项目的opengl-samples\Build文件夹下。设置后点击 Configure 后你需要选择项目生成器，使用默认选择Visual Studio 15 2017，然后点“Finish"完成项目配置。
+
+* 不要理会红色部分，直接点击“Generate"生成Visual Studio 2017项目和解决方案(.sln)
+
+* 然后点击“Open Project"将自动启动Visual Studio 2017打开生成的解决方案
+
+* 在Visual Studio的解决方案管理器中右键单击“CGLab"解决方案，在弹出的菜单中选择“生成解决方案”进行项目的构建。
+
+* 构建成功后，选中解决方案管理器的CGLab项目，点“运行”按钮开始运行和调试。到此，您便可以进行Windows的Opengl学习之旅了。
