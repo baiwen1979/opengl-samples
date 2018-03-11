@@ -6,7 +6,7 @@
 
 ## 使用方法
 ----
-### 1. Linux平台
+### 1. Linux平台
 
 * 使用apt包管理工具下载OpenGL、GLUT和GLEW工具包，具体操作步骤如下：
     
@@ -19,11 +19,11 @@
   4. 安装OpenGL Utility Toolkit 用于支持用户界面窗口
      > sudo apt-get install freeglut3-dev
 
-* 下载并安装linux版本的CMake工具,具体步骤如下：
+* 下载并安装linux版本的CMake工具,具体步骤如下：
 
   1. 从官网下载最新版本的cmake压缩包，输入以下命令解压缩：
      > sudo tar -zxvf cmake-3.9.6.tar.gz
-  2. 进入到解压后的目录，执行以下操作:
+  2. 进入到解压后的目录，执行以下操作:
      > sudo ./bootstrap  
      > sudo make  
      > sudo make install
@@ -42,35 +42,35 @@
   1. 使用Git直接下载本项目源码：
      > git clone https://github.com/baiwen1979/opengl-samples.git
   
-  2. 进入项目文件夹,使用cmake命令构建项目
-     > cd opengl-samples  
+  2. 进入项目文件夹,使用cmake命令构建项目
+     > cd opengl-samples  
      > cd build  
      > cmake .. 
-  3. 使用make命令编译和链接项目源码，并运行可行性程序 
+  3. 使用make命令编译和链接项目源码，并运行可行性程序 
      > make  
      > bin/CGLab
 
 ### 2. MACOS平台
 
-* 从苹果应用商店安装Xcode，具体安装步骤请参考苹果官方文档。安装好Xcode后，OpenGL，GLUT库都已经安装好，无需专门安装。MACOS版的GLEW本项目自带，无需安装。
+* 从苹果应用商店安装Xcode，具体安装步骤请参考苹果官方文档。安装好Xcode后，OpenGL，GLUT库都已经安装好，无需专门安装。MACOS版的GLEW本项目自带，无需安装。
 
-* CMake的源码安装方法与Linux相同。也可以直接下载安装[二进制DMG版本](https://cmake.org/download/)进行安装。
+* CMake的源码安装方法与Linux相同。也可以直接下载安装[二进制DMG版本](https://cmake.org/download/)进行安装。
 
-* 安装Git版本控制工具。有两种安装方法：
+* 安装Git版本控制工具。有两种安装方法：
 
   1. 先安装homebrew，然后通过homebrew安装Git，具体方法请参考homebrew的文档：http://brew.sh/
   2. 第二种方法更简单，也是推荐的方法，就是直接使用Xcode的集成的Git，默认没有安装，你需要运行Xcode，选择菜单“Xcode”->“Preferences”，在弹出窗口中找到“Downloads”，选择“Command Line Tools”，点“Install”就可以完成安装了。
 
-* 下载并使用本项目的步骤和LINUX相同。
+* 下载并使用本项目的步骤和LINUX相同。
 
 ## Windows + Visual Studio 2017 平台
 
 * 从微软官方网站下载并安装Visual Studio Community 2017。【注意】一定要安装C++语言支持，具体步骤问度娘。
 
-* 下载Cmake的Windows安装包(.msi)，注意要根据您Windows的位数（32/64）选择相应的版本（x86/x64)。下载地址为：[https://cmake.org/download/]  下载完成后，双击安装即可，在安装向导中,要选择为所有用户添加Cmake到PATH系统环境变量，如图所示：
+* 下载Cmake的Windows安装包(.msi)，注意要根据您Windows的位数（32/64）选择相应的版本（x86/x64)。下载地址为：[https://cmake.org/download/]  下载完成后，双击安装即可，在安装向导中,要选择为所有用户添加Cmake到PATH系统环境变量，如图所示：
 
     <img src="http://img.blog.csdn.net/20160830035822836"/>
 
-* 点击Github上本项目源码首页的“clone or download"->"Download Zip"下载[本项目源码](https://github.com/baiwen1979/opengl-samples)的压缩包。
+* 点击Github上本项目源码首页的“clone or download"->"Download Zip"下载[本项目源码](https://github.com/baiwen1979/opengl-samples)的压缩包。
 
-* 解压得到opengl-samples-master文件夹，重命名为opengl-samples
+* 解压得到opengl-samples-master文件夹，重命名为opengl-samples
