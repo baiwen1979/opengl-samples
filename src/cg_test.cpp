@@ -2,6 +2,8 @@
 #include "cg_test.hpp"
 #include <cg_gem3d.h>
 
+using namespace cg;
+
 // 初始窗口大小
 const GLsizei WIN_WIDTH = 800;
 const GLsizei WIN_HEIGHT = 600;
@@ -9,7 +11,7 @@ const GLsizei WIN_HEIGHT = 600;
 void renderWireTeapot() {
     //glShadeModel(GL_SMOOTH); 
     glClear(GL_COLOR_BUFFER_BIT); 
-    glColor3f(1.0,1.0,0);
+    glColor3f(1.0, 1.0, 0);
     glutWireTeapot(3);
     glFlush();
 }
@@ -18,8 +20,8 @@ void renderLineSegment() {
     glClear(GL_COLOR_BUFFER_BIT); //清除窗口
     glColor3f(1.0, 0.0, 0.0); //红色线段
     glBegin (GL_LINES); //开始绘制线段
-      glVertex2i(280, 20); //顶点1
-      glVertex2i(20, 180); //顶点2
+      glVertex2i(WIN_WIDTH - 10, WIN_HEIGHT-10); //顶点1
+      glVertex2i(10, 10); //顶点2
     glEnd(); //结束绘制
     glFlush(); //强制清空所有缓存，并处理OpenGL函数
     errorCheck();
@@ -27,12 +29,14 @@ void renderLineSegment() {
 
 void renderPoints() {
     glClear(GL_COLOR_BUFFER_BIT);
-    glColor3f(0.0, 0.0, 0.0);
+    glColor3f(1.0, 0.0, 0.0);
+
+    glPointSize(10.0);
 
     glBegin(GL_POINTS);
-      glVertex2i(280, 20);
-      glVertex2i(20, 20);
-      glVertex2i(150, 180);
+      glVertex2i(WIN_WIDTH / 2, WIN_HEIGHT - 100);
+      glVertex2i(100, 100);
+      glVertex2i(WIN_WIDTH - 100, 100);
     glEnd();
 
     glFlush();
@@ -41,9 +45,12 @@ void renderPoints() {
 void renderPointsV() {
     glClear(GL_COLOR_BUFFER_BIT);
     glColor3f(1.0, 0.0, 0.0);
-    int point1[] = {280, 20};
+
+    glPointSize(20);
+
+    int point1[] = {WIN_WIDTH / 2, WIN_HEIGHT - 20};
     int point2[] = {20, 20};
-    int point3[] = {150, 180};
+    int point3[] = {WIN_WIDTH - 20, 20};
 
     glBegin(GL_POINTS);
       glVertex2iv(point1);
@@ -57,9 +64,10 @@ void renderPointsV() {
 void renderTriangle() {
     glClear(GL_COLOR_BUFFER_BIT);
     glColor3f(1.0, 0.0, 0.0);
-    int p1[] = {20, 20};
-    int p2[] = {280, 20};
-    int p3[] = {150, 180};
+
+    int p1[] = {WIN_WIDTH / 2 , WIN_HEIGHT - 20};
+    int p2[] = {20, 20};
+    int p3[] = {WIN_WIDTH - 20, 20};
 
 
     /* GL_LINES: 连接每一对相邻顶点
@@ -96,22 +104,26 @@ void renderTriangle() {
 
 void renderLineDDA() {
     glClear(GL_COLOR_BUFFER_BIT); //清除窗口
+
+    glPointSize(10);
+
     glColor3f(0.0, 0.0, 1.0); //蓝色线段
-    lineDDA(280, 20, 20, 180);
-    glColor3f(0.0, 1.0, 0.0); //绿色线段
-    lineDDA(20, 20, 280, 180);
+    lineDDA(WIN_WIDTH - 20, 20, 20, WIN_HEIGHT - 20);
+    glColor3f(1.0, 0.0, 0.0); //红色线段
+    lineDDA(20, 20, WIN_WIDTH - 20, WIN_HEIGHT - 20);
     glFlush();
 }
 
 void renderLineBres() {
     glClear(GL_COLOR_BUFFER_BIT); //清除窗口
     glColor3f(0.0, 0.0, 0.0); //黑色线段
-    lineBres(20, 20, 280, 180);
+    lineBres(20, 20, WIN_WIDTH - 20, WIN_HEIGHT - 20);
     glFlush();
 }
 
 void renderCircleMidPoint() {
     glClear(GL_COLOR_BUFFER_BIT); //清除窗口
+    glPointSize(8);
     glColor3f(1.0, 0.0, 1.0); //品红色线条
     circleMidPoint(WIN_WIDTH / 2, WIN_HEIGHT / 2, WIN_HEIGHT / 2 - 10);
     glFlush();
@@ -119,16 +131,18 @@ void renderCircleMidPoint() {
 
 void renderEllipseMidPoint() {
     glClear(GL_COLOR_BUFFER_BIT); //清除窗口
+    glPointSize(8);
     glColor3f(0.5, 0.0, 0.0); //深红色线条
-    ellipseMidPoint(WIN_WIDTH / 2, WIN_HEIGHT / 2, 300 , 150);
+    ellipseMidPoint(WIN_WIDTH / 2, WIN_HEIGHT / 2, WIN_WIDTH / 4 , WIN_HEIGHT / 4);
     glFlush();
 }
 
 void renderRegPolygon() {
     glClear(GL_COLOR_BUFFER_BIT);
+    glPointSize(4);
     Vec2i c(WIN_WIDTH / 2, WIN_HEIGHT / 2);
     Color4f color(1.0, 0.0, 1.0, 1.0);
-    regPolygon(c, 200, 12, color);
+    regPolygon(c, WIN_HEIGHT / 2, 12, color);
     glFlush();
 }
 
@@ -167,6 +181,25 @@ void renderColoredTriangle() {
     glFlush();
 }
 
+void testGem3d() {
+    Vec3f v(0, 1, 2); 
+    std::cerr << v << std::endl; 
+    Mat4f a, b, c; 
+    c = a * b; 
+ 
+    Mat4f d(
+        0.707107,  0,        -0.707107, 0, 
+        -0.331295, 0.883452, -0.331295, 0, 
+        0.624695,  0.468521, 0.624695,  0, 
+        4.000574,  3.00043,  4.000574,  1
+    );
+
+    std::cerr << d << std::endl; 
+    d.invert(); 
+    std::cerr << d << std::endl; 
+}
+
 void test2d() {
-    openWindow("CG with OpenGL", renderLineDDA, WIN_WIDTH, WIN_HEIGHT);
+    testGem3d();
+    openWindow("CG with OpenGL", renderRegPolygon, WIN_WIDTH, WIN_HEIGHT);
 }

@@ -52,10 +52,10 @@ typedef Color4<GLfloat> Color4f;
 
 /**
  * 整型型颜色值
- * @member r {GLint} 红色分量
- * @member g {GLint} 绿色分量
- * @member b {GLint} 蓝色分量
- * @member a {GLint} alpha分量
+ * @member r {GLubyte} 红色分量
+ * @member g {GLubyte} 绿色分量
+ * @member b {GLubyte} 蓝色分量
+ * @member a {GLubyte} alpha分量
  * @usage: Color4i c;
  */
 typedef Color4<GLubyte> Color4i;
