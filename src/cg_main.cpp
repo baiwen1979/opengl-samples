@@ -2,6 +2,7 @@
 #include "cg_test.hpp"
 
 int main(int argc,char *argv[]){
-    test2d();
+    testRenders2d();
+    //testRendersLab();
     return 0;
 }

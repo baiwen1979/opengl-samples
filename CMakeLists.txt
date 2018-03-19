@@ -75,9 +75,9 @@ link_directories(${PROJECT_LIB_DIR})
 # 添加项目工具库子目录
 add_subdirectory(utils)
 # 添加项目3D几何对象库子目录
-add_subdirectory(gem3d)
+add_subdirectory(math3d)
 # 设置项目自定义库
-set(PROJECT_LIBS CGUtils CGGem3d)
+set(PROJECT_LIBS CGUtils CGMath3d)
 
 # 将SRC目录下的所有*.cpp和*.hpp文件作为编译器输入
 file(GLOB SRC_FILES "./src/*.hpp" "./src/*.cpp")

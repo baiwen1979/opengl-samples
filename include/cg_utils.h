@@ -66,14 +66,17 @@ void regPolygon(Vec2i center, GLint radius, GLint numEdges = 6, Color4f fillColo
 
 /**
  * 打开窗口
+ * @param renderCallback {void(*)()} 窗口绘制（回调）函数（默认为空）
  * @param title {char*} 窗口标题
- * @param mode {GLenum} 图形模式（默认为3D）
- * @param width {GLsizei} 窗口宽度（默认为800）
- * @param height {GLsizei} 窗口高度（默认为600）
- * @param drawCallback {void(*)()} 窗口绘制（回调）函数（默认为空）
+ * @param initCallback {void(*)(void*)} 窗口初始化（回调）函数（默认为空）
+ * @param initParam {void*} 传递给窗口初始化函数的初始化参数
+ * @param rect {Recti} 窗口矩形区域，默认位置为(100,100)，默认大小为(800,600)
  */
-void openWindow(const char* title, 
-    void(*drawCallback)() = NULL, 
-    GLsizei width = 800, 
-    GLsizei height = 600, 
-    GLenum mode = GL_2D);
+void openGlWindow ( 
+    void(*renderCallback)(),
+    const char* title = "Computer Graphics with OpenGL",
+    void(*initGlCallback)(void*) = NULL,
+    void* initParam = NULL,
+    Recti rect = Recti(100, 100, 800, 600),
+    GLenum glMode = GL_2D
+);

@@ -1,6 +1,6 @@
 #include <cg_utils.h>
 #include "cg_test.hpp"
-#include <cg_gem3d.h>
+#include <cg_math3d.h>
 
 using namespace cg;
 
@@ -13,7 +13,7 @@ void renderWireTeapot() {
     glClear(GL_COLOR_BUFFER_BIT); 
     glColor3f(1.0, 1.0, 0);
     glutWireTeapot(3);
-    glFlush();
+    glutSwapBuffers();
 }
 
 void renderLineSegment() {
@@ -23,7 +23,7 @@ void renderLineSegment() {
       glVertex2i(WIN_WIDTH - 10, WIN_HEIGHT-10); //顶点1
       glVertex2i(10, 10); //顶点2
     glEnd(); //结束绘制
-    glFlush(); //强制清空所有缓存，并处理OpenGL函数
+    glutSwapBuffers(); //交换前后缓存
     errorCheck();
 }
 
@@ -39,7 +39,7 @@ void renderPoints() {
       glVertex2i(WIN_WIDTH - 100, 100);
     glEnd();
 
-    glFlush();
+    glutSwapBuffers(); //交换前后缓存
 }
 
 void renderPointsV() {
@@ -58,7 +58,7 @@ void renderPointsV() {
       glVertex2iv(point3);
     glEnd();
 
-    glFlush();
+    glutSwapBuffers(); //交换前后缓存
 }
 
 void renderTriangle() {
@@ -99,7 +99,7 @@ void renderTriangle() {
       glVertex2iv(p3);
     glEnd();
     
-    glFlush();
+    glutSwapBuffers(); //交换前后缓存;
 }
 
 void renderLineDDA() {
@@ -111,14 +111,14 @@ void renderLineDDA() {
     lineDDA(WIN_WIDTH - 20, 20, 20, WIN_HEIGHT - 20);
     glColor3f(1.0, 0.0, 0.0); //红色线段
     lineDDA(20, 20, WIN_WIDTH - 20, WIN_HEIGHT - 20);
-    glFlush();
+    glutSwapBuffers(); //交换前后缓存
 }
 
 void renderLineBres() {
     glClear(GL_COLOR_BUFFER_BIT); //清除窗口
     glColor3f(0.0, 0.0, 0.0); //黑色线段
     lineBres(20, 20, WIN_WIDTH - 20, WIN_HEIGHT - 20);
-    glFlush();
+    glutSwapBuffers(); //交换前后缓存
 }
 
 void renderCircleMidPoint() {
@@ -126,7 +126,7 @@ void renderCircleMidPoint() {
     glPointSize(8);
     glColor3f(1.0, 0.0, 1.0); //品红色线条
     circleMidPoint(WIN_WIDTH / 2, WIN_HEIGHT / 2, WIN_HEIGHT / 2 - 10);
-    glFlush();
+    glutSwapBuffers(); //交换前后缓存
 }
 
 void renderEllipseMidPoint() {
@@ -134,7 +134,7 @@ void renderEllipseMidPoint() {
     glPointSize(8);
     glColor3f(0.5, 0.0, 0.0); //深红色线条
     ellipseMidPoint(WIN_WIDTH / 2, WIN_HEIGHT / 2, WIN_WIDTH / 4 , WIN_HEIGHT / 4);
-    glFlush();
+    glutSwapBuffers(); //交换前后缓存
 }
 
 void renderRegPolygon() {
@@ -143,7 +143,7 @@ void renderRegPolygon() {
     Vec2i c(WIN_WIDTH / 2, WIN_HEIGHT / 2);
     Color4f color(1.0, 0.0, 1.0, 1.0);
     regPolygon(c, WIN_HEIGHT / 2, 12, color);
-    glFlush();
+    glutSwapBuffers(); //交换前后缓存
 }
 
 void renderColoredTriangle() {
@@ -178,13 +178,14 @@ void renderColoredTriangle() {
         glVertex2i(WIN_WIDTH - 50, 50);
     glEnd();
 
-    glFlush();
+    glutSwapBuffers(); //交换前后缓存
 }
 
-void testGem3d() {
+void testMath3d() {
     Vec3f v(0, 1, 2); 
     std::cerr << v << std::endl; 
     Mat4f a, b, c; 
+    cout << a << endl;
     c = a * b; 
  
     Mat4f d(
@@ -199,7 +200,7 @@ void testGem3d() {
     std::cerr << d << std::endl; 
 }
 
-void test2d() {
-    testGem3d();
-    openWindow("CG with OpenGL", renderRegPolygon, WIN_WIDTH, WIN_HEIGHT);
+void testRenders2d() {
+    // testMath3d();
+    openGlWindow(renderRegPolygon);
 }

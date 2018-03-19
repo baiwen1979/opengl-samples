@@ -10,13 +10,11 @@ int lasty = 0;
 unsigned char mouseButtons[3] = {0};
 
 //初始化2D绘图上下文/
-void init2D(GLsizei width, GLsizei height) {
+void init2D() {
     // 设置显示窗口的颜色为白色/
     glClearColor(1.0, 1.0, 1.0, 0.0);
     // 设置矩阵模式为投影矩阵/
     glMatrixMode(GL_PROJECTION);
-    // 使用glu 2D正交投影/
-    gluOrtho2D(0.0, width, 0.0, height);
 }
 
 // 初始化3D绘图上下文/
@@ -129,33 +127,34 @@ void onKeyboard(unsigned char key, int x, int y)
             exit(0);  
             break;  
     }  
-}  
+}
 
-// 打开窗口/
-void openWindow(const char* title, void(*renderCallback)(), 
-                GLsizei width, GLsizei height, GLenum mode){
+void createGlWindow(const char* title, Recti rect) {
     int argc = 0;
     // 初始化GLUT/
     glutInit(&argc, NULL);
     // 显示模式：双缓存、RGBA/
-    glutInitDisplayMode(GLUT_RGBA | GLUT_SINGLE);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
     // 窗口设置/
-    glutInitWindowPosition(100, 100);  //窗口位置/
-    glutInitWindowSize(width, height); //窗口尺寸/
-    glutCreateWindow(title);           //窗口大小/
-    // 开始渲染
-    glutDisplayFunc(renderCallback);
+    glutInitWindowPosition(rect.x, rect.y);  //窗口位置/
+    glutInitWindowSize(rect.w, rect.h);      //窗口尺寸/
+    glutCreateWindow(title);       //窗口标题/
+}
+
+void initGlWindow(void* param) {
+    GLenum* mode = (GLenum*)param;
     // 注册键盘按键事件回调函数/
     glutKeyboardFunc(onKeyboard);
     // 注册鼠标按键事件回调函数/
     glutMouseFunc(onMouse);
     // 注册鼠标移动事件回调函数/
     glutMotionFunc(onMotion);
-    if (mode == GL_2D) {
+
+    if (*mode == GL_2D) {
         // 注册窗口改变事件回调函数/
         glutReshapeFunc(onReshape2D);
         // 初始化2D渲染上下文/
-        init2D(width, height);
+        init2D();
     }
     else {
         // 注册窗口改变事件回调函数/
@@ -163,6 +162,35 @@ void openWindow(const char* title, void(*renderCallback)(),
         // 初始化3D渲染上下文/
         init3D();
     }
+
+}
+
+// 打开窗口/
+void openGlWindow (
+    void(*renderCallback)(), const char* title, 
+    void(*initGlCallback)(void*), void* initParam, 
+    Recti rect, GLenum glMode) {
+    // 创建OpenGL窗口
+    createGlWindow(title, rect);
+    // 初始化GLEW
+    GLenum res = glewInit();   
+    if (res != GLEW_OK) {
+        fprintf(stderr, "Error: '%s'\n", glewGetErrorString(res));
+        return;
+    }
+    cout << "OpenGL Vender: " << glGetString(GL_VENDOR) << endl;
+    cout << "OpenGL Renderer: " << glGetString(GL_RENDERER) << endl;
+    cout << "OpenGL Version: " << glGetString(GL_VERSION) << endl;
+    // 初始化GL
+    if (initGlCallback) {
+        initGlCallback(initParam);
+    }
+    else {
+        initGlWindow(&glMode);
+    }
+
+    // 注册渲染函数
+    glutDisplayFunc(renderCallback);
     // 开始GLUT内部消息循环/
     glutMainLoop();
 }

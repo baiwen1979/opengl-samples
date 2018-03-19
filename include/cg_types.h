@@ -19,11 +19,21 @@ public:
 template<typename T>
 class Color4 {
 public:    
-    Color4(): r(0), g(0), b(0), a(1){}
+    Color4(): r(0), g(0), b(0), a(1) {}
     Color4(T rr, T gg, T bb, T aa):r(rr), g(gg), b(bb), a(aa) {}
     T r, g, b, a;
 };
 
+// 模板类：矩形
+template<typename T>
+class Rect {
+public:
+    Rect(T w, T h): x(0), y(0), w(w), h(h) {}
+    Rect(T xx, T yy, T ww, T hh): x(xx), y(yy), w(ww), h(hh) {}
+    T x, y;
+    T w, h;
+    T area() const { return w * h; }
+};
 /**
  * 整型二维向量
  * @member x {GLint} 向量的x值
@@ -51,7 +61,7 @@ typedef Vec2<GLfloat> Vec2f;
 typedef Color4<GLfloat> Color4f;
 
 /**
- * 整型型颜色值
+ * 整型颜色值
  * @member r {GLubyte} 红色分量
  * @member g {GLubyte} 绿色分量
  * @member b {GLubyte} 蓝色分量
@@ -59,6 +69,22 @@ typedef Color4<GLfloat> Color4f;
  * @usage: Color4i c;
  */
 typedef Color4<GLubyte> Color4i;
+
+/**
+ * 浮点型矩形
+ * @member width {GLfloat} 高度
+ * @member height {GLfloat} 宽度
+ * @usage: Rectf r;
+ */
+typedef Rect<GLfloat> Rectf;
+
+/**
+ * 整型矩形
+ * @member r {GLint} 高度
+ * @member g {GLint} 宽度
+ * @usage: Recti r;
+ */
+typedef Rect<GLint> Recti;
 
 } //namespace cg
 

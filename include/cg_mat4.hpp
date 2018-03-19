@@ -48,7 +48,7 @@ public:
     static void multiply(const Mat4<T> &a, const Mat4& b, Mat4 &c);
 
     /* 成员变量 */
-    T x[4][4] = {{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}};
+    T x[4][4];
 };
 
 }
