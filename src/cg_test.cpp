@@ -116,16 +116,35 @@ void renderLineDDA() {
 
 void renderLineBres() {
     glClear(GL_COLOR_BUFFER_BIT); //清除窗口
+    glPointSize(4);
     glColor3f(0.0, 0.0, 0.0); //黑色线段
+    lineBres(20, 20, WIN_WIDTH - 20, WIN_HEIGHT - 20);
+    glutSwapBuffers(); //交换前后缓存
+}
+
+void renderLinePPC() {
+    glClear(GL_COLOR_BUFFER_BIT); //清除窗口
+    glPointSize(4);
+    glColor3f(0.0, 0.0, 1.0); //蓝色线段
+    linePPC(WIN_WIDTH - 20, 20, 20, WIN_HEIGHT - 20);
+    glColor3f(0.0, 1.0, 0.0); //绿色线段
     lineBres(20, 20, WIN_WIDTH - 20, WIN_HEIGHT - 20);
     glutSwapBuffers(); //交换前后缓存
 }
 
 void renderCircleMidPoint() {
     glClear(GL_COLOR_BUFFER_BIT); //清除窗口
-    glPointSize(8);
+    glPointSize(2);
     glColor3f(1.0, 0.0, 1.0); //品红色线条
     circleMidPoint(WIN_WIDTH / 2, WIN_HEIGHT / 2, WIN_HEIGHT / 2 - 10);
+    glutSwapBuffers(); //交换前后缓存
+}
+
+void renderCircleBres() {
+    glClear(GL_COLOR_BUFFER_BIT); //清除窗口
+    glPointSize(4);
+    glColor3f(0.0, 1.0, 0.0); //绿线条
+    circleBres(WIN_WIDTH / 2, WIN_HEIGHT / 2, WIN_HEIGHT / 2 - 10);
     glutSwapBuffers(); //交换前后缓存
 }
 
@@ -134,6 +153,14 @@ void renderEllipseMidPoint() {
     glPointSize(8);
     glColor3f(0.5, 0.0, 0.0); //深红色线条
     ellipseMidPoint(WIN_WIDTH / 2, WIN_HEIGHT / 2, WIN_WIDTH / 4 , WIN_HEIGHT / 4);
+    glutSwapBuffers(); //交换前后缓存
+}
+
+void renderArcAngDiscrete() {
+    glClear(GL_COLOR_BUFFER_BIT); //清除窗口
+    glLineWidth(2);
+    glColor3f(0.0, 0.0, 0.0); //黑线条
+    arcAngDiscrete(WIN_WIDTH / 2, WIN_HEIGHT / 2, WIN_HEIGHT / 2 - 10);
     glutSwapBuffers(); //交换前后缓存
 }
 
@@ -200,7 +227,8 @@ void testMath3d() {
     std::cerr << d << std::endl; 
 }
 
-void testRenders2d() {
+void testPrimitive2d() {
     // testMath3d();
-    openGlWindow(renderRegPolygon);
+    // openGlWindow(renderArcAngDiscrete);
+    openGlWindow(renderCircleMidPoint);
 }

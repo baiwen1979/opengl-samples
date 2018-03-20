@@ -81,7 +81,62 @@ void lineBres (GLint x0, GLint y0, GLint xEnd, GLint yEnd) {
         // 画出当前像素点
         setPixel(x, y);
     }
+}
 
+// 逐点比较法画线算法
+void linePPC(GLint x0, GLint y0, GLint xEnd, GLint yEnd) {
+    // 平移后的画笔坐标（从原点开始）
+    GLint x = 0, y = 0;
+    // 平移后的终点坐标
+    GLint xA, yA;
+    // 画线时的起点坐标
+    GLint xS, yS;
+    // 平移坐标，使y值较小的点位于坐标原点
+    if (y0 > yEnd) {
+        yA = y0 - yEnd;
+        xA = x0 - xEnd;
+
+        xS = xEnd;
+        yS = yEnd;
+    }
+    else {
+        yA = yEnd - y0;
+        xA = xEnd - x0;
+
+        xS = x0;
+        yS = y0;
+    }
+    
+    GLint F = 0;
+
+    int n = abs(xA) + abs(yA);
+
+    if (xA > 0) { // 斜率为正
+        for (int i = 0; i < n; i++) {
+            if (F < 0) {
+                y++;
+                F += xA;
+            }
+            else {
+                x++;
+                F -= yA;
+            }
+            setPixel(xS + x, yS + y);
+        }
+    }
+    else { // 斜率为负
+        for (int i = 0; i < n; i++) {
+            if (F < 0) {
+                x--;
+                F += yA;
+            }
+            else {
+                y++;
+                F += xA;
+            }
+            setPixel(xS + x, yS + y);
+        }
+    }
 }
 
 // 以指定的圆心坐标绘制圆的八个对称点
@@ -96,30 +151,82 @@ inline void circlePlotPoints(GLint xc, GLint yc, GLint px, GLint py) {
     setPixel(xc - py, yc - px);
 }
 
+void circleBres(GLint xc, GLint yc, GLint radius) {
+    // （递推公式的）初始像素为(0, radius)
+    int x = 0, y = radius;
+    // 决策参数（判别式）的初始值: d = 3 - 2r;
+    GLint d = 3 - 2 * radius;
+    // 先绘制八分圆的初始像素
+    circlePlotPoints(xc, yc, x, y);
+    while (x < y) {
+        if (d < 0) {
+            d += 4 * x + 6;
+        }
+        else {
+            d += 4 * (x - y) + 10;
+            y--;
+        }
+        x++;
+        // 绘制当前像素及所有对称点
+        circlePlotPoints(xc, yc, x, y);
+    }
+}
+
 // 中点画圆算法
 void circleMidPoint(GLint xc, GLint yc, GLint radius) {
     // 先以圆心在原点的圆进行绘制，从点(0, radius)开始
     GLint x = 0, y = radius;
     // 计算决策参数的初始值
-    GLint p = 1 - radius;
+    GLint d = 1 - radius;
     // 绘制所有八分圆的起始点
     circlePlotPoints(xc, yc, x, y);
 
     // 计算1/8圆弧的其余点的坐标并绘制其所有对称点,直到x>=y
     while (x < y) {
-        x++; //下一个要绘制的像素点的x坐标,x=x+1
-        // 如果当前决策参数p的值为负(<0),下一个要绘制的像素点的y坐标不变，即y=y
-        if (p < 0) {
-            p += 2 * x + 1; //并更新决策参数的值为p=p+2(x+1)+1
+        // 如果当前决策参数p的值为负(<0)
+        if (d < 0) {
+            d += 2 * x + 3; // 并更新决策参数的值为d=d+2x+3
+            //下一个要绘制的像素点的y坐标不变，即y=y
         }
-        // 否则，下一个要绘制的像素点的y坐标为当前值减一，即y=y-1
+        // 否则
         else {
-            y--;
-            p += 2 * (x - y) + 1; //并更新决策参数的值为p=p+2(x+1)-2(y-1)+1
+            d += 2 * (x - y) + 5; //并更新决策参数的值为d=d+2x-2y+5
+            y--; // 下一个要绘制的像素点的y坐标为当前值减一，即y=y-1
         }
+        x++; //下一个要绘制的像素点的x坐标,x=x+1
         // 绘制当前像素点及其所有对称点
         circlePlotPoints(xc, yc, x, y);
     }
+}
+
+// 使用角度离散法绘制圆弧
+void arcAngDiscrete(GLint xc, GLint yc, GLint radius, GLfloat radStart, GLfloat radEnd) {
+    // 如果终止角比起始角还小，则终止角加2*PI
+    if (radEnd < radStart) {
+        radEnd += 2 * M_PI;
+    }
+    GLfloat dt = 0.4 / radius; // 角度离散值，及步长
+    GLint n = (GLint)((radEnd - radStart) / dt + 0.5);
+    GLfloat rad = radStart;
+    GLint x = xc + (GLint) (radius * cos(radStart));
+    GLint y = yc + (GLint) (radius * sin(radStart));
+    // 开始绘制短直线
+    if (abs(radEnd - radStart) < 2 * M_PI) {
+        glBegin(GL_LINE_STRIP);
+    }
+    else {
+        glBegin(GL_LINE_LOOP);
+    }    
+    glVertex2f(x, y);
+    for (GLint i = 0; i <= n; i++) {
+        rad += dt;
+        GLfloat cos_rad = cos(rad);
+        GLfloat sin_rad = sin(rad);
+        x = (GLint) (xc + radius * cos_rad);
+        y = (GLint) (yc + radius * sin_rad);
+        glVertex2f(x, y);
+    }
+    glEnd();
 }
 
 // 以指定中心点坐标绘制所有1/4椭圆弧上点(x,y)及其对称点

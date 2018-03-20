@@ -8,6 +8,7 @@
         "stdexcept": "cpp",
         "typeinfo": "cpp",
         "iostream": "cpp",
-        "ios": "cpp"
+        "ios": "cpp",
+        "algorithm": "cpp"
     }
 }

@@ -129,16 +129,16 @@ void onKeyboard(unsigned char key, int x, int y)
     }  
 }
 
-void createGlWindow(const char* title, Recti rect) {
+void createGlWindow(const char* title, Recti rect, GLenum glMode = GLUT_DEPTH) {
     int argc = 0;
     // 初始化GLUT/
     glutInit(&argc, NULL);
-    // 显示模式：双缓存、RGBA/
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
+    // 显示模式
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | glMode);
     // 窗口设置/
     glutInitWindowPosition(rect.x, rect.y);  //窗口位置/
     glutInitWindowSize(rect.w, rect.h);      //窗口尺寸/
-    glutCreateWindow(title);       //窗口标题/
+    glutCreateWindow(title);                 //窗口标题/
 }
 
 void initGlWindow(void* param) {
@@ -171,7 +171,12 @@ void openGlWindow (
     void(*initGlCallback)(void*), void* initParam, 
     Recti rect, GLenum glMode) {
     // 创建OpenGL窗口
-    createGlWindow(title, rect);
+    if (glMode == GLUT_3_2_CORE_PROFILE) {
+        createGlWindow(title, rect, glMode);
+    }
+    else {
+        createGlWindow(title, rect);
+    }
     // 初始化GLEW
     GLenum res = glewInit();   
     if (res != GLEW_OK) {

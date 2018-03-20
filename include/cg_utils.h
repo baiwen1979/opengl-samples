@@ -25,6 +25,16 @@ void setPixel(GLint x, GLint y);
 void lineDDA(GLint x0, GLint y0, GLint xEnd, GLint yEnd);
 
 /**
+ * 使用PPC（逐点比较）算法在屏幕上绘制直线段    
+ * @param x0 {GLint} 起始端点的x坐标
+ * @param y0 {GLint} 起始端点的y坐标
+ * @param xEnd {GLint} 结束端点的x坐标
+ * @param yEnd {GLint} 结束端点的y坐标
+ * @return {void} 无 
+ */
+void linePPC(GLint x0, GLint y0, GLint xEnd, GLint yEnd);
+
+/**
  * 使用Bresenham算法在屏幕上绘制斜率小于1的直线段
  * @param x0 {GLint} 起始端点的x坐标
  * @param y0 {GLint} 起始端点的y坐标
@@ -35,6 +45,15 @@ void lineDDA(GLint x0, GLint y0, GLint xEnd, GLint yEnd);
 void lineBres(GLint x0, GLint y0, GLint xEnd, GLint yEnd);
 
 /**
+ * 使用Bresenham算法在屏幕上绘制圆
+ * @param xc {GLint} 圆心的x坐标
+ * @param yc {GLint} 圆心的y坐标
+ * @param radius {GLint} 半径
+ * @return {void} 无 
+ */ 
+void circleBres(GLint xc, GLint yc, GLint radius);
+
+/**
  * 使用中点画圆算法在屏幕上绘制圆形
  * @param xc {GLint} 圆心的x坐标
  * @param yc {GLint} 圆心的y坐标
@@ -42,6 +61,17 @@ void lineBres(GLint x0, GLint y0, GLint xEnd, GLint yEnd);
  * @return {void} 无 
  */
 void circleMidPoint(GLint xc, GLint yc, GLint radius);
+
+/**
+ * 使用角度离散法绘制圆弧
+ * @param xc {GLint} 圆弧所在圆心的x坐标
+ * @param yc {GLint} 圆弧所在圆心的y坐标
+ * @param radius {GLint} 半径
+ * @param radStart {GLfloat} 起始弧度
+ * @param radEnd {GLfloat} 结束弧度
+ * @return {void} 无
+ */
+void arcAngDiscrete(GLint xc, GLint yc, GLint radius, GLfloat radStart = 0, GLfloat radEnd = 2 * M_PI);
 
 /**
  * 使用中点椭圆算法在屏幕上绘制椭圆
@@ -65,7 +95,7 @@ void ellipseMidPoint(GLint xc, GLint yc, GLint rx, GLint ry);
 void regPolygon(Vec2i center, GLint radius, GLint numEdges = 6, Color4f fillColor = Color4f(1.0, 0.0, 0.0, 1.0));
 
 /**
- * 打开窗口
+ * 打开OpenGL 窗口
  * @param renderCallback {void(*)()} 窗口绘制（回调）函数（默认为空）
  * @param title {char*} 窗口标题
  * @param initCallback {void(*)(void*)} 窗口初始化（回调）函数（默认为空）
@@ -80,3 +110,10 @@ void openGlWindow (
     Recti rect = Recti(100, 100, 800, 600),
     GLenum glMode = GL_2D
 );
+
+/**
+ * 加载着色器
+ * @param vertexShaderFilePath {char*} 顶点着色器文件的路径
+ * @param fragmentShaderFilePath {char*} 片元着色器文件的路径
+ */
+GLuint LoadShaders(const char * vertexShaderFilePath, const char * fragmentShaderFilePath);

@@ -13,6 +13,6 @@ void init(void * param) {
     cout << "Initializing OpenGL ..." << endl;
 }
 
-void testRendersLab() {
+void testCGCourseLab() {
     openGlWindow(renderLab1, "Lab1", init);
 }
