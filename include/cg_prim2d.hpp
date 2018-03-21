@@ -84,7 +84,6 @@ void arcAngDiscrete(GLint xc, GLint yc, GLint radius, GLfloat radStart = 0, GLfl
  */
 void ellipseMidPoint(GLint xc, GLint yc, GLint rx, GLint ry);
 
-
 /**
  * 绘制正多边形
  * @param center {Vec2i} 中心点（坐标）
@@ -93,7 +92,8 @@ void ellipseMidPoint(GLint xc, GLint yc, GLint rx, GLint ry);
  * @param fillColor {Color4f} 填充颜色（默认为红色）
  * @return {void} 无
  */
-void regPolygon(Vec2i center, GLint radius, GLint numEdges = 6, Color4f fillColor = Color4f(1.0, 0.0, 0.0, 1.0));
+void regPolygon(Vec2i center, GLint radius, GLint numEdges = 6, 
+    Color4f fillColor = Color4f(1.0, 0.0, 0.0, 1.0));
 
 } //namespace cg
 

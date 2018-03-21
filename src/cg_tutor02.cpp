@@ -69,7 +69,9 @@ static void init() {
 
 
 void testOGLTutorial() {
-    openGlWindow(renderSceneCB, "OpenGL Tutorial 02 - First Triangle", init, NULL, true, Recti(100,100,1024, 768));
+    openGlWindow(renderSceneCB, 
+        "OpenGL Tutorial 02 - First Triangle", 
+        init, NULL, true, Recti(100,100,1024, 768));
 }
 
 
