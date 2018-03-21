@@ -6,6 +6,7 @@
 #ifdef _WIN32
     #include <windows.h>
     #include <GL/glut.h>
+    #define GLUT_3_2_CORE_PROFILE 0x00
 #elif __APPLE__
     #include <GLUT/glut.h>
 #else

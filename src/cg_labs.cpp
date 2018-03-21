@@ -1,5 +1,7 @@
 #include <cg_utils.h>
 
+using namespace cg;
+
 void renderLab1() {
     cout << "Running lab1..." << endl;
 
@@ -9,7 +11,7 @@ void renderLab2() {
     cout << "Running lab2..." << endl;
 }
 
-void init(void * param) {
+void init() {
     cout << "Initializing OpenGL ..." << endl;
 }
 

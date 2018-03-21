@@ -1,5 +1,7 @@
 #include <cg_utils.h>
 
+namespace cg {
+
 // 绘制像素
 void setPixel(GLint x, GLint y) {
     glBegin(GL_POINTS);
@@ -203,7 +205,7 @@ void circleMidPoint(GLint xc, GLint yc, GLint radius) {
 void arcAngDiscrete(GLint xc, GLint yc, GLint radius, GLfloat radStart, GLfloat radEnd) {
     // 如果终止角比起始角还小，则终止角加2*PI
     if (radEnd < radStart) {
-        radEnd += 2 * M_PI;
+        radEnd += 2 * PI;
     }
     GLfloat dt = 0.4 / radius; // 角度离散值，及步长
     GLint n = (GLint)((radEnd - radStart) / dt + 0.5);
@@ -312,3 +314,5 @@ void regPolygon(Vec2i center, GLint radius, GLint numEdges, Color4f fillColor) {
     GLuint listId = genRegPolyList(center, radius, numEdges, fillColor);
     glCallList(listId);
 }
+
+} //namespace cg

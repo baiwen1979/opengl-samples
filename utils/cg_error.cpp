@@ -1,5 +1,6 @@
 #include <cg_utils.h>
 
+namespace cg {
 // 错误检查
 GLenum errorCheck () {
     GLenum code;
@@ -11,3 +12,5 @@ GLenum errorCheck () {
     }
     return code;
 }
+
+} //namespace cg

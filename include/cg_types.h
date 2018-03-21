@@ -4,7 +4,7 @@
 #define _CG_TYPES_H_
 
 #include <GL/cgl.h>
-#include <cmath>
+
 // 模板类：二维向量
 namespace cg {
 

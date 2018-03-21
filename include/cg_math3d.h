@@ -1,5 +1,5 @@
-#ifndef _CG_GEM3D_H_
-#define _CG_GEM3D_H_
+#ifndef _CG_MATH3D_H_
+#define _CG_MATH3D_H_
 
 #include "cg_vec3.hpp"
 #include "cg_mat4.hpp"
@@ -13,4 +13,4 @@ namespace cg {
     typedef Mat4<int32_t> Mat4i;
 }
 
-#endif
+#endif //_CG_MATH3D_H_

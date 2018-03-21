@@ -12,6 +12,8 @@ using namespace std;
 
 #include <cg_utils.h>
 
+namespace cg {
+
 GLuint LoadShaders(const char * vertex_file_path, const char * fragment_file_path){
 
 	// 创建着色器
@@ -103,5 +105,7 @@ GLuint LoadShaders(const char * vertex_file_path, const char * fragment_file_pat
 	// 返回着色程序的ID
 	return ProgramID;
 }
+
+} //namespace cg
 
 

@@ -1,94 +1,40 @@
 #include <cg_utils.h>
 
-float zoom = 2000.f;  
-float rotx = 20;  
-float roty = 0;  
-float tx = 0;  
-float ty = 0;
-int lastx = 0;  
-int lasty = 0;  
-unsigned char mouseButtons[3] = {0};
+namespace cg {
 
-//初始化2D绘图上下文/
-void init2D() {
-    // 设置显示窗口的颜色为白色/
-    glClearColor(1.0, 1.0, 1.0, 0.0);
-    // 设置矩阵模式为投影矩阵/
-    glMatrixMode(GL_PROJECTION);
-}
+static float g_zoom = 2000.f;  
+static float g_rotx = 20;  
+static float g_roty = 0;  
+static float g_tx = 0;  
+static float g_ty = 0;
+static int g_lastx = 0;  
+static int g_lasty = 0;  
+static unsigned char g_mouseButtons[3] = {0};
 
-// 初始化3D绘图上下文/
-void init3D() {
-    // 设置显示窗口的颜色为黑色/
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    // 清除深度缓存/
-    glClearDepth(1.0f);
-    // 指定深度比较函数为小于等于/
-    glDepthFunc(GL_LEQUAL);
-    // 启用深度测试/
-    glEnable(GL_DEPTH_TEST);  
-    // 启用多边形（面片）剔除/ 
-    glEnable(GL_CULL_FACE);  
-    // 启用规格化/
-    glEnable(GL_NORMALIZE); 
-    // 设置矩阵模式为投影矩阵/
-    glMatrixMode(GL_PROJECTION);
-    // 使用正交投影矩阵/
-    glOrtho(-5, 5, -5, 5, 5, 15);
-    // 设置模型视图矩阵模式/
-    glMatrixMode(GL_MODELVIEW);
-    // 设置摄像机位置/
-    gluLookAt(0,0,10, 0,0,0, 0,1,0);
-}
-
-void reshapeViewPort(int w, int h) {
-    glViewport(0, 0, (GLsizei)w, (GLsizei)h);
-    glMatrixMode (GL_PROJECTION);
-    glLoadIdentity();
-}
-// 窗口调整事件回调函数，2D模式/
-void onReshape2D(int w, int h) {
-    reshapeViewPort(w, h);
-    gluOrtho2D(0.0, (GLdouble)w, 0.0, (GLdouble)h);
-}
-// 窗口调整事件回调函数，3D正交模式/
-void onReshape3DOrtho(int w, int h) {
-    reshapeViewPort(w, h);
-    if (w <= h) {
-        glOrtho(-1.5, 1.5, -1.5 * (GLfloat)h / (GLfloat)w, 
-            1.5 * (GLfloat)h / (GLfloat)w, -10.0, 10.0);
-    }
-    else {
-        glOrtho(-1.5 * (GLfloat)w / (GLfloat)h, 
-            1.5 * (GLfloat)w / (GLfloat)h, -1.5, 1.5, -10.0, 10.0);
-    }
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-}
 
 // 鼠标移动事件回调函数/
-void onMotion(int x, int y)  
+static void onMotion(int x, int y)  
 {  
-    int diffx = x - lastx;  
-    int diffy = y - lasty;  
-    lastx = x;  
-    lasty = y;  
+    int diffx = x - g_lastx;  
+    int diffy = y - g_lasty;  
+    g_lastx = x;  
+    g_lasty = y;  
       
-    if(mouseButtons[2])  
+    if(g_mouseButtons[2])  
     {  
-        zoom -= (float)1 * diffx * 2;  
+        g_zoom -= (float)1 * diffx * 2;  
     }  
     else {
-        if(mouseButtons[0])  
+        if(g_mouseButtons[0])  
         {  
-            rotx += (float)1 * diffy;  
-            roty += (float)1 * diffx;  
+            g_rotx += (float)1 * diffy;  
+            g_roty += (float)1 * diffx;  
         }  
         else {
-            if(mouseButtons[1])  
+            if(g_mouseButtons[1])  
             {  
-                tx += (float)1 * diffx;  
-                ty -= (float)1 * diffy;  
+                g_tx += (float)1 * diffx;  
+                g_ty -= (float)1 * diffy;  
             }
         } 
     } 
@@ -96,20 +42,20 @@ void onMotion(int x, int y)
 } 
 
 // 鼠标按键事件回调函数/
-void onMouse(int b, int s, int x, int y)  
+static void onMouse(int b, int s, int x, int y)  
 {  
-    lastx = x;  
-    lasty = y;  
+    g_lastx = x;  
+    g_lasty = y;  
     switch(b)  
     {  
         case GLUT_LEFT_BUTTON:  
-            mouseButtons[0] = ((GLUT_DOWN == s)? 1: 0);  
+            g_mouseButtons[0] = ((GLUT_DOWN == s)? 1: 0);  
             break;  
         case GLUT_MIDDLE_BUTTON:  
-            mouseButtons[1] = ((GLUT_DOWN == s)? 1: 0);  
+            g_mouseButtons[1] = ((GLUT_DOWN == s)? 1: 0);  
             break;  
         case GLUT_RIGHT_BUTTON:  
-            mouseButtons[2] = ((GLUT_DOWN == s)? 1: 0);  
+            g_mouseButtons[2] = ((GLUT_DOWN == s)? 1: 0);  
             break;  
         default:  
             break;  
@@ -118,7 +64,7 @@ void onMouse(int b, int s, int x, int y)
 }   
 
 // 按键事件回调函数/
-void onKeyboard(unsigned char key, int x, int y)  
+static void onKeyboard(unsigned char key, int x, int y)  
 {  
     switch(key) {  
         case 'q':  
@@ -129,73 +75,78 @@ void onKeyboard(unsigned char key, int x, int y)
     }  
 }
 
-void createGlWindow(const char* title, Recti rect, GLenum glMode = GLUT_DEPTH) {
+// 辅助函数：创建OpenGL窗口
+void createGlWindow(const char* title, Recti rect, bool usingGL3Mode = false) {
     int argc = 0;
     // 初始化GLUT/
     glutInit(&argc, NULL);
     // 显示模式
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | glMode);
+    GLuint displayMode = GLUT_DOUBLE | GLUT_RGBA;
+    // 是否使用OpenGL3模式
+    if (usingGL3Mode) {
+        displayMode |= GLUT_3_2_CORE_PROFILE;
+    }
+    glutInitDisplayMode(displayMode);
     // 窗口设置/
     glutInitWindowPosition(rect.x, rect.y);  //窗口位置/
     glutInitWindowSize(rect.w, rect.h);      //窗口尺寸/
     glutCreateWindow(title);                 //窗口标题/
 }
 
-void initGlWindow(void* param) {
-    GLenum* mode = (GLenum*)param;
+inline void registerDefaultUIEventHandlers() {
     // 注册键盘按键事件回调函数/
     glutKeyboardFunc(onKeyboard);
     // 注册鼠标按键事件回调函数/
     glutMouseFunc(onMouse);
     // 注册鼠标移动事件回调函数/
     glutMotionFunc(onMotion);
-
-    if (*mode == GL_2D) {
-        // 注册窗口改变事件回调函数/
-        glutReshapeFunc(onReshape2D);
-        // 初始化2D渲染上下文/
-        init2D();
-    }
-    else {
-        // 注册窗口改变事件回调函数/
-        glutReshapeFunc(onReshape3DOrtho);
-        // 初始化3D渲染上下文/
-        init3D();
-    }
-
 }
 
-// 打开窗口/
-void openGlWindow (
-    void(*renderCallback)(), const char* title, 
-    void(*initGlCallback)(void*), void* initParam, 
-    Recti rect, GLenum glMode) {
-    // 创建OpenGL窗口
-    if (glMode == GLUT_3_2_CORE_PROFILE) {
-        createGlWindow(title, rect, glMode);
-    }
-    else {
-        createGlWindow(title, rect);
-    }
-    // 初始化GLEW
+// 初始化GLEW
+inline bool initGLEW() {
     GLenum res = glewInit();   
     if (res != GLEW_OK) {
         fprintf(stderr, "Error: '%s'\n", glewGetErrorString(res));
-        return;
+        return false;
     }
+    return true;
+}
+
+// 输出OpenGL的版本信息
+inline void printOpenGLInfo() {
     cout << "OpenGL Vender: " << glGetString(GL_VENDOR) << endl;
     cout << "OpenGL Renderer: " << glGetString(GL_RENDERER) << endl;
     cout << "OpenGL Version: " << glGetString(GL_VERSION) << endl;
+}
+
+void initGlWindow (void(*renderCallback)(),
+    void(*initGlCallback)(), void(*reshapeCallback)(int, int)) {
+
+    if (!initGLEW()) {
+        return;
+    }   
     // 初始化GL
     if (initGlCallback) {
-        initGlCallback(initParam);
+        initGlCallback();
     }
-    else {
-        initGlWindow(&glMode);
+    // 注册默认的UI事件处理函数
+    registerDefaultUIEventHandlers();
+    // 注册窗口大小改变回调函数
+    if (reshapeCallback) {
+        glutReshapeFunc(reshapeCallback);
     }
-
-    // 注册渲染函数
+    // 注册渲染回调函数
     glutDisplayFunc(renderCallback);
     // 开始GLUT内部消息循环/
-    glutMainLoop();
+    glutMainLoop();  
 }
+
+// 打开OpenGL窗口/
+void openGlWindow (void(*renderCallback)(), const char* title, 
+    void(*initGlCallback)(), void(*reshapeCallback)(int, int), 
+    bool usingGL3, Recti rect) {
+    createGlWindow(title, rect, usingGL3);   
+    initGlWindow(renderCallback, initGlCallback, reshapeCallback);
+}
+
+} //namespace cg

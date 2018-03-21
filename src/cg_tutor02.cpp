@@ -1,6 +1,8 @@
 #include <cg_utils.h>
 #include <cg_math3d.h>
 
+using namespace cg;
+
 // 顶点数组对象VAO的ID
 static GLuint vertexArrayID;
 // 顶点缓存对象VBO的ID
@@ -60,14 +62,14 @@ static void createVertexBuffer()
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 }
 
-static void init(void* param) {
+static void init() {
     cout << "Initialing Vertex Buffer" << endl;
     createVertexBuffer();
 }
 
 
 void testOGLTutorial() {
-    openGlWindow(renderSceneCB, "OpenGL Tutorial 02 - First Triangle", init, NULL, Recti(100,100,1024, 768), GLUT_3_2_CORE_PROFILE);
+    openGlWindow(renderSceneCB, "OpenGL Tutorial 02 - First Triangle", init, NULL, true, Recti(100,100,1024, 768));
 }
 
 
