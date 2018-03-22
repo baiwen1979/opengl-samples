@@ -2,8 +2,8 @@
 #include "cg_test.hpp"
 
 int main(int argc,char *argv[]){
-    //testPrimitive2d();
+    testPrimitive2d();
     //testCGCourseLab();
-    testOGLTutorial();
+    //testOGLTutorial();
     return 0;
 }

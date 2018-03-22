@@ -33,7 +33,7 @@ void init3D() {
     // 设置矩阵模式为投影矩阵/
     glMatrixMode(GL_PROJECTION);
     // 使用正交投影矩阵/
-    glOrtho(-5, 5, -5, 5, 5, 15);
+    glOrtho(-8, 8, -5, 5, 1, 10);
     // 设置模型视图矩阵模式/
     glMatrixMode(GL_MODELVIEW);
     // 设置摄像机位置/
@@ -52,26 +52,12 @@ void onReshape2D(int w, int h) {
     gluOrtho2D(0.0, (GLdouble)w, 0.0, (GLdouble)h);
 }
 
-// 窗口调整事件回调函数，3D正交模式/
-void onReshape3DOrtho(int w, int h) {
-    reshapeViewPort(w, h);
-    if (w <= h) {
-        glOrtho(-1.5, 1.5, -1.5 * (GLfloat)h / (GLfloat)w, 
-            1.5 * (GLfloat)h / (GLfloat)w, -10.0, 10.0);
-    }
-    else {
-        glOrtho(-1.5 * (GLfloat)w / (GLfloat)h, 
-            1.5 * (GLfloat)w / (GLfloat)h, -1.5, 1.5, -10.0, 10.0);
-    }
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-}
-
 void renderWireTeapot() {
-    //glShadeModel(GL_SMOOTH); 
+    glShadeModel(GL_LIGHT0);
     glClear(GL_COLOR_BUFFER_BIT); 
     glColor3f(1.0, 1.0, 0);
     glutWireTeapot(3);
+    //glutSolidTeapot(4);
     glutSwapBuffers();
 }
 
@@ -287,5 +273,6 @@ void testMath3d() {
 }
 
 void testPrimitive2d() {
-    openGlWindow(renderCircleMidPoint, "Primitive 2D", init2D, onReshape2D);
+    openGlWindow(renderLinePPC, "Primitive 2D", init2D, onReshape2D);
+    //openGlWindow(renderWireTeapot, "3D", init3D);
 }

@@ -213,7 +213,7 @@ void arcAngDiscrete(GLint xc, GLint yc, GLint radius, GLfloat radStart, GLfloat 
     GLint x = xc + (GLint) (radius * cos(radStart));
     GLint y = yc + (GLint) (radius * sin(radStart));
     // 开始绘制短直线
-    if (abs(radEnd - radStart) < 2 * M_PI) {
+    if (abs(radEnd - radStart) < 2 * PI) {
         glBegin(GL_LINE_STRIP);
     }
     else {

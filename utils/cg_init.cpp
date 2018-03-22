@@ -76,10 +76,11 @@ static void onKeyboard(unsigned char key, int x, int y)
 }
 
 // 辅助函数：创建OpenGL窗口
-void createGlWindow(const char* title, Recti rect, bool usingGL3Mode = false) {
-    int argc = 0;
+inline void createGlWindow(const char* title, Recti rect, bool usingGL3Mode = false) {
+    int argc = 1; 
+    char* argv[] = {"CGLab"};
     // 初始化GLUT/
-    glutInit(&argc, NULL);
+    glutInit(&argc, argv);
     // 显示模式
     GLuint displayMode = GLUT_DOUBLE | GLUT_RGBA;
     // 是否使用OpenGL3模式
@@ -121,11 +122,13 @@ inline void printOpenGLInfo() {
 
 void initGlWindow (void(*renderCallback)(),
     void(*initGlCallback)(), void(*reshapeCallback)(int, int)) {
-
+    // 初始化GLEW
     if (!initGLEW()) {
         return;
-    }   
-    // 初始化GL
+    }
+    // 输出OpenGL的版本信息
+    printOpenGLInfo();
+    // 初始化GL渲染上下文
     if (initGlCallback) {
         initGlCallback();
     }
