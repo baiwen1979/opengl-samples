@@ -1,6 +1,8 @@
 #include <cg_utils.h>
 
-namespace cg {
+namespace glw {
+
+using namespace cg;
 
 static float g_zoom = 2000.f;  
 static float g_rotx = 20;  
@@ -78,7 +80,7 @@ static void onKeyboard(unsigned char key, int x, int y)
 // 辅助函数：创建OpenGL窗口
 inline void createGlWindow(const char* title, Recti rect, bool usingGL3Mode = false) {
     int argc = 1; 
-    char* argv[] = {"CGLab"};
+    char* argv[] = { "CGLab" };
     // 初始化GLUT/
     glutInit(&argc, argv);
     // 显示模式
@@ -152,4 +154,4 @@ void openGlWindow (void(*renderCallback)(), const char* title,
     initGlWindow(renderCallback, initGlCallback, reshapeCallback);
 }
 
-} //namespace cg
+} //namespace glw

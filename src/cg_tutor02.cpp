@@ -1,6 +1,8 @@
 #include <cg_utils.h>
 #include <cg_math3d.h>
 
+#include "cg_glw.hpp"
+
 using namespace cg;
 
 // 顶点数组对象VAO的ID
@@ -29,8 +31,6 @@ static void renderSceneCB() {
 
     // 交换前后缓存
     glutSwapBuffers();
-
-    glFlush();
 }
 
 /**
@@ -69,10 +69,7 @@ static void init() {
 
 
 void testOGLTutorial() {
-    openGlWindow(renderSceneCB, 
+    glw::openGlWindow(renderSceneCB, 
         "OpenGL Tutorial 02 - First Triangle", 
         init, NULL, true, Recti(100,100,1024, 768));
-}
-
-
- 
+} 

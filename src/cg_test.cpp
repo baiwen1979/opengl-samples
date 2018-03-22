@@ -1,6 +1,7 @@
 #include <cg_utils.h>
-#include "cg_test.hpp"
 #include <cg_math3d.h>
+
+#include "cg_test.hpp"
 
 using namespace cg;
 

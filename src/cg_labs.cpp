@@ -1,6 +1,9 @@
 #include <cg_utils.h>
 
+#include "cg_glw.hpp"
+
 using namespace cg;
+using namespace glw;
 
 void renderLab1() {
     cout << "Running lab1..." << endl;
