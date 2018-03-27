@@ -14,21 +14,46 @@ template<typename T>
 Vec3<T>::Vec3(T xx): x(xx), y(xx), z(xx) {}
 template<typename T>
 Vec3<T>::Vec3(T xx, T yy, T zz): x(xx), y(yy), z(zz) {}
+
 // 加
 template<typename T>
 Vec3<T> Vec3<T>::operator + (const Vec3<T>& v) const {
     return Vec3(x + v.x, y + v.y, z + v.z);
 }
+template<typename T>
+Vec3<T>& Vec3<T>::operator += (const Vec3<T>& v) {
+    x += v.x;
+    y += v.y;
+    z += v.z;
+    return *this;
+}
+
 // 减
 template<typename T>
 Vec3<T> Vec3<T>::operator - (const Vec3<T>& v) const {
     return Vec3(x - v.x, y - v.y, z - v.z);
 }
+template<typename T>
+Vec3<T>& Vec3<T>::operator -= (const Vec3<T>& v) {
+    x -= v.x;
+    y -= v.y;
+    z -= v.z;
+    return *this;
+}
+
 // 数乘
 template<typename T>
 Vec3<T> Vec3<T>::operator * (const T& r) const {
     return Vec3(x * r, y * r, z * r);
 }
+template<typename T>
+Vec3<T>& Vec3<T>::operator *= (const T& r) {
+    x *= r;
+    y *= r;
+    z *= r;
+    return *this;
+}
+
 // 点积
 template<typename T>
 T Vec3<T>::dotProduct(const Vec3<T> &v) const {
@@ -37,10 +62,10 @@ T Vec3<T>::dotProduct(const Vec3<T> &v) const {
 // 叉积
 template<typename T>
 Vec3<T> Vec3<T>::crossProduct(const Vec3<T>& v) const {
-    T x = y * v.z - z * v.y;
-    T y = z * v.x - x * v.z;
-    T z = x * v.y - y * v.x;
-    return Vec3<T>(x, y, z);
+    T xx = y * v.z - z * v.y;
+    T yy = z * v.x - x * v.z;
+    T zz = x * v.y - y * v.x;
+    return Vec3<T>(xx, yy, zz);
 }
 // 模
 template<typename T>

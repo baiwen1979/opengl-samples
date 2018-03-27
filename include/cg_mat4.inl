@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <iostream>
 #include "cg_mat4.hpp"
+#include "cg_math.hpp"
 
 namespace cg {
 
@@ -36,9 +37,9 @@ T* Mat4<T>::operator[] (uint8_t i) {
 
 template<typename T>
 Mat4<T> Mat4<T>::operator * (const Mat4<T>& v) const {
-    Mat4 tmp;
-    multiply(*this, v, tmp);
-    return tmp;
+    Mat4<T> ret;
+    multiply(*this, v, ret);
+    return ret;
 }
 
 template<typename T>
@@ -66,7 +67,7 @@ Mat4<T>& Mat4<T>::transpose() {
 
 template<typename T>
 template<typename S>
-void Mat4<T>::multVertex3Matrix(const Vec3<S> &src, Vec3<S> &dst) const {
+void Mat4<T>::multPos(const Vec3<S> &src, Vec3<S> &dst) const {
     S a, b, c, w; 
  
     a = src[0] * x[0][0] + src[1] * x[1][0] + src[2] * x[2][0] + x[3][0]; 
@@ -82,7 +83,7 @@ void Mat4<T>::multVertex3Matrix(const Vec3<S> &src, Vec3<S> &dst) const {
 
 template<typename T>
 template<typename S>
-void Mat4<T>::multVector3Matrix(const Vec3<S> &src, Vec3<S> &dst) const {
+void Mat4<T>::multDir(const Vec3<S> &src, Vec3<S> &dst) const {
     S a, b, c; 
  
     a = src[0] * x[0][0] + src[1] * x[1][0] + src[2] * x[2][0]; 
@@ -192,6 +193,95 @@ void Mat4<T>::multiply(const Mat4<T> &a, const Mat4& b, Mat4 &c) {
                 a[i][2] * b[2][j] + a[i][3] * b[3][j]; 
         } 
     } 
+}
+
+template<typename T> 
+Mat4<T> Mat4<T>::identity() {
+    return Mat4<T>();
+}
+
+template<typename T>
+Mat4<T> Mat4<T>::translationMat(T tx, T ty, T tz) {
+    return Mat4<T>(
+        T(1), T(0), T(0), T(tx),
+        T(0), T(1), T(0), T(ty),
+        T(0), T(0), T(1), T(tz),
+        T(0), T(0), T(0), T(1)
+    );
+}
+
+template<typename T>
+Mat4<T> Mat4<T>::scalingMat(T sx, T sy, T sz) {
+    return Mat4<T>(
+        T(sx), T(0),  T(0),  T(0),
+        T(0),  T(sy), T(0),  T(0),
+        T(0),  T(0),  T(sz), T(0),
+        T(0),  T(0),  T(0),  T(1)
+    );
+}
+
+template<typename T>
+Mat4<T> Mat4<T>::rotationMat(T rx, T ry, T rz) {
+
+    rx = toRadian(rx);
+    ry = toRadian(ry);
+    rz = toRadian(rz);
+
+    Mat4<T> mrx(
+        T(1), T(0),       T(0),        T(0),
+        T(0), T(cos(rx)), T(-sin(rx)), T(0),
+        T(0), T(sin(rx)), T(cos(rx)),  T(0),
+        T(0), T(0),       T(0),        T(1)
+    );
+
+    Mat4<T> mry(
+        T(cos(ry)), T(0), T(-sin(ry)), T(0),
+        T(0),       T(1), T(0),        T(0),
+        T(sin(ry)), T(0), T(cos(ry)),  T(0),
+        T(0),       T(0), T(0),        T(1)
+    );
+
+    Mat4<T> mrz(
+        T(cos(rz)), T(-sin(rz)), T(0), T(0),
+        T(sin(rz)), T(cos(rz)),  T(0), T(0),
+        T(0),       T(0),        T(1), T(0),
+        T(0),       T(0),        T(0), T(1)       
+    );
+
+    return mrx * mry * mrz;
+}
+
+template<typename T>
+Mat4<T> Mat4<T>::persProjMat(T ar, T fov, T zNear, T zFar) {
+    T zRange = zNear - zFar;
+    T tanHalfFov = tan(toRadian(fov / 2.0));
+    Mat4<T> persProjMat(
+        T(ar / tanHalfFov),   T(0), T(0), T(0),
+        T(0),       T(1 / tanHalfFov),  T(0), T(0),
+        T(0), T(0), T((-zNear - zFar) / zRange), T(2 * zNear * zFar / zRange),
+        T(0), T(0), T(1), T(0)
+    );
+    return persProjMat;
+}
+
+template<typename T>
+Mat4<T> Mat4<T>::cameraMat(const Vec3<T>& target, const Vec3<T>& up) {
+    Vec3<T> n = target;
+    n.normalize();
+
+    Vec3<T> u = up;
+    u = u.crossProduct(n);
+    u.normalize();
+
+    Vec3<T> v = n.crossProduct(u);
+
+    Mat4<T> cm(
+        T(u.x),  T(u.y),  T(u.z),  T(0.0f),
+        T(v.x),  T(v.y),  T(v.z),  T(0.0f),
+        T(n.x),  T(n.y),  T(n.z),  T(0.0f),
+        T(0.0f), T(0.0f), T(0.0f), T(1.0f)
+    );
+    return cm;
 }
 
 template<typename T>

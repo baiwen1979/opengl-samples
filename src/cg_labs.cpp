@@ -8,6 +8,14 @@ using namespace glw;
 void renderLab1() {
     cout << "Running lab1..." << endl;
 
+    glClearColor(0.0, 0.0, 0.0, 0.0);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glColor3f(1.0f, 1.0f, 1.0f);
+    glRectf(-0.5f, -0.5f, 0.5f, 0.5f);
+
+    glutSwapBuffers();
+
 }
 
 void renderLab2() {

@@ -15,10 +15,13 @@ public:
     Vec3(T xx);
     Vec3(T xx, T yy, T zz);
     // 向量的+,-
-    Vec3 operator + (const Vec3 &v) const;
-    Vec3 operator - (const Vec3 &v) const;
+    Vec3<T> operator + (const Vec3<T>& v) const;
+    Vec3<T>& operator += (const Vec3& v);
+    Vec3<T> operator - (const Vec3<T>& v) const;
+    Vec3<T>& operator -= (const Vec3& v);
     // 向量的数乘 
-    Vec3 operator * (const T &r) const;
+    Vec3<T> operator * (const T&r) const;
+    Vec3<T>& operator *= (const T& r);
     // 向量的点积
     T dotProduct(const Vec3<T> &v) const; 
     // 向量的叉积

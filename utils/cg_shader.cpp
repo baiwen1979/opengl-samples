@@ -17,8 +17,8 @@ namespace cg {
 GLuint LoadShaders(const char * vertex_file_path, const char * fragment_file_path){
 
 	// 创建着色器
-	GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
-	GLuint FragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
+	GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);     //顶点着色器
+	GLuint FragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER); //片元着色器
 
 	// 从文件中读取顶点着色器代码（GLSL）
 	std::string VertexShaderCode;
@@ -58,7 +58,7 @@ GLuint LoadShaders(const char * vertex_file_path, const char * fragment_file_pat
 	// 检查顶点着色器是否编译错误
 	glGetShaderiv(VertexShaderID, GL_COMPILE_STATUS, &Result);
 	glGetShaderiv(VertexShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
-	if ( InfoLogLength > 0 ){
+	if ( InfoLogLength > 0 ) {
 		std::vector<char> VertexShaderErrorMessage(InfoLogLength + 1);
 		glGetShaderInfoLog(VertexShaderID, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
 		printf("%s\n", &VertexShaderErrorMessage[0]);
@@ -79,7 +79,7 @@ GLuint LoadShaders(const char * vertex_file_path, const char * fragment_file_pat
 		printf("%s\n", &FragmentShaderErrorMessage[0]);
 	}
 
-	// 链接着色器程序
+	// 绑定并链接着色器程序
 	printf("Linking program\n");
 	GLuint ProgramID = glCreateProgram();
 	glAttachShader(ProgramID, VertexShaderID);

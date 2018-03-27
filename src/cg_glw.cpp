@@ -96,6 +96,7 @@ inline void createGlWindow(const char* title, Recti rect, bool usingGL3Mode = fa
     glutCreateWindow(title);                 //窗口标题/
 }
 
+// 注册默认的UI时间处理函数
 inline void registerDefaultUIEventHandlers() {
     // 注册键盘按键事件回调函数/
     glutKeyboardFunc(onKeyboard);
@@ -122,8 +123,11 @@ inline void printOpenGLInfo() {
     cout << "OpenGL Version: " << glGetString(GL_VERSION) << endl;
 }
 
-void initGlWindow (void(*renderCallback)(),
-    void(*initGlCallback)(), void(*reshapeCallback)(int, int)) {
+void initGlWindow (
+    void(*renderCallback)(),
+    void(*initGlCallback)(), 
+    void(*reshapeCallback)(int, int), 
+    void(*idleCallback)()) {
     // 初始化GLEW
     if (!initGLEW()) {
         return;
@@ -136,22 +140,27 @@ void initGlWindow (void(*renderCallback)(),
     }
     // 注册默认的UI事件处理函数
     registerDefaultUIEventHandlers();
+    // 注册渲染回调函数
+    glutDisplayFunc(renderCallback);
     // 注册窗口大小改变回调函数
     if (reshapeCallback) {
         glutReshapeFunc(reshapeCallback);
     }
-    // 注册渲染回调函数
-    glutDisplayFunc(renderCallback);
+    // 注册空闲（动画）回调函数
+    if (idleCallback) {
+        glutIdleFunc(idleCallback);
+    }
     // 开始GLUT内部消息循环/
     glutMainLoop();  
 }
 
 // 打开OpenGL窗口/
-void openGlWindow (void(*renderCallback)(), const char* title, 
-    void(*initGlCallback)(), void(*reshapeCallback)(int, int), 
-    bool usingGL3, Recti rect) {
+void openGlWindow (
+    void(*renderCallback)(), const char* title, 
+    void(*initGlCallback)(), void(*reshapeCallback)(int, int),
+    void(*idleCallback)(),bool usingGL3, const Recti& rect) {
     createGlWindow(title, rect, usingGL3);   
-    initGlWindow(renderCallback, initGlCallback, reshapeCallback);
+    initGlWindow(renderCallback, initGlCallback, reshapeCallback, idleCallback);
 }
 
 } //namespace glw

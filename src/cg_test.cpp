@@ -274,6 +274,6 @@ void testMath3d() {
 }
 
 void testPrimitive2d() {
-    openGlWindow(renderLinePPC, "Primitive 2D", init2D, onReshape2D);
+    openGlWindow(renderRegPolygon, "Primitive 2D", init2D, onReshape2D);
     //openGlWindow(renderWireTeapot, "3D", init3D);
 }

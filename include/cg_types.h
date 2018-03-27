@@ -29,7 +29,7 @@ public:
 template<typename T>
 class Rect {
 public:
-    Rect(T w, T h): x(0), y(0), w(w), h(h) {}
+    Rect(T ww, T hh): x(0), y(0), w(ww), h(hh) {}
     Rect(T xx, T yy, T ww, T hh): x(xx), y(yy), w(ww), h(hh) {}
     T x, y;
     T w, h;

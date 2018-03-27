@@ -1,5 +1,6 @@
 #include <cg_utils.h>
 #include <cg_math3d.h>
+#include <cassert>
 
 #include "cg_glw.hpp"
 
@@ -9,12 +10,31 @@ using namespace cg;
 static GLuint vertexArrayID;
 // 顶点缓存对象VBO的ID
 static GLuint vertexBuffer;
+// 着色器变量的位置
+static GLuint glWorldLocation;
+// 着色器文件路径
+static const char* vShaderFileName = "GLSL/vshader04.glsl";
+static const char* fshaderFileName = "GLSL/fshader04.glsl";
 
  /**
  * 渲染回调函数
  */
 static void renderSceneCB() {
-    cout << "Rendering" << endl;
+    // 平移距离
+    static float tx = 0.0f;
+    // 平移增量
+    tx += 0.01f;
+    // 创建4X4平移矩阵
+    Mat4f world(
+        1.0f, 0.0f, 0.0f, sinf(tx),
+        0.0f, 1.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, 1.0f
+    );
+
+    // 将平移矩阵传递给着色器的uniform变量glWorld中
+    glUniformMatrix4fv(glWorldLocation, 1, GL_TRUE, &world[0][0]);
+
     // 清空颜色和深度缓存
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     // 开启顶点属性
@@ -44,12 +64,6 @@ static void createVertexBuffer()
     vertices[0] = Vec3f(-0.8f, -0.8f, 0.0f);
     vertices[1] = Vec3f(0.8f, -0.8f, 0.0f);
     vertices[2] = Vec3f(0.0f, 0.8f, 0.0f);
-    // 加载着色器
-    GLuint program = LoadShaders(
-        "GLSL/vshader02.glsl", 
-        "GLSL/fshader02.glsl");
-    // 使用着色器
-    glUseProgram(program);
     // 生成1个顶点数组，并将其ID存储到vertexArrayID变量中
     glGenVertexArrays(1, &vertexArrayID);
     // 绑定顶点数组
@@ -62,15 +76,28 @@ static void createVertexBuffer()
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 }
 
+static void initShaders() {
+    // 加载着色器
+    GLuint program = LoadShaders(vShaderFileName, fshaderFileName);
+    // 使用着色器
+    glUseProgram(program);
+    // 获取着色器中uniform变量glWorld的位置
+    glWorldLocation = glGetUniformLocation(program, "glWorld");
+    // 检查错误
+    assert(glWorldLocation != 0xFFFFFFFF);
+}
+
 static void init() {
     cout << "Initialing Vertex Buffer" << endl;
     createVertexBuffer();
+    initShaders();
 }
+
 
 /*
 void testOGLTutorial() {
     glw::openGlWindow(renderSceneCB, 
-        "OpenGL Tutorial 02 - First Triangle", 
-        init, NULL, true, Recti(100,100,1024, 768));
+        "OpenGL Tutorial 04 - Moving Triangle", 
+        init, NULL, renderSceneCB, true, Recti(100,100,1024, 768));
 }
 */

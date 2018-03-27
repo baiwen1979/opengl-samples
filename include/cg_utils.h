@@ -3,6 +3,8 @@
 
 #include "cg_types.h"
 #include "cg_prim2d.hpp"
+#include "cg_math.hpp"
+#include "cg_pipline.hpp"
 
 namespace cg {
 
