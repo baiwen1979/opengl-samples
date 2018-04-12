@@ -1,5 +1,5 @@
 #include <cg_utils.h>
-#include <cg_math3d.h>
+#include <cgm/cg_math.h>
 
 #include "cg_test.hpp"
 
@@ -273,7 +273,28 @@ void testMath3d() {
     std::cerr << d << std::endl; 
 }
 
+void testFloodFill() {
+    glClear(GL_COLOR_BUFFER_BIT); //清除窗口
+    glPointSize(2);
+    glColor3f(1.0, 0.0, 0.0); //红线条
+    // 先绘制要填充的三角形
+    int p1[] = {WIN_WIDTH / 2 , WIN_HEIGHT - 20};
+    int p2[] = {20, 20};
+    int p3[] = {WIN_WIDTH - 20, 20};
+    glBegin(GL_LINE_LOOP);
+      glVertex2iv(p1);
+      glVertex2iv(p2);
+      glVertex2iv(p3);
+    glEnd();
+    // 目标颜色
+    Color4i tColor(255, 255, 255, 255);
+    // 填充颜色
+    Color4i fColor(255, 0, 0, 255);
+    // 种子填充
+    floodFill(WIN_WIDTH / 2, WIN_HEIGHT / 2, tColor, fColor);
+    glutSwapBuffers();
+}
+
 void testPrimitive2d() {
-    openGlWindow(renderRegPolygon, "Primitive 2D", init2D, onReshape2D);
-    //openGlWindow(renderWireTeapot, "3D", init3D);
+    openGlWindow(testFloodFill, "Primitive 2D", init2D, onReshape2D);
 }

@@ -4,22 +4,38 @@
 
 #include <cmath>
 #include "cg_vec3.hpp"
+#include "cg_quat.hpp"
+
 using namespace std;
 
 namespace cg {
 
 template<typename T>
 Vec3<T>::Vec3(): x(0), y(0), z(0) {}
+
 template<typename T>
 Vec3<T>::Vec3(T xx): x(xx), y(xx), z(xx) {}
+
 template<typename T>
 Vec3<T>::Vec3(T xx, T yy, T zz): x(xx), y(yy), z(zz) {}
 
-// 加
+template<typename T>
+Vec3<T>::Vec3(const Vec3<T>& v): x(v.x), y(v.y), z(v.z) {}
+
+template<typename T>
+Vec3<T>& Vec3<T>::operator = (const Vec3<T>& v) {
+    x = v.x;
+    y = v.y;
+    z = v.z;
+    return *this;
+}
+
+// + 和 -
 template<typename T>
 Vec3<T> Vec3<T>::operator + (const Vec3<T>& v) const {
     return Vec3(x + v.x, y + v.y, z + v.z);
 }
+
 template<typename T>
 Vec3<T>& Vec3<T>::operator += (const Vec3<T>& v) {
     x += v.x;
@@ -28,16 +44,51 @@ Vec3<T>& Vec3<T>::operator += (const Vec3<T>& v) {
     return *this;
 }
 
-// 减
 template<typename T>
 Vec3<T> Vec3<T>::operator - (const Vec3<T>& v) const {
     return Vec3(x - v.x, y - v.y, z - v.z);
 }
+
 template<typename T>
 Vec3<T>& Vec3<T>::operator -= (const Vec3<T>& v) {
     x -= v.x;
     y -= v.y;
     z -= v.z;
+    return *this;
+}
+
+// ++ 和 --
+template<typename T>
+Vec3<T>& Vec3<T>::operator ++ () {
+    ++x;
+    ++y;
+    ++z;
+    return *this;
+}
+
+template<typename T>
+Vec3<T> Vec3<T>::operator ++ (int) {
+    Vec3<T> ret(x, y, z);
+    x++;
+    y++;
+    z++;
+    return ret;
+}
+
+template<typename T>
+Vec3<T>& Vec3<T>::operator -- () {
+    --x;
+    --y;
+    --z;
+    return *this;
+}
+
+template<typename T>
+Vec3<T> Vec3<T>::operator -- (int) {
+    Vec3<T> ret(x, y, z);
+    x--;
+    y--;
+    z--;
     return *this;
 }
 
@@ -56,36 +107,43 @@ Vec3<T>& Vec3<T>::operator *= (const T& r) {
 
 // 点积
 template<typename T>
-T Vec3<T>::dotProduct(const Vec3<T> &v) const {
+T Vec3<T>::dot(const Vec3<T> &v) const {
     return x * v.x + y * v.y + z * v.z;
 }
+
 // 叉积
 template<typename T>
-Vec3<T> Vec3<T>::crossProduct(const Vec3<T>& v) const {
+Vec3<T> Vec3<T>::cross(const Vec3<T>& v) const {
     T xx = y * v.z - z * v.y;
     T yy = z * v.x - x * v.z;
     T zz = x * v.y - y * v.x;
     return Vec3<T>(xx, yy, zz);
 }
+
 // 模
 template<typename T>
 T Vec3<T>::norm() const {
     return x * x + y * y + z * z;
 }
+
 // 长度
 template<typename T>
 T Vec3<T>::length() const {
     return sqrt(norm());
 }
+
 // 下标访问运算
 template<typename T>
 const T& Vec3<T>::operator[] (uint8_t i) const {
+    assert(i < 3);
     return (&x)[i];
 }
 template<typename T>
 T& Vec3<T>::operator[] (uint8_t i) {
+    assert(i < 3);
     return (&x)[i];
 }
+
 // 规范化
 template<typename T>
 Vec3<T>& Vec3<T>::normalize() { 
@@ -93,9 +151,46 @@ Vec3<T>& Vec3<T>::normalize() {
     if (n > 0) { 
         T factor = 1 / sqrt(n); 
         x *= factor, y *= factor, z *= factor; 
-    } 
- 
+    }
     return *this; 
+}
+
+// 旋转向量
+template<typename T>
+Vec3<T>& Vec3<T>::rotate(T angle, const Vec3<T>& axis) {
+    const T sinHalfAngle = sin(toRadian(angle / 2));
+    const T cosHalfAngle = cos(toRadian(angle / 2));
+
+    const T rx = axis.x * sinHalfAngle;
+    const T ry = axis.y * sinHalfAngle;
+    const T rz = axis.z * sinHalfAngle;
+    const T rw = cosHalfAngle;
+
+    Quaternion<T> q(rx, ry, rz, rw);
+    Quaternion<T> qc = q.getConjugate();
+    Quaternion<T> w = q * (*this) * qc;
+
+    x = w.x;
+    y = w.y;
+    z = w.z;
+
+    return *this;
+}
+
+template <typename T>
+Vec3<T> Vec3<T>::normalize(const Vec3<T>& v) {
+    Vec3<T> n(v);
+    return n.normalize();
+}
+
+template <typename T>
+Vec3<T> Vec3<T>::cross(const Vec3<T>& u, const Vec3<T>& v) {
+    return u.cross(v);
+}
+
+template <typename T>
+T Vec3<T>::dot(const Vec3<T>& u, const Vec3<T>& v) {
+    return u.dot(v);
 }
 
 // 重载流输出运算符
@@ -111,12 +206,6 @@ Vec3<T> sphericalToCartesian(const T &theta, const T &phi) {
     T y = sin(phi) * sin(theta);
     T z = cos(theta);
     return Vec3<T>(x, y, z); 
-}
-
-// “夹紧”一对边界值之间的值，确保其不越界
-template<typename T>
-T clamp(T& v, T& min, T& max) {
-    return min(max(v, min), max);
 }
 
 // 计算单位（笛卡尔坐标）向量的单位球面坐标:Theta

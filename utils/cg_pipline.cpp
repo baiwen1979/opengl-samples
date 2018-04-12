@@ -47,14 +47,16 @@ void Pipeline::setPersProjParams(const PersProjParams& p) {
 }
 
 void Pipeline::setCamera(const Camera& camera) {
-    _camera = camera;
+    _camera.pos = camera.getPos();
+    _camera.target = camera.getTarget();
+    _camera.up = camera.getUp();
 }
 
 const Mat4f& Pipeline::getWPTransform() {
     getWorldTransform();
-    Mat4f mp = Mat4f::persProjMat(
-        _persProjParams.aspectRatio,
+    Mat4f mp = Mat4f::perspective(
         _persProjParams.fieldOfView,
+        _persProjParams.aspectRatio,
         _persProjParams.zNear,
         _persProjParams.zFar
     );
@@ -63,21 +65,24 @@ const Mat4f& Pipeline::getWPTransform() {
 }
 
 const Mat4f& Pipeline::getWorldTransform() {
-    Mat4f mt = Mat4f::translationMat(_pos.x, _pos.y, _pos.z);
-    Mat4f mr = Mat4f::rotationMat(_rot.x, _rot.y, _rot.z);
-    Mat4f ms = Mat4f::scalingMat(_scale.x, _scale.y, _scale.z);
-    _transform = mt * mr * ms;
+    Mat4f m;
+    m = Mat4f::scale(m, _scale.x, _scale.y, _scale.z);   
+    m = Mat4f::rotateX(m, _rot.x);
+    m = Mat4f::rotateY(m, _rot.y);
+    m = Mat4f::rotateZ(m, _rot.z);
+    m = Mat4f::translate(m, _pos.x, _pos.y, _pos.z);
+    _transform = m;
     return _transform;
 }
 
 const Mat4f& Pipeline::getWVPTransform() {
     getWorldTransform();
-    Vec3f pos = _camera.getPos() * -1.0;
-    Mat4f cmt = Mat4f::translationMat(pos.x, pos.y, pos.z);
-    Mat4f cmr = Mat4f::cameraMat(_camera.getTarget(), _camera.getUp());
-    Mat4f mp = Mat4f::persProjMat(
-        _persProjParams.aspectRatio,
+    Vec3f pos = _camera.pos * -1;
+    Mat4f cmt = Mat4f::translate(Mat4f(), pos.x, pos.y, pos.z);
+    Mat4f cmr = Mat4f::lookAt(_camera.pos, _camera.target, _camera.up);
+    Mat4f mp = Mat4f::perspective(
         _persProjParams.fieldOfView,
+        _persProjParams.aspectRatio,   
         _persProjParams.zNear,
         _persProjParams.zFar
     );

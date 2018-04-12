@@ -1,5 +1,5 @@
 #include <cg_utils.h>
-#include <cg_math3d.h>
+#include <cgm/cg_math.h>
 #include <cassert>
 
 #include "cg_glw.hpp"
@@ -27,10 +27,10 @@ static void renderSceneCB() {
     // 旋转增量
     scale += 0.01f;
  
-    Pipeline p;
+    Pipeline p;  
+    //p.posit(sinf(scale), sinf(scale), 0.0f);
     p.scale(sinf(scale));
-    p.posit(0.0f, sinf(scale), 0.0f);
-    p.rotate(sinf(scale) * 90.0f, sinf(scale) * 90.0f, sinf(scale) * 90.0f);
+    //p.rotate(0, 0, sinf(scale) * 180);
     const Mat4f& world = p.getWorldTransform();
 
     cout << world << endl;
@@ -132,6 +132,9 @@ void testOGLTutorial() {
     );
 }
 */
+
+
+
 
 
 

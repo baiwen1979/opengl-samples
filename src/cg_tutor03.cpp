@@ -1,5 +1,5 @@
 #include <cg_utils.h>
-#include <cg_math3d.h>
+#include <cgm/cg_math.h>
 #include <cassert>
 
 #include "cg_glw.hpp"

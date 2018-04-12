@@ -15,8 +15,14 @@ class Mat4
 public:
     /* 构造函数 */
     Mat4();
-    Mat4 (T a, T b, T c, T d, T e, T f, T g, T h, 
-          T i, T j, T k, T l, T m, T n, T o, T p);
+    Mat4(T v);
+    Mat4(
+        const T& a, const T& b, const T& c, const T& d, 
+        const T& e, const T& f, const T& g, const T& h, 
+        const T& i, const T& j, const T& k, const T& l, 
+        const T& m, const T& n, const T& o, const T& p);
+
+    Mat4(const Mat4<T>& m);
 
     /* 成员运算符 */
     // 下标取值
@@ -46,19 +52,25 @@ public:
 
     /* 静态成员 */
     // 乘
-    static void multiply(const Mat4<T> &a, const Mat4& b, Mat4 &c);
-    // 单位矩阵
-    static Mat4<T> identity();
+    static void multiply(const Mat4<T>& a, const Mat4<T>& b, Mat4<T>& c);
+
     // 平移矩阵
-    static Mat4<T> translationMat(T tx, T ty, T tz);
+    static Mat4<T> translate(const Mat4<T>& m, T tx, T ty, T tz);
+    static Mat4<T> translate(const Mat4<T>& m, const Vec3<T>& v);
     // 旋转矩阵
-    static Mat4<T> rotationMat(T rx, T ry, T rz);
+    static Mat4<T> rotateX(const Mat4<T>& m, T angle);
+    static Mat4<T> rotateY(const Mat4<T>& m, T angle);
+    static Mat4<T> rotateZ(const Mat4<T>& m, T angle);
+    static Mat4<T> rotate(const Mat4<T>& m, T angle, const Vec3<T>& v);
     // 缩放矩阵
-    static Mat4<T> scalingMat(T sx, T sy, T sz);
+    static Mat4<T> scale(const Mat4<T>& m, T sx, T sy, T sz);
+    static Mat4<T> scale(const Mat4<T>& m, const Vec3<T>& v);
+    // 正交投影矩阵
+    static Mat4<T> ortho(T left, T right, T top, T bottom, T zNear, T zFar);
     // 透视投影矩阵
-    static Mat4<T> persProjMat(T ar, T fov, T zNear, T zFar);
-    // 摄像机矩阵
-    static Mat4<T> cameraMat(const Vec3<T>& target, const Vec3<T>& up);
+    static Mat4<T> perspective(T fovy, T aspect, T zNear, T zFar);
+    // 观察视图矩阵
+    static Mat4<T> lookAt(const Vec3<T>& eye, const Vec3<T>& target, const Vec3<T>& up);
 
     /* 成员变量 */
     T x[4][4];

@@ -1,7 +1,7 @@
 #ifndef _CG_PIPLINE_HPP_
 #define _CG_PIPLINE_HPP_
 
-#include "cg_math3d.h"
+#include "cgm/cg_math.h"
 #include "cg_camera.hpp"
 
 namespace cg {
@@ -47,7 +47,11 @@ private:
     Vec3f _pos;   // 位置
     Vec3f _rot;   // 旋转
 
-    Camera _camera; // 摄像机
+    struct {
+        Vec3f pos;     // 位置
+        Vec3f target;  // 目标
+        Vec3f up;      // 上方向
+    } _camera; // 摄像机
 
     Mat4f _transform; // 变换矩阵
     PersProjParams _persProjParams; // 透视投影设置

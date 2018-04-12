@@ -2,6 +2,7 @@
 #define _CG_PRIM3D_HPP_
 
 #include <cg_types.h>
+#include <cgm/cg_math.h>
 
 namespace cg {
 
@@ -14,6 +15,23 @@ const float PI = 3.14159265358;
  * @return {void} 无
  */
 void setPixel(GLint x, GLint y);
+
+/*
+ * 在屏幕的指定坐标位置绘制指定颜色的像素
+ * @param x {GLint} 像素点的x坐标
+ * @param y {GLint} 像素点的y坐标
+ * @param color {Color4i} 像素点的颜色
+ * @return {void} 无
+*/
+void setPixel(GLint x, GLint y, Color4i color);
+
+/**
+ * 获取屏幕的指定坐标位置的像素颜色
+ * @param x {GLint} 像素点的x坐标
+ * @param y {GLint} 像素点的y坐标
+ * @return {Color4i} RGBA颜色
+ */
+Color4i getPixel(GLint x, GLint y);
 
 /**
  * 使用DDA算法在屏幕上绘制直线段
@@ -94,6 +112,15 @@ void ellipseMidPoint(GLint xc, GLint yc, GLint rx, GLint ry);
  */
 void regPolygon(Vec2i center, GLint radius, GLint numEdges = 6, 
     Color4f fillColor = Color4f(1.0, 0.0, 0.0, 1.0));
+
+/**
+ * 种子区域填充算法（漫水法）
+ * @param x {GLint} 种子像素点的x坐标
+ * @param y {GLint} 种子像素点的y坐标
+ * @param targetColor {Color4i} 目标颜色
+ * @param fillColor {Color4i} 填充颜色
+ */
+void floodFill(GLint x, GLint y, const Color4i& targetColor, const Color4i& fillColor);
 
 } //namespace cg
 

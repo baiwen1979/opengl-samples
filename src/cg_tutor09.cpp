@@ -1,5 +1,5 @@
 #include <cg_utils.h>
-#include <cg_math3d.h>
+#include <cgm/cg_math.h>
 #include <cassert>
 
 #include "cg_glw.hpp"
@@ -24,45 +24,54 @@ static PersProjParams persProjParams;
 static const char* vShaderFileName = "GLSL/vshader07.glsl";
 static const char* fshaderFileName = "GLSL/fshader07.glsl";
 
+Mat4f testMatrixTransform() {
+    Mat4f trans;
+    cout << trans << endl;
+    trans = Mat4f::scale(trans, Vec3f(1.2f));
+    //cout << trans << endl;
+    //trans = Mat4f::rotate(trans, -60.0f, Vec3f(0.0f, 1.0f, 0.0f));
+    trans = Mat4f::rotateZ(trans, -60.0f);
+    //cout << trans << endl;
+    trans = Mat4f::translate(trans, Vec3f(0.0f, 0.0f, 5.0f));
+    cout << trans << endl;
+
+    Mat4f projectMat = Mat4f::perspective(45, (float)WinRect.w/(float)WinRect.h, 1.0f, 100.0f);
+
+    cout << projectMat << endl;
+    trans =  projectMat * trans;
+    cout << trans << endl;
+    return trans;
+}
+
  /**
  * 渲染回调函数
  */
 static void renderSceneCB() {
     // 旋转角度
-    static float scale = 0.0f;
+    static float scale = 0.5f;
     // 旋转增量
     scale += 0.5f;
  
-    Pipeline p;
-    p.posit(0.0f, 0.0f, 5.0f);
+    Pipeline p;    
     p.rotate(0.0f, scale, 0.0f);
+    p.posit(0.0f, 0.0f, 5.0f);   
     // 设置透视投影变换参数
     p.setPersProjParams(persProjParams);
     // 获得世界坐标透视投影变换矩阵
-    const Mat4f& world = p.getWPTransform();
-    //const Mat4f& world = p.getWorldTransform();
-
-    cout << world << endl;
+    const Mat4f& trans = p.getWPTransform();
 
     // 将平移矩阵传递给着色器的uniform变量glWorld中
-    glUniformMatrix4fv(glWorldLocation, 1, GL_TRUE, &world[0][0]);
+    glUniformMatrix4fv(glWorldLocation, 1, GL_TRUE, &trans[0][0]);
 
     // 清空颜色和深度缓存
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    // 开启顶点属性
-    glEnableVertexAttribArray(0);
-    // 绑定GL_ARRAY_BUFFER缓冲器
-    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    // 告诉管线怎样解析buffer中的数据
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-    // 绘图之前，绑定索引缓存
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-    // 绘制索引图形
+     // 绑定到事先创建好的顶点数组对象
+    glBindVertexArray(vertexArrayID);
+
+    // 绘制图形元素
     glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
 
-    // 禁用顶点数据
-    glDisableVertexAttribArray(0);
     // 交换前后缓存
     glutSwapBuffers();
 }
@@ -91,6 +100,11 @@ static void createVertexBuffer()
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     // 绑定顶点数据
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    // 顶点位置
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+    // 开启顶点位置属性
+    glEnableVertexAttribArray(0);
 }
 
 // 创建索引缓冲器
@@ -130,6 +144,13 @@ static void initPersProjInfo() {
 }
 
 static void init() {
+    // 设置前向面
+    glFrontFace(GL_CW);
+    // 背面剔除
+    glCullFace(GL_BACK);
+    // 启用背面剔除
+    glEnable(GL_CULL_FACE);
+
     createVertexBuffer();
     createIndexBuffer();
     initShaders();
@@ -149,6 +170,7 @@ void testOGLTutorial() {
     );
 }
 */
+
 
 
 

@@ -9,6 +9,18 @@ void setPixel(GLint x, GLint y) {
     glEnd();
 }
 
+void setPixel(GLint x, GLint y, Color4i color) {
+    glColor4ubv((GLubyte*)&color);
+    setPixel(x, y);
+}
+
+// 获取像素颜色
+Color4i getPixel(GLint x, GLint y) {
+    Color4i color;
+    glReadPixels(x, y, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &color.r);
+    return color;
+}
+
 // DDA画线算法
 void lineDDA(GLint x0, GLint y0, GLint xEnd, GLint yEnd) {
     // 计算两端点之间的水平和垂直距离
@@ -313,6 +325,25 @@ GLuint genRegPolyList(Vec2i center, GLint radius, GLint numEdges, Color4f fillCo
 void regPolygon(Vec2i center, GLint radius, GLint numEdges, Color4f fillColor) {
     GLuint listId = genRegPolyList(center, radius, numEdges, fillColor);
     glCallList(listId);
+}
+
+// 种子填充算法（漫水法）
+void floodFill(GLint x, GLint y, const Color4i& targetColor, const Color4i& fillColor) {
+    Color4i color = getPixel(x, y);
+
+    if (fillColor == targetColor) return;
+    if (color != targetColor) return;
+
+    setPixel(x, y, fillColor);
+
+    floodFill(x, y + 1, targetColor, fillColor);     // 北
+    //floodFill(x + 1, y + 1, targetColor, fillColor); // 东北
+    floodFill(x + 1, y, targetColor, fillColor);     // 东
+    //floodFill(x + 1, y - 1, targetColor, fillColor); // 东南
+    floodFill(x, y - 1, targetColor, fillColor);     // 南
+    //floodFill(x - 1, y - 1, targetColor, fillColor); // 西南
+    floodFill(x - 1, y, targetColor, fillColor);     // 西   
+    //floodFill(x - 1, y + 1, targetColor, fillColor); // 西北         
 }
 
 } //namespace cg

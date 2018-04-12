@@ -14,6 +14,44 @@ using namespace std;
 
 namespace cg {
 
+Shader::Shader(const GLchar *vsPath, GLchar *fsPath) {
+	id = LoadShaders(vsPath, fsPath);
+}
+
+void Shader::use() {
+	glUseProgram(id);
+}
+
+void Shader::setBool(const std::string& name, bool value) const {
+	glUniform1i(glGetUniformLocation(id, name.c_str()), (int)value);
+}
+
+void Shader::setInt(const std::string& name, int value) const {
+	glUniform1i(glGetUniformLocation(id, name.c_str()), value);
+}
+
+void Shader::setFloat(const std::string& name, float value) const {
+	glUniform1f(glGetUniformLocation(id, name.c_str()), value);
+}
+
+void Shader::setVec2f(const std::string& name, const Vec2f& value) const {
+	glUniform2f(glGetUniformLocation(id, name.c_str()), value.x, value.y);
+}
+
+void Shader::setVec3f(const std::string& name, const Vec3f& value) const {
+	glUniform3f(glGetUniformLocation(id, name.c_str()), value.x, value.y, value.z);
+}
+
+void Shader::setMat4f(const std::string& name, const Mat4f& value) const {
+	GLuint location = glGetUniformLocation(id, name.c_str());
+	glUniformMatrix4fv(location, 1, GL_TRUE, &value[0][0]);
+}
+
+void Shader::setColor4f(const std::string& name, const Color4f& value) const {
+	GLuint location = glGetUniformLocation(id, name.c_str());
+	glUniform4f(location, value.r, value.g, value.b, value.a);
+}
+
 GLuint LoadShaders(const char * vertex_file_path, const char * fragment_file_path){
 
 	// 创建着色器

@@ -1,5 +1,5 @@
 #include <cg_utils.h>
-#include <cg_math3d.h>
+#include <cgm/cg_math.h>
 #include <cassert>
 
 #include "cg_glw.hpp"
@@ -7,7 +7,7 @@
 using namespace cg;
 
 // 窗口设置
-static const Recti WinRect = Recti(100, 100, 1024, 768);
+static const Recti WIN_RECT = Recti(100, 100, 1024, 768);
 
 // 顶点数组对象VAO的ID
 static GLuint vertexArrayID;
@@ -20,7 +20,7 @@ static GLuint glWorldLocation;
 // 透视变换参数设置
 static PersProjParams persProjParams;
 // 摄像机
-static Camera camera;
+static Camera* pCamera;
 
 // 着色器文件路径
 static const char* vShaderFileName = "GLSL/vshader07.glsl";
@@ -36,10 +36,10 @@ static void renderSceneCB() {
     scale += 0.5f;
  
     Pipeline p;
-    p.posit(0.0f, 0.0f, 3.0f);
+    p.posit(0.0f, 0.0f, 5.0f);
     p.rotate(0.0f, scale, 0.0f);
     // 设置摄像机
-    p.setCamera(camera);
+    p.setCamera(*pCamera);
     // 设置透视投影变换参数
     p.setPersProjParams(persProjParams);
     // 获得世界视图坐标透视投影变换矩阵
@@ -126,19 +126,27 @@ static void initShaders() {
 }
 
 static void initPersProjParams() {
-    persProjParams.aspectRatio = WinRect.w / WinRect.h;
+    persProjParams.aspectRatio = WIN_RECT.w / WIN_RECT.h;
     persProjParams.fieldOfView = 45.0f;
     persProjParams.zNear = 1.0f;
     persProjParams.zFar = 100.0f;
 }
 
 static void initCamera() {
-    camera.setPos(Vec3f(0.0, 0.0f, -1.0f));
-    camera.setTarget(Vec3f(0.0f, 0.0f, 2.0f));
-    camera.setUp(Vec3f(0.0f, 1.0f, 0.0f));
+    pCamera = new Camera(WIN_RECT.w, WIN_RECT.h);
+    pCamera->setPos(Vec3f(0.0, 0.0f, -1.0f));
+    pCamera->setTarget(Vec3f(0.0f, 0.0f, 2.0f));
+    pCamera->setUp(Vec3f(0.0f, 1.0f, 0.0f));
 }
 
 static void init() {
+    // 设置前向面
+    glFrontFace(GL_CW);
+    // 背面剔除
+    glCullFace(GL_BACK);
+    // 启用背面剔除
+    glEnable(GL_CULL_FACE);
+
     createVertexBuffer();
     createIndexBuffer();
     initShaders();
@@ -155,10 +163,9 @@ void testOGLTutorial() {
         NULL, 
         renderSceneCB,
         true, 
-        WinRect
+        WIN_RECT
     );
 }
 */
-
 
 

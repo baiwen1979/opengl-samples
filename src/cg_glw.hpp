@@ -1,5 +1,6 @@
 #ifndef _CG_INIT_HPP_
 #define _CG_INIT_HPP_
+
 #include <cg_types.h>
 
 namespace glw {
