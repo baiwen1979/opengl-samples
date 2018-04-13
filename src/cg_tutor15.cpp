@@ -310,64 +310,6 @@ static void registerUIEvents() {
     glutKeyboardFunc(keyboardCB);
 }
 
-void testMat3() {
-    Mat3f a(
-        1, 1, 1, 
-        2, 2, 2, 
-        3, 3, 3
-    );
-
-    Mat3f b(
-        1, 2, 3, 
-        4, 5, 6, 
-        7, 8, 9
-    );
-
-    cout << "a:\n" << a;
-    cout << "b:\n" << b;
-
-    cout << "a + b:\n" << a + b;
-    cout << "b - a:\n" << b - a;
-    cout << "a * b:\n" << a * b;
-    cout << "a * 2:\n" << a * 2;
-
-    cout << "a.transpose():\n" << a.transpose();
-    cout << "a:\n" << a;
-    cout << "b.transposed():\n" << b.transposed();
-    cout << "b:\n" << b;
-
-    Mat3f m;
-    Vec2f p(1,1);
-    cout << "p = " << p << endl;
-
-    Mat3f sm = Mat3f::scale(m, 2, 2);
-    cout << "scale(m):\n" << sm;
-    cout << "p' = " << sm * p << endl;
-
-    Mat3f rm = Mat3f::rotate(m, 45, 0, 0);
-    cout << "rotate(m):\n" << rm;
-    cout << "p' = " << rm * p << endl;
-    cout << "rm * sm:\n" << rm * sm << endl;
-
-    Mat3f tm = Mat3f::translate(m, 2, 3);
-    cout << "translate(m):\n" << tm;
-    cout << "p' = " << tm * p << endl;
-    cout << "T(2,3) * R(45,0,0) * S(2,2)\n" 
-         << tm * rm * sm << endl;
-
-    cout << p << "->scale(2,2)->rotate(45,0,0)->tranlate(2,3)->"
-         << tm * rm * sm * p << endl;
-
-    m = Mat3f::scale(m, Vec2f(2, 2));
-    cout << "m(scale):\n" << m;
-    m = Mat3f::rotate(m, 45, Vec2f(0, 0));
-    cout << "m(rotate):\n" << m;
-    m = Mat3f::translate(m, Vec2f(2, 3));
-    cout << "m(translate):\n" << m;
-    cout << p << "->scale(2,2)->rotate(45,0,0)->tranlate(2,3)->"
-         << m * p << endl;
-}
-
 static void init() {
     // 设置前向面
     glFrontFace(GL_CW);
@@ -385,8 +327,6 @@ static void init() {
     initDirectionalLight();
 
     registerUIEvents();
-
-    testMat3();
 }
 
 

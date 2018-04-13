@@ -6,7 +6,7 @@
 using namespace cg;
 
 // 初始窗口大小
-const GLsizei WIN_WIDTH = 800;
+const GLsizei WIN_WIDTH = 600;
 const GLsizei WIN_HEIGHT = 600;
 
 //初始化2D绘图上下文/
@@ -295,6 +295,164 @@ void testFloodFill() {
     glutSwapBuffers();
 }
 
+void testVec2f() {
+    
+    Vec2f a(2), b(1,2);
+
+    cout << "a = " << a << endl;
+    cout << "b = " << b << endl;
+    cout << "a + b = " << a + b << endl; // a.operator+(b);
+    cout << "a = " << a << "," << " b = " << b << endl;
+    a += b;
+    cout << "a = " << a << "," << " b = " << b << endl;
+    cout << "b - a = " << b - a << endl; 
+    
+    cout << "b * 2 = " << b * 2 << endl; //b.operator*(2)
+    cout << "2 * b = " << 2.0f * b << endl; 
+
+    cout << "a . b = " << a.dot(b) << endl;
+    cout << "|a|^2 = " << a.norm() << endl;
+
+    cout << "a[0] = " << a[0] << endl;
+    a[1] = 10;
+    cout << a << endl;
+
+    cout << "|b| = " << b.length() << endl;
+    cout << "Normalization of b:" << b.normalize() << endl;
+    cout << "After Normalization of b: " << b << endl;
+    cout << "|b| = " << b.length() << endl;
+
+}
+
+void testMat3f() {
+    Mat3f a(
+        1, 1, 1, 
+        2, 2, 2, 
+        3, 3, 3
+    );
+
+    Mat3f b(
+        1, 2, 3, 
+        4, 5, 6, 
+        7, 8, 9
+    );
+
+    cout << "a:\n" << a;
+    cout << "b:\n" << b;
+
+    cout << "a + b:\n" << a + b;
+    cout << "b - a:\n" << b - a;
+    cout << "a * b:\n" << a * b;
+    cout << "a * 2:\n" << a * 2;
+
+    cout << "a.transpose():\n" << a.transpose();
+    cout << "a:\n" << a;
+    cout << "b.transposed():\n" << b.transposed();
+    cout << "b:\n" << b;
+
+    Mat3f m;
+    Vec2f p(1,1);
+    cout << "p = " << p << endl;
+
+    Mat3f sm = Mat3f::scale(m, 2, 2);
+    cout << "scale(m):\n" << sm;
+    cout << "p' = " << sm * p << endl;
+
+    Mat3f rm = Mat3f::rotate(m, 45, 0, 0);
+    cout << "rotate(m):\n" << rm;
+    cout << "p' = " << rm * p << endl;
+    cout << "rm * sm:\n" << rm * sm << endl;
+
+    Mat3f tm = Mat3f::translate(m, 2, 3);
+    cout << "translate(m):\n" << tm;
+    cout << "p' = " << tm * p << endl;
+
+    cout << "T(2,3) * R(45,0,0) * S(2,2)\n" 
+         << tm * rm * sm << endl;
+
+    cout << p << "->scale(2,2)->rotate(45,0,0)->tranlate(2,3)->"
+         << tm * rm * sm * p << endl;
+
+    m = Mat3f::scale(m, Vec2f(2, 2));
+    cout << "m(scale):\n" << m;
+    m = Mat3f::rotate(m, 45, Vec2f(0, 0));
+    cout << "m(rotate):\n" << m;
+    m = Mat3f::translate(m, Vec2f(2, 3));
+    cout << "m(translate):\n" << m;
+    cout << p << "->scale(2,2)->rotate(45,0,0)->tranlate(2,3)->"
+         << m * p << endl;
+}
+
+void drawPolygon(Vec2f vertices[], GLint numOfVertices) {
+    glBegin(GL_TRIANGLES);
+      for (GLint i = 0; i < numOfVertices; i++) {
+          glVertex2f(vertices[i].x, vertices[i].y);
+      }
+    glEnd();
+}
+
+Vec2f getVerticesCenter(Vec2f vertices[], GLint numOfVertices) {
+    Vec2f sum(0.0f);
+    for (GLint i = 0; i < numOfVertices; i++) {
+        sum += vertices[i];
+    }
+    return sum * (1.0f / numOfVertices);
+}
+
+void transformVertices(const Mat3f& tm, Vec2f vertices[], GLint numOfVertices) {
+    for (GLint i = 0; i < numOfVertices; i++) {
+        vertices[i] = tm * vertices[i];
+    }
+}
+
+void testTransformation() {
+    cout << "Testing Transformation" << endl;
+
+    Vec2f vertices[] = {
+        Vec2f(50.0f, 25.0f), 
+        Vec2f(150.0f, 25.0f),
+        Vec2f(100.0f, 100.0f)
+    };
+
+    GLint numOfVertices =  sizeof(vertices)/sizeof(Vec2f);
+
+    Vec2f center = getVerticesCenter(vertices,numOfVertices);
+    cout << "center = " << center << endl;
+
+    glClear(GL_COLOR_BUFFER_BIT);
+    glColor3f(0.0, 0.0, 1.0);
+    drawPolygon(vertices, numOfVertices);
+
+    Mat3f m;
+    m = Mat3f::scale(m, Vec2f(0.5f, 0.5f), center);
+    m = Mat3f::rotate(m, 90.0f, center);
+    m = Mat3f::translate(m, 0.0f, 100.0f);
+
+    transformVertices(m, vertices, numOfVertices);
+
+    glColor3f(1.0, 0.0, 0.0);
+    drawPolygon(vertices, numOfVertices);
+
+    glutSwapBuffers();
+}
+
+void initTransformation() {
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+}
+
+void reshapeTransformation(int w, int h) {
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(0, 200.0, 0, 200.0);
+}
+
 void testPrimitive2d() {
-    openGlWindow(testFloodFill, "Primitive 2D", init2D, onReshape2D);
+    openGlWindow(
+        testTransformation, 
+        "三角形和矩形变换", 
+        initTransformation, 
+        reshapeTransformation
+    );
+    //testVec2f();
+    //testMat3f();
 }

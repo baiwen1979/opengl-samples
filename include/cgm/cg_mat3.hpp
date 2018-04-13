@@ -50,6 +50,8 @@ public:
     // 创建缩放矩阵
     static Mat3<T> scale(const Mat3<T>& m, const T& sx, const T& sy);
     static Mat3<T> scale(const Mat3<T>& m, const Vec2<T>& sv);
+    static Mat3<T> scale(const Mat3<T>& m, const T& sx, const T& sy, const T& px, const T& py);
+    static Mat3<T> scale(const Mat3<T>& m, const Vec2<T>& sv, const Vec2<T>& pv);
 
     /*** 成员变量 ***/
     T m[3][3];

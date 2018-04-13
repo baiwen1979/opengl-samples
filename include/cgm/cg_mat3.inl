@@ -53,9 +53,9 @@ Mat3<T> Mat3<T>::operator + (const Mat3<T>& b) const {
 template <typename T>
 Mat3<T> Mat3<T>::operator - (const Mat3<T>& b) const {
     return Mat3(
-        m[0][0] - b[0][0], m[0][1] + b[0][1], m[0][2] + b[0][2],
-        m[1][0] - b[1][0], m[1][1] + b[1][1], m[1][2] + b[1][2],
-        m[2][0] - b[2][0], m[2][1] + b[2][1], m[2][2] + b[2][2]
+        m[0][0] - b[0][0], m[0][1] - b[0][1], m[0][2] - b[0][2],
+        m[1][0] - b[1][0], m[1][1] - b[1][1], m[1][2] - b[1][2],
+        m[2][0] - b[2][0], m[2][1] - b[2][1], m[2][2] - b[2][2]
     );
 }
 
@@ -178,6 +178,19 @@ Mat3<T> Mat3<T>::scale(const Mat3<T>& m, const T& sx, const T& sy) {
 template <typename T>
 Mat3<T> Mat3<T>::scale(const Mat3<T>& m, const Vec2<T>& sv) {
     return scale(m, sv.x, sv.y);
+}
+
+template <typename T>
+Mat3<T> Mat3<T>::scale(const Mat3<T>& m, const T& sx, const T& sy, const T& px, const T& py) {
+    Mat3<T> t = translate(m, -px, -py);
+    t = scale(t, sx, sy);
+    t = translate(t, px, py);
+    return t;
+}
+
+template <typename T>
+Mat3<T> Mat3<T>::scale(const Mat3<T>& m, const Vec2<T>& sv, const Vec2<T>& pv) {
+    return scale(m, sv.x, sv.y, pv.x, pv.y);
 }
 
 template<typename T>
