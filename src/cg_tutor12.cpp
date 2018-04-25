@@ -20,7 +20,7 @@ static GLuint glWorldLocation;
 // 透视变换参数设置
 static PersProjParams persProjParams;
 // 摄像机
-static Camera* pCamera = NULL;
+static CameraQuat *pCamera = NULL;
 
 // 着色器文件路径
 static const char* vShaderFileName = "GLSL/vshader07.glsl";
@@ -139,7 +139,7 @@ static void initPersProjParams() {
 }
 
 static void initCamera() {
-    pCamera = new Camera(WIN_RECT.w, WIN_RECT.h);
+    pCamera = new CameraQuat(WIN_RECT.w, WIN_RECT.h);
 }
 
 static void specialKeyboardCB(int key, int x, int y) {
@@ -165,7 +165,21 @@ static void registerUIEvents() {
     glutKeyboardFunc(keyboardCB);
 }
 
+static void initGl() {
+    // 启用深度测试
+    glEnable(GL_DEPTH_TEST);
+    // 设置前向面
+    glFrontFace(GL_CW);
+    // 背面剔除
+    glCullFace(GL_BACK);
+    // 启用背面剔除
+    glEnable(GL_CULL_FACE);
+    // 背景颜色
+    glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
+}
+
 static void init() {
+    initGl();
     createVertexBuffer();
     createIndexBuffer();
 
@@ -180,7 +194,7 @@ static void init() {
 void testOGLTutorial() {
     glw::openGlWindow(
         renderSceneCB, 
-        "OpenGL Tutorial 12 - Camera Control (Mouse) ", 
+        "OpenGL Tutorial 12 - Camera Control Using Mouse ", 
         init, 
         NULL, 
         renderSceneCB,

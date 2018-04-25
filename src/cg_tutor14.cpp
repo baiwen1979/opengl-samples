@@ -13,10 +13,10 @@ struct DirectionalLight {
 };
 
 // 带纹理坐标的顶点
-struct Vertex {
+struct MyVertex {
     Vec3f pos;      // 顶点位置
     Vec2f texCoord; // 纹理坐标
-    Vertex(Vec3f p, Vec2f tc): pos(p), texCoord(tc) {}
+    MyVertex(Vec3f p, Vec2f tc): pos(p), texCoord(tc) {}
 };
 
 // 窗口设置
@@ -43,7 +43,7 @@ static GLuint gDirLightIntensityLocation;
 // 透视变换参数设置
 static PersProjParams persProjParams;
 // 摄像机
-static Camera* pCamera = NULL;
+static CameraQuat *pCamera = NULL;
 
 // 着色器文件路径
 static const char* vShaderFileName = "GLSL/vshader14.glsl";
@@ -95,11 +95,11 @@ static void renderSceneCB() {
 static void createVertexBuffer()
 {
     // 金字塔（4面体）的4个顶点
-    Vertex vertices[] = {
-        Vertex(Vec3f(-1.0f, -1.0f, 0.5773f), Vec2f(0.0f, 0.0f)),
-        Vertex(Vec3f(0.0f, -1.0f, -1.15475f), Vec2f(0.5f, 0.0f)),
-        Vertex(Vec3f(1.0f, -1.0f, 0.5773f), Vec2f(1.0f, 0.0f)),
-        Vertex(Vec3f(0.0f, 1.0f, 0.0f), Vec2f(0.5f, 1.0f))
+    MyVertex vertices[] = {
+        MyVertex(Vec3f(-1.0f, -1.0f, 0.5773f), Vec2f(0.0f, 0.0f)),
+        MyVertex(Vec3f(0.0f, -1.0f, -1.15475f), Vec2f(0.5f, 0.0f)),
+        MyVertex(Vec3f(1.0f, -1.0f, 0.5773f), Vec2f(1.0f, 0.0f)),
+        MyVertex(Vec3f(0.0f, 1.0f, 0.0f), Vec2f(0.5f, 1.0f))
     };
 
     // 生成1个顶点数组对象，并将其ID存储到vertexArray变量中
@@ -115,11 +115,11 @@ static void createVertexBuffer()
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     // 顶点位置
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(MyVertex), (void*)0);
     // 开启顶点位置属性
     glEnableVertexAttribArray(0);
     // 顶点纹理坐标属性
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(MyVertex), (void*)(3 * sizeof(float)));
     // 开启纹理坐标属性
     glEnableVertexAttribArray(1);
 
@@ -150,23 +150,9 @@ static void createIndexBuffer() {
 
 // 创建纹理对象
 static void createTexture() {
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-    // 设置当前绑定的纹理对象的纹理包裹和过滤参数
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // 加载纹理图像
-    Texture tex = Texture::load("textures/container.jpg");
-    if (tex.getData()) {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex.getWidth(), tex.getHeight(), 
-            0, GL_RGB, GL_UNSIGNED_BYTE, tex.getData());
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else {
-        cout << "Failed to load Texture!" << endl;
-    }
+        // 加载纹理图像
+    Texture tex = Texture::load("textures/test.png", Texture::Diffuse);
+    texture = tex.getId();
 }
 
 static void initShaders() {
@@ -196,12 +182,12 @@ static void initPersProjParams() {
 }
 
 static void initCamera() {
-    pCamera = new Camera(WIN_RECT.w, WIN_RECT.h);
+    pCamera = new CameraQuat(WIN_RECT.w, WIN_RECT.h);
 }
 
 static void initDirectionalLight() {
     DirectionalLight dirLight;
-    dirLight.color = Color3f(1.0, 1.0, 0.0);
+    dirLight.color = Color3f(0.0, 1.0, 1.0);
     dirLight.intensity = 0.5f;
     glUniform3f(gDirLightColorLocation, dirLight.color.r, dirLight.color.g, dirLight.color.b);
     glUniform1f(gDirLightIntensityLocation, dirLight.intensity);
@@ -232,14 +218,21 @@ static void registerUIEvents() {
     glutKeyboardFunc(keyboardCB);
 }
 
-static void init() {
+static void initGl() {
+    // 启用深度测试
+    glEnable(GL_DEPTH_TEST);
     // 设置前向面
     glFrontFace(GL_CW);
     // 背面剔除
     glCullFace(GL_BACK);
     // 启用背面剔除
     glEnable(GL_CULL_FACE);
+    // 背景颜色
+    glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
+}
 
+static void init() {
+    initGl();
     createVertexBuffer();
     createIndexBuffer();
     createTexture();

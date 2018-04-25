@@ -93,11 +93,10 @@ static void init() {
     initShaders();
 }
 
-
 /*
 void testOGLTutorial() {
     glw::openGlWindow(renderSceneCB, 
-        "OpenGL Tutorial 04 - Moving Triangle", 
+        "OpenGL Tutorial 04 - Translation Transformation", 
         init, NULL, renderSceneCB, true, Recti(100,100,1024, 768));
 }
 */

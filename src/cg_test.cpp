@@ -383,76 +383,68 @@ void testMat3f() {
          << m * p << endl;
 }
 
-void drawPolygon(Vec2f vertices[], GLint numOfVertices) {
-    glBegin(GL_TRIANGLES);
-      for (GLint i = 0; i < numOfVertices; i++) {
-          glVertex2f(vertices[i].x, vertices[i].y);
-      }
+// 矩形裁剪区域
+static Rectf rect(100.0f,100.0f,200.0f,200.0f);
+// 被裁剪线段(p0,p1)
+static Vec2f p0(450.0f, 0.0f);
+static Vec2f p1(0.0f, 450.0f);
+
+void drawLine(const Vec2f& p0, const Vec2f& p1) {
+    glBegin(GL_LINES);
+    glColor3f(1.0f, 0.0f, 0.0f);
+    glVertex2f(p0.x, p0.y);
+    glColor3f(0.0f, 1.0f, 0.0f);
+    glVertex2f(p1.x, p1.y);
     glEnd();
 }
 
-Vec2f getVerticesCenter(Vec2f vertices[], GLint numOfVertices) {
-    Vec2f sum(0.0f);
-    for (GLint i = 0; i < numOfVertices; i++) {
-        sum += vertices[i];
-    }
-    return sum * (1.0f / numOfVertices);
-}
-
-void transformVertices(const Mat3f& tm, Vec2f vertices[], GLint numOfVertices) {
-    for (GLint i = 0; i < numOfVertices; i++) {
-        vertices[i] = tm * vertices[i];
-    }
-}
-
-void testTransformation() {
-    cout << "Testing Transformation" << endl;
-
-    Vec2f vertices[] = {
-        Vec2f(50.0f, 25.0f), 
-        Vec2f(150.0f, 25.0f),
-        Vec2f(100.0f, 100.0f)
-    };
-
-    GLint numOfVertices =  sizeof(vertices)/sizeof(Vec2f);
-
-    Vec2f center = getVerticesCenter(vertices,numOfVertices);
-    cout << "center = " << center << endl;
-
+void renderTestLineClip() {
     glClear(GL_COLOR_BUFFER_BIT);
-    glColor3f(0.0, 0.0, 1.0);
-    drawPolygon(vertices, numOfVertices);
-
-    Mat3f m;
-    m = Mat3f::scale(m, Vec2f(0.5f, 0.5f), center);
-    m = Mat3f::rotate(m, 90.0f, center);
-    m = Mat3f::translate(m, 0.0f, 100.0f);
-
-    transformVertices(m, vertices, numOfVertices);
-
-    glColor3f(1.0, 0.0, 0.0);
-    drawPolygon(vertices, numOfVertices);
-
+    glColor3f(1.0f, 0.0f, 0.0f);
+    glLineWidth(4);
+    glRectf(rect.x, rect.y, rect.x + rect.w, rect.y + rect.h);
+    drawLine(p0, p1);
     glutSwapBuffers();
 }
 
-void initTransformation() {
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+void initRectAndLines() {
+    rect.x = 100.0f;
+    rect.y = 100.0f;
+    rect.w = 200.0f;
+    rect.h = 200.0f;
+    p0 = Vec2f(450.0f, 0.0f);
+    p1 = Vec2f(0.0f, 450.0f);  
 }
 
-void reshapeTransformation(int w, int h) {
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluOrtho2D(0, 200.0, 0, 200.0);
+void keyboardCB(unsigned char key, int x, int y) {
+    switch(key) {
+        case 'c':
+            lineClipCB(p0.x, p0.y, p1.x, p1.y, rect.x, rect.x + rect.w, rect.y, rect.y + rect.h);
+            glutPostRedisplay();
+            break;
+        case 'r':
+            initRectAndLines();
+            glutPostRedisplay();
+            break;
+        case 'x':
+            exit(0);
+        default:
+            break;
+    }
+}
+
+void initTestLineClip() {
+    glClearColor(1.0, 1.0, 1.0, 0.0);
+    glShadeModel(GL_FLAT);
+    cout << "Press key 'c' to Clip! \n" << "Press key 'r' to Restore!\n";
+    glutKeyboardFunc(keyboardCB);
 }
 
 void testPrimitive2d() {
-    openGlWindow(
-        testTransformation, 
-        "三角形和矩形变换", 
-        initTransformation, 
-        reshapeTransformation
-    );
+    // 测试2D绘图算法
+    // openGlWindow(renderArcAngDiscrete, "角度离散圆弧绘制算法", init2D, onReshape2D);
+    // 测试线段裁剪算法
+    openGlWindow(renderTestLineClip, "线段裁剪算法", initTestLineClip, onReshape2D);
     //testVec2f();
     //testMat3f();
 }

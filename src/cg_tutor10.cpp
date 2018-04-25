@@ -20,7 +20,7 @@ static GLuint glWorldLocation;
 // 透视变换参数设置
 static PersProjParams persProjParams;
 // 摄像机
-static Camera* pCamera;
+static CameraQuat* pCamera;
 
 // 着色器文件路径
 static const char* vShaderFileName = "GLSL/vshader07.glsl";
@@ -133,20 +133,27 @@ static void initPersProjParams() {
 }
 
 static void initCamera() {
-    pCamera = new Camera(WIN_RECT.w, WIN_RECT.h);
-    pCamera->setPos(Vec3f(0.0, 0.0f, -1.0f));
-    pCamera->setTarget(Vec3f(0.0f, 0.0f, 2.0f));
-    pCamera->setUp(Vec3f(0.0f, 1.0f, 0.0f));
+    pCamera = new CameraQuat(WIN_RECT.w, WIN_RECT.h);
+    pCamera -> setPos(Vec3f(0.0, 0.0f, -1.0f));
+    pCamera -> setTarget(Vec3f(0.0f, 0.0f, 2.0f));
+    pCamera -> setUp(Vec3f(0.0f, 1.0f, 0.0f));
 }
 
-static void init() {
+static void initGl() {
+    // 启用深度测试
+    glEnable(GL_DEPTH_TEST);
     // 设置前向面
     glFrontFace(GL_CW);
     // 背面剔除
     glCullFace(GL_BACK);
     // 启用背面剔除
     glEnable(GL_CULL_FACE);
+    // 背景颜色
+    glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
+}
 
+static void init() {
+    initGl();
     createVertexBuffer();
     createIndexBuffer();
     initShaders();
@@ -158,7 +165,7 @@ static void init() {
 void testOGLTutorial() {
     glw::openGlWindow(
         renderSceneCB, 
-        "OpenGL Tutorial 10 - Rotating Pyramid (Camera Space)", 
+        "OpenGL Tutorial 10 - Camera Space", 
         init, 
         NULL, 
         renderSceneCB,

@@ -93,11 +93,10 @@ static void init() {
     initShaders();
 }
 
-
 /*
 void testOGLTutorial() {
     glw::openGlWindow(renderSceneCB, 
-        "OpenGL Tutorial 05 - Rotating Triangle", 
+        "OpenGL Tutorial 05 - Rotation Transformation", 
         init, NULL, renderSceneCB, true, Recti(100,100,1024, 768));
 }
 */

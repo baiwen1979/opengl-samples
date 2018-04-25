@@ -8,7 +8,7 @@ using namespace glw;
 // 测试2d图元绘制函数
 void testPrimitive2d();
 
-// 测试图形学课程实验
+// 测试图形学课程实验(例)
 void testCGCourseLab();
 
 // 测试OpenGL3.3教程

@@ -112,9 +112,23 @@ static void initShaders() {
     assert(glWorldLocation != 0xFFFFFFFF);
 }
 
+static void initGl() {
+    // 启用深度测试
+    glEnable(GL_DEPTH_TEST);
+    // 设置前向面
+    glFrontFace(GL_CW);
+    // 背面剔除
+    glCullFace(GL_BACK);
+    // 启用背面剔除
+    glEnable(GL_CULL_FACE);
+    // 背景颜色
+    glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
+}
+
 static void init() {
     createVertexBuffer();
     createIndexBuffer();
+    initGl();
     initShaders();
 }
 
@@ -122,7 +136,7 @@ static void init() {
 void testOGLTutorial() {
     glw::openGlWindow(
         renderSceneCB, 
-        "OpenGL Tutorial 07 - Rotating Pyramid", 
+        "OpenGL Tutorial 07 - Index Draws", 
         init, 
         NULL, 
         renderSceneCB, 

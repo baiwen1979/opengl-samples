@@ -71,6 +71,6 @@ static void init() {
 void testOGLTutorial() {
     glw::openGlWindow(renderSceneCB, 
         "OpenGL Tutorial 02 - First Triangle", 
-        init, NULL, true, Recti(100,100,1024, 768));
+        init, NULL, NULL,true, Recti(100,100,1024, 768));
 }
 */

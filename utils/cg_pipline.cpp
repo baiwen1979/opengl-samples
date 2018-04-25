@@ -46,7 +46,7 @@ void Pipeline::setPersProjParams(const PersProjParams& p) {
     _persProjParams = p;
 }
 
-void Pipeline::setCamera(const Camera& camera) {
+void Pipeline::setCamera(const CameraQuat& camera) {
     _camera.pos = camera.getPos();
     _camera.target = camera.getTarget();
     _camera.up = camera.getUp();

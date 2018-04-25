@@ -1,7 +1,10 @@
 #include <cg_utils.h>
 #include <cgm/cg_math.h>
 
+#include "cg_glw.hpp"
+
 using namespace cg;
+using namespace glw;
 
 static GLuint vbo;
 
@@ -46,13 +49,13 @@ static void createVertexBuffer()
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 }
 
-static void init(void* param) {
+static void init() {
     createVertexBuffer();
 }
 
 /*
-void testTutorial() {
-    openGlWindow(renderSceneCB, "OpenGL Tutorials", init);
+void testOGLTutorial() {
+    openGlWindow(renderSceneCB, "OpenGL Tutorials - Point", init);
 }
 */
 

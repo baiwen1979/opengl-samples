@@ -13,8 +13,12 @@ struct DirectionalLight
     vec3 Direction;
 };
 
+struct Material {
+    sampler2D texture_diffuse1;
+};
+
 uniform DirectionalLight gDirectionalLight;                                         
-uniform sampler2D gSampler;  
+uniform Material material;
 
 void main()
 {
@@ -31,5 +35,5 @@ void main()
         DiffuseColor = vec4(0, 0, 0, 0);
     }
 
-    FragColor = texture(gSampler, TexCoord0.xy) * (AmbientColor + DiffuseColor);
+    FragColor = texture(material.texture_diffuse1, TexCoord0.xy) * (AmbientColor + DiffuseColor);
 }

@@ -33,17 +33,18 @@ public:
     // 矩阵相乘
     Mat4<T> operator * (const Mat4<T>& v) const;
 
+    // 矩阵*向量
+    Vec3<T> operator * (const Vec3<T>& v) const;
+
     // 返回当前矩阵的转置
     Mat4<T> transposed() const;   
     // 将当前矩阵转置
     Mat4<T>& transpose ();
 
     // 顶点 * 当前矩阵
-    template<typename S> 
-    void multPos(const Vec3<S> &src, Vec3<S> &dst) const;
+    void multPos(const Vec3<T> &src, Vec3<T> &dst) const;
     // 向量 * 当前矩阵
-    template<typename S> 
-    void multDir(const Vec3<S> &src, Vec3<S> &dst) const;
+    void multDir(const Vec3<T> &src, Vec3<T> &dst) const;
 
     // 返回当前矩阵的逆矩阵
     Mat4<T> inverse();

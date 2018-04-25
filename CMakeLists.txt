@@ -53,7 +53,11 @@ message("GLEW Include Directory: ${GLEW_INCLUDE_DIR}")
 # 显示GLEW库
 message("GLEW Library: ${GLEW_LIBRARY}")
 
-#### 第三方库目录
+# assimp库和LIBZ库
+set(ASSIMP_LIBRARY assimp)
+set(Z_LIBRARY z)
+
+#### 项目生成库的目录
 set(PROJECT_LIB_DIR ${PROJECT_SOURCE_DIR}/lib)
 # 指定LINUX系统的第三方库目录
 if(UNIX AND NOT APPLE)
@@ -89,6 +93,8 @@ set(LINK_LIBS
     ${OPENGL_LIBRARY}
     ${GLEW_LIBRARY}
     ${GLUT_LIBRARY}
+    ${ASSIMP_LIBRARY}
+    ${Z_LIBRARY}
     ${PROJECT_LIBS}
 )
 # 指定目标链接库

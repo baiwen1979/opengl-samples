@@ -96,8 +96,9 @@ static void init() {
 /*
 void testOGLTutorial() {
     glw::openGlWindow(renderSceneCB, 
-        "OpenGL Tutorial 06 - Scaling Triangle (Using Matrix)", 
+        "OpenGL Tutorial 06 - Scaling Transformation And Interpolation", 
         init, NULL, renderSceneCB, true, Recti(100, 100, 1024, 768));
 }
 */
+
 

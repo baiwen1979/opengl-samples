@@ -87,9 +87,8 @@ Mat4<T>& Mat4<T>::transpose() {
 }
 
 template <typename T>
-template <typename S>
-void Mat4<T>::multPos(const Vec3<S> &src, Vec3<S> &dst) const {
-    S a, b, c, w; 
+void Mat4<T>::multPos(const Vec3<T> &src, Vec3<T> &dst) const {
+    T a, b, c, w; 
  
     a = src[0] * x[0][0] + src[1] * x[1][0] + src[2] * x[2][0] + x[3][0]; 
     b = src[0] * x[0][1] + src[1] * x[1][1] + src[2] * x[2][1] + x[3][1]; 
@@ -103,9 +102,8 @@ void Mat4<T>::multPos(const Vec3<S> &src, Vec3<S> &dst) const {
 }
 
 template <typename T>
-template <typename S>
-void Mat4<T>::multDir(const Vec3<S> &src, Vec3<S> &dst) const {
-    S a, b, c; 
+void Mat4<T>::multDir(const Vec3<T> &src, Vec3<T> &dst) const {
+    T a, b, c; 
  
     a = src[0] * x[0][0] + src[1] * x[1][0] + src[2] * x[2][0]; 
     b = src[0] * x[0][1] + src[1] * x[1][1] + src[2] * x[2][1]; 
@@ -115,6 +113,13 @@ void Mat4<T>::multDir(const Vec3<S> &src, Vec3<S> &dst) const {
     dst.y = b; 
     dst.z = c; 
 
+}
+
+template <typename T>
+Vec3<T> Mat4<T>::operator * (const Vec3<T>& v) const {
+    Vec3<T> dst;
+    multPos(v, dst);
+    return dst;
 }
 
 template <typename T>
@@ -326,10 +331,10 @@ Mat4<T> Mat4<T>::perspective(T fov, T aspect, T zNear, T zFar) {
     const T zRange = zNear - zFar;
     const T tanHalfFov = tan(toRadian(fov / 2.0));
     Mat4<T> mp(
-        T(aspect / tanHalfFov),  T(0),              T(0),                        T(0),
-        T(0),                    T(1 / tanHalfFov), T(0),                        T(0),
-        T(0),                    T(0),              T((-zNear - zFar) / zRange), T(2 * zNear * zFar / zRange),
-        T(0),                    T(0),              T(1),                        T(0)
+        T(1 / (tanHalfFov * aspect)),  T(0),              T(0),                        T(0),
+        T(0),                          T(1 / tanHalfFov), T(0),                        T(0),
+        T(0),                          T(0),              T((-zNear - zFar) / zRange), T(2 * zNear * zFar / zRange),
+        T(0),                          T(0),              T(1),                        T(0)
     );
     return mp;
 }

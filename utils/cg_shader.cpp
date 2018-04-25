@@ -14,11 +14,11 @@ using namespace std;
 
 namespace cg {
 
-Shader::Shader(const GLchar *vsPath, GLchar *fsPath) {
+Shader::Shader(const GLchar *vsPath, const GLchar *fsPath) {
 	id = LoadShaders(vsPath, fsPath);
 }
 
-void Shader::use() {
+void Shader::use() const {
 	glUseProgram(id);
 }
 
@@ -35,16 +35,34 @@ void Shader::setFloat(const std::string& name, float value) const {
 }
 
 void Shader::setVec2f(const std::string& name, const Vec2f& value) const {
-	glUniform2f(glGetUniformLocation(id, name.c_str()), value.x, value.y);
+	glUniform2fv(glGetUniformLocation(id, name.c_str()), 1, &value[0]);
+}
+
+void Shader::setVec2f(const std::string& name, float x, float y) const {
+	glUniform2f(glGetUniformLocation(id, name.c_str()), x, y);
 }
 
 void Shader::setVec3f(const std::string& name, const Vec3f& value) const {
-	glUniform3f(glGetUniformLocation(id, name.c_str()), value.x, value.y, value.z);
+	glUniform3fv(glGetUniformLocation(id, name.c_str()), 1, &value[0]);
+}
+
+void Shader::setVec3f(const std::string& name, float x, float y, float z) const {
+	glUniform3f(glGetUniformLocation(id, name.c_str()), x, y, z);	
+}
+
+void Shader::setMat3f(const std::string& name, const Mat3f& value) const {
+	GLuint location = glGetUniformLocation(id, name.c_str());
+	glUniformMatrix3fv(location, 1, GL_TRUE, &value[0][0]);
 }
 
 void Shader::setMat4f(const std::string& name, const Mat4f& value) const {
 	GLuint location = glGetUniformLocation(id, name.c_str());
 	glUniformMatrix4fv(location, 1, GL_TRUE, &value[0][0]);
+}
+
+void Shader::setColor3f(const std::string& name, const Color3f& value) const {
+	GLuint location = glGetUniformLocation(id, name.c_str());
+	glUniform3f(location, value.r, value.g, value.b);
 }
 
 void Shader::setColor4f(const std::string& name, const Color4f& value) const {

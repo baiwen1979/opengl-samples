@@ -11,6 +11,9 @@
         "ios": "cpp",
         "algorithm": "cpp",
         "__bit_reference": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "iosfwd": "cpp",
+        "iterator": "cpp",
+        "vector": "cpp"
     }
 }

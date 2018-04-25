@@ -11,7 +11,8 @@ namespace cg {
 template<typename T>
 class Color3 {
 public:
-    Color3(): r(0), g(0) {}
+    Color3(): r(0), g(0), b(0) {}
+    Color3(T v): r(v), g(v), b(v) {}
     Color3(T red, T green, T blue): r(red), g(green), b(blue) {}
 
     T r, g, b;

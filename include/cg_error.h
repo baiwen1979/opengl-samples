@@ -12,4 +12,4 @@ namespace cg {
 GLenum errorCheck ();
 
 }
-#endif;
+#endif

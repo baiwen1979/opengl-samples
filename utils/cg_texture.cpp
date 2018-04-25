@@ -1,37 +1,75 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "cg_image.hpp"
 
+#include <iostream>
 #include <cg_texture.hpp>
+#include <GL/cgl.h>
 
 namespace cg {
 
-Texture::Texture(): _width(0), _height(0), _data(NULL) {}
+Texture::Texture(unsigned int id, const Type& texType): 
+    _id(id), _type(texType) {}
 
-unsigned char* Texture::getData() const {
-    return _data;
+Texture::Texture(unsigned int id, const Type& texType, const string& path):
+    _id(id), _type(texType), _path(path) {}
+
+unsigned int Texture::getId() const {
+    return _id;
 }
 
-int Texture::getHeight() const {
-    return _height;
+Texture::Type Texture::getType() const {
+    return _type;
 }
 
-int Texture::getWidth() const {
-    return _width;
+const string& Texture::getPath() const {
+    return _path;
 }
 
 Texture::~Texture() {
-    stbi_image_free(_data);
+    // nothing to do;
 }
 
-Texture Texture::load(const char* filename) {
-    Texture tex;
-    int w, h, nc;
-    stbi_set_flip_vertically_on_load(true);
-    tex._data = stbi_load(filename, &w, &h, &nc, 0);
-    tex._width = w;
-    tex._height = h;
-    tex._nChannels = nc;
+Texture Texture::load(const string& filename, const string& directory, Type texType) {
+    Texture tex = load((directory + '/' + filename).c_str(), texType);
+    tex._path;
     return tex;
+}
+
+Texture Texture::load(const char* filePath, Type texType) {
+    unsigned int texId;
+    glGenTextures(1, &texId);
+    int width, height, numOfChannels;
+    stbi_set_flip_vertically_on_load(true);
+    unsigned char* data = stbi_load(filePath, &width, &height, &numOfChannels, 0);
+    if (data) {
+        GLenum format;
+        if (numOfChannels == 1) {
+            format = GL_RED;
+        }
+        if (numOfChannels == 3) {
+            format = GL_RGB;
+        }
+        if (numOfChannels == 4) {
+            format = GL_RGBA;
+        }
+
+        glBindTexture(GL_TEXTURE_2D, texId);
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        stbi_image_free(data);
+    }
+    else {
+        std::cout << "Texture::failed to load from file path: " << filePath << std::endl;
+        stbi_image_free(data);
+    }
+
+    return Texture(texId, texType);
 }
 
 

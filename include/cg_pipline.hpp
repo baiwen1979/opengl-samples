@@ -2,7 +2,7 @@
 #define _CG_PIPLINE_HPP_
 
 #include "cgm/cg_math.h"
-#include "cg_camera.hpp"
+#include "cg_cam2.hpp"
 
 namespace cg {
 
@@ -33,7 +33,7 @@ public:
     // 设置透视投影
     void setPersProjParams(const PersProjParams& p);
     // 设置摄像机
-    void setCamera(const Camera& camera);
+    void setCamera(const CameraQuat& camera);
 
     // 获取世界坐标变换矩阵
     const Mat4f& getWorldTransform();

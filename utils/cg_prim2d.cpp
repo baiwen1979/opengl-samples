@@ -346,4 +346,178 @@ void floodFill(GLint x, GLint y, const Color4i& targetColor, const Color4i& fill
     //floodFill(x - 1, y + 1, targetColor, fillColor); // 西北         
 }
 
+static const GLubyte LEFT = 1, RIGHT = 2, BOTTOM = 4, TOP = 8, FRONT = 16, BACK = 32;
+
+// 二维顶点(x,y)的区域编码算法
+GLubyte encodeVertex2(GLfloat x, GLfloat y, GLfloat xl, GLfloat xr, GLfloat yb, GLfloat yt) {
+    // 计算区域编码
+    GLubyte code = 0;
+    if (x < xl) {
+        code = code | LEFT;   // 左
+    }
+    if (x > xr) {
+        code = code | RIGHT;  // 右
+    }
+    if (y < yb) {
+        code = code | BOTTOM; // 下
+    }
+    if (y > yt) {
+        code = code | TOP;    // 上
+    }
+
+    return code;
+}
+
+// 三维顶点(x, y, z)的区域编码算法
+GLubyte encodeVertex3(GLfloat x, GLfloat y, GLfloat z, 
+    GLfloat xl, GLfloat xr, GLfloat yb, GLfloat yt, GLfloat zf, GLfloat zb) {
+    // 计算区域编码
+    GLubyte code = encodeVertex2(x, y, xl, xr, yb, yt);
+    if (z < zf) {
+        code = code | FRONT; // 前
+    }
+    if (z > zb) {
+        code = code | BACK;  // 后
+    }
+
+    return code;
+}
+
+// Cohen-Sutherland编码线段裁剪算法
+bool lineClipCB(GLfloat& x0, GLfloat& y0, GLfloat& x1, GLfloat& y1, 
+    GLfloat xl, GLfloat xr, GLfloat yb, GLfloat yt) {
+    // 计算线段起点的区域编码
+    GLubyte code0 = encodeVertex2(x0, y0, xl, xr, yb, yt);
+    // 计算线段终点的区域编码
+    GLubyte code1 = encodeVertex2(x1, y1, xl, xr, yb, yt);
+    // 外部端点编码
+    GLubyte outerCode;
+    // 线段与裁剪区域边界交点的坐标
+    float x, y;
+    // 是否完成
+    bool done = false;
+    // 取之/弃之？
+    bool accept = false;
+
+    do {
+        if (!(code0 | code1)) { // 同为0，两个端点都在裁剪区域内
+            // 取之并结束
+            accept = true;
+            done = true;
+        }
+        else if (code0 & code1) { // 同在裁剪区域的上、下、左或右
+            // 弃之并结束
+            done = true;
+        }
+        else {
+
+            if (code0 != 0) { // 起始端点为外部端点
+                outerCode = code0;
+            }
+            else { // 终止端点为外部端点
+                outerCode = code1; 
+            }
+
+            if (outerCode & LEFT) { // 外部端点在左边界外, 说明线段与左边界相交
+                // 交点的x坐标为xl
+                x = xl;
+                // 计算交点的y坐标
+                y = y0 + (y1 - y0) * (xl - x0) / (x1 - x0);         
+            }
+            else if (outerCode & RIGHT) { // 外部端点在右边界外，说明线段与右边界相交
+                // 交点的x坐标为xr
+                x = xr;
+                // 计算交点的y坐标
+                y = y0 + (y1 - y0) * (xr - x0) / (x1 - x0);
+            }
+            else if (outerCode & BOTTOM) { // 外部端点在下边界外，说明线段与下边界相交
+                // 交点的y坐标为yb
+                y = yb;
+                // 计算交点的x坐标
+                x = x0 + (x1 - x0) * (yb - y0) / (y1 - y0);
+            }
+            else if (outerCode & TOP) { //外部端点在上边界外，说明线段与上边界相交
+                // 交点的y坐标为yt
+                y = yt;
+                // 计算交点的x坐标
+                x = x0 + (x1 - x0) * (yt - y0) / (y1 - y0);
+            }
+            
+            if (outerCode == code0) { // 起始端点出界
+                // 将交点作为被裁剪线段的起始端点
+                x0 = x;
+                y0 = y;
+                // 并对新起点重新编码
+                code0 = encodeVertex2(x0, y0, xl, xr, yb, yt);
+            }
+            else { // 结束端点出界
+                // 将交点作为被裁剪线段的结束端点
+                x1 = x;
+                y1 = y;
+                // 并对新起点重新编码
+                code1 = encodeVertex2(x1, y1, xl, xr, yb, yt);
+            }
+        }
+
+    } while (!done);
+
+    return accept;
+}
+
+// 交点参数计算函数
+bool clipTest(GLfloat p, GLfloat q, GLfloat& u1, GLfloat& u2) {
+    GLfloat r;
+    bool ret = true;
+    if (p < 0) {
+        r = q / p;
+        if (r > u2) {
+            ret = false;
+        }
+        else if (r > u1) {
+            u1 = r;
+        }
+    }
+    else if (p > 0) {
+        r = q / p;
+        if (r < u1) {
+            ret = false;
+        }
+        else if (r < u2) {
+            u2 = r;
+        }
+    }
+    else if (q < 0) {
+        ret = false;
+    }
+
+    return ret;
+}
+
+// Liang-Barsky参数化线段裁剪算法
+bool lineClipLB(GLfloat& x0, GLfloat& y0, GLfloat& x1, GLfloat& y1, 
+                GLfloat xl, GLfloat xr, GLfloat yb, GLfloat yt) {
+    
+    GLfloat u1 = 0, u2 = 1, dx = x1 - x0, dy = y1 - y0;
+    // u1为始点参数，初值为0；u2为终点参数，初值为1
+    if (clipTest(-dx, x0 - xl, u1, u2)) { // 计算左边界交点参数，更新u1,u2
+        if (clipTest(dx, xr - x0, u1, u2)) { // 计算右边界交点参数，更新u1,u2
+            dy = y1 - y0;
+            if  (clipTest(-dy, y0 - yb, u1, u2)) { // 计算下边界交点参数，更新u1,u2
+                if (clipTest(dy, yt - y0, u1, u2)) { // 计算上边界交点参数，更新u1,u2
+                    if (u2 < 1) {
+                        x1 = x0 + u2 * dx;
+                        y1 = y0 + u2 * dy;
+                    }
+                    if (u1 > 0) {
+                        x0 += u1 * dx;
+                        y0 += u1 * dy;
+                    }
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+}
+
 } //namespace cg

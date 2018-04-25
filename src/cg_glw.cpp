@@ -84,7 +84,7 @@ inline void createGlWindow(const char* title, Recti rect, bool usingGL3Mode = fa
     // 初始化GLUT/
     glutInit(&argc, argv);
     // 显示模式
-    GLuint displayMode = GLUT_DOUBLE | GLUT_RGBA;
+    GLuint displayMode = GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH;
     // 是否使用OpenGL3模式
     if (usingGL3Mode) {
         displayMode |= GLUT_3_2_CORE_PROFILE;
@@ -106,6 +106,13 @@ inline void registerDefaultUIEventHandlers() {
     glutMotionFunc(onMotion);
 }
 
+// 默认的初始化函数
+inline void initDefault() {
+    // 注册默认的UI事件处理函数
+    registerDefaultUIEventHandlers();
+}
+
+
 // 初始化GLEW
 inline bool initGLEW() {
     GLenum res = glewInit();   
@@ -123,6 +130,7 @@ inline void printOpenGLInfo() {
     cout << "OpenGL Version: " << glGetString(GL_VERSION) << endl;
 }
 
+// 初始化OpenGL窗口
 void initGlWindow (
     void(*renderCallback)(),
     void(*initGlCallback)(), 
@@ -134,12 +142,12 @@ void initGlWindow (
     }
     // 输出OpenGL的版本信息
     printOpenGLInfo();
+    // 默认初始化
+    initDefault();
     // 初始化GL渲染上下文
     if (initGlCallback) {
         initGlCallback();
     }
-    // 注册默认的UI事件处理函数
-    registerDefaultUIEventHandlers();
     // 注册渲染回调函数
     glutDisplayFunc(renderCallback);
     // 注册窗口大小改变回调函数

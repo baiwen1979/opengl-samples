@@ -81,11 +81,10 @@ static void init() {
     createVertexBuffer();
     initShaders();
 }
-
 /*
 void testOGLTutorial() {
     glw::openGlWindow(renderSceneCB, 
-        "OpenGL Tutorial 03 - Scaling Triangle", 
-        init, NULL, renderSceneCB, true, Recti(100,100,1024, 768));
+        "OpenGL Tutorial 03 - Shader And Uniforms - Scaling Triangle", 
+        init, NULL, renderSceneCB, true, Recti(100, 100, 1024, 768));
 }
 */

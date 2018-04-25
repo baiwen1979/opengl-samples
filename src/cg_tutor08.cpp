@@ -30,7 +30,7 @@ static void renderSceneCB() {
     Pipeline p;  
     //p.posit(sinf(scale), sinf(scale), 0.0f);
     p.scale(sinf(scale));
-    //p.rotate(0, 0, sinf(scale) * 180);
+    p.rotate(0, sinf(scale) * 180, 0);
     const Mat4f& world = p.getWorldTransform();
 
     cout << world << endl;
@@ -113,7 +113,21 @@ static void initShaders() {
     assert(glWorldLocation != 0xFFFFFFFF);
 }
 
+static void initGl() {
+    // 启用深度测试
+    glEnable(GL_DEPTH_TEST);
+    // 设置前向面
+    glFrontFace(GL_CW);
+    // 背面剔除
+    glCullFace(GL_BACK);
+    // 启用背面剔除
+    glEnable(GL_CULL_FACE);
+    // 背景颜色
+    glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
+}
+
 static void init() {
+    initGl();
     createVertexBuffer();
     createIndexBuffer();
     initShaders();
@@ -123,7 +137,7 @@ static void init() {
 void testOGLTutorial() {
     glw::openGlWindow(
         renderSceneCB, 
-        "OpenGL Tutorial 08 - Freely Rotating Pyramid", 
+        "OpenGL Tutorial 08 - Concatenating transformations", 
         init, 
         NULL, 
         renderSceneCB,
