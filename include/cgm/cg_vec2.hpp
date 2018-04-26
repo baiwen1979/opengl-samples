@@ -35,6 +35,9 @@ public:
     // 数乘
     Vec2<T> operator * (const T& v) const;
     Vec2<T>& operator *= (const T& v);
+    // 分量乘
+    Vec2<T> operator * (const Vec2<T>& v) const;
+    Vec2<T>& operator *= (const Vec2<T>& v);
     // 下标取值运算符
     const T& operator [] (uint8_t i) const;
     // 下标设值运算符

@@ -29,8 +29,11 @@ public:
     Vec3<T>& operator -- ();   // --v
     Vec3<T> operator -- (int); // v--
     // 向量的数乘 
-    Vec3<T> operator * (const T&r) const;
-    Vec3<T>& operator *= (const T& r);
+    Vec3<T> operator * (const T& n) const;
+    Vec3<T>& operator *= (const T& n);
+    // 向量的分量积
+    Vec3<T> operator * (const Vec3<T>& v) const;
+    Vec3<T>& operator *= (const Vec3<T>& v);
     // 向量的点积
     T dot(const Vec3<T> &v) const; 
     // 向量的叉积
@@ -47,6 +50,7 @@ public:
     Vec3<T>& rotate(T angle, const Vec3<T>& axis);
     // 规范化
     Vec3<T>& normalize();
+
     // 计算规范化向量
     static Vec3<T> normalize(const Vec3<T>& v);
     // 计算两个向量的叉积

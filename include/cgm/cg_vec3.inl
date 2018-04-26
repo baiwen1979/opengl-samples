@@ -10,19 +10,19 @@ using namespace std;
 
 namespace cg {
 
-template<typename T>
+template <typename T>
 Vec3<T>::Vec3(): x(0), y(0), z(0) {}
 
-template<typename T>
+template <typename T>
 Vec3<T>::Vec3(T xx): x(xx), y(xx), z(xx) {}
 
-template<typename T>
+template <typename T>
 Vec3<T>::Vec3(T xx, T yy, T zz): x(xx), y(yy), z(zz) {}
 
-template<typename T>
+template <typename T>
 Vec3<T>::Vec3(const Vec3<T>& v): x(v.x), y(v.y), z(v.z) {}
 
-template<typename T>
+template <typename T>
 Vec3<T>& Vec3<T>::operator = (const Vec3<T>& v) {
     x = v.x;
     y = v.y;
@@ -31,12 +31,12 @@ Vec3<T>& Vec3<T>::operator = (const Vec3<T>& v) {
 }
 
 // + 和 -
-template<typename T>
+template <typename T>
 Vec3<T> Vec3<T>::operator + (const Vec3<T>& v) const {
     return Vec3(x + v.x, y + v.y, z + v.z);
 }
 
-template<typename T>
+template <typename T>
 Vec3<T>& Vec3<T>::operator += (const Vec3<T>& v) {
     x += v.x;
     y += v.y;
@@ -44,12 +44,12 @@ Vec3<T>& Vec3<T>::operator += (const Vec3<T>& v) {
     return *this;
 }
 
-template<typename T>
+template <typename T>
 Vec3<T> Vec3<T>::operator - (const Vec3<T>& v) const {
     return Vec3(x - v.x, y - v.y, z - v.z);
 }
 
-template<typename T>
+template <typename T>
 Vec3<T>& Vec3<T>::operator -= (const Vec3<T>& v) {
     x -= v.x;
     y -= v.y;
@@ -58,7 +58,7 @@ Vec3<T>& Vec3<T>::operator -= (const Vec3<T>& v) {
 }
 
 // ++ 和 --
-template<typename T>
+template <typename T>
 Vec3<T>& Vec3<T>::operator ++ () {
     ++x;
     ++y;
@@ -66,7 +66,7 @@ Vec3<T>& Vec3<T>::operator ++ () {
     return *this;
 }
 
-template<typename T>
+template <typename T>
 Vec3<T> Vec3<T>::operator ++ (int) {
     Vec3<T> ret(x, y, z);
     x++;
@@ -75,7 +75,7 @@ Vec3<T> Vec3<T>::operator ++ (int) {
     return ret;
 }
 
-template<typename T>
+template <typename T>
 Vec3<T>& Vec3<T>::operator -- () {
     --x;
     --y;
@@ -83,7 +83,7 @@ Vec3<T>& Vec3<T>::operator -- () {
     return *this;
 }
 
-template<typename T>
+template <typename T>
 Vec3<T> Vec3<T>::operator -- (int) {
     Vec3<T> ret(x, y, z);
     x--;
@@ -93,26 +93,40 @@ Vec3<T> Vec3<T>::operator -- (int) {
 }
 
 // 数乘
-template<typename T>
-Vec3<T> Vec3<T>::operator * (const T& r) const {
-    return Vec3(x * r, y * r, z * r);
+template <typename T>
+Vec3<T> Vec3<T>::operator * (const T& n) const {
+    return Vec3<T>(x * n, y * n, z * n);
 }
-template<typename T>
-Vec3<T>& Vec3<T>::operator *= (const T& r) {
-    x *= r;
-    y *= r;
-    z *= r;
+template <typename T>
+Vec3<T>& Vec3<T>::operator *= (const T& n) {
+    x *= n;
+    y *= n;
+    z *= n;
+    return *this;
+}
+
+// 按分量相乘
+template <typename T>
+Vec3<T> Vec3<T>::operator * (const Vec3<T>& v) const {
+    return Vec3<T>(x * v.x, y * v.y, z * v.z);
+}
+
+template <typename T>
+Vec3<T>& Vec3<T>::operator *= (const Vec3<T>& v) {
+    x *= v.x;
+    y *= v.y;
+    z *= v.z;
     return *this;
 }
 
 // 点积
-template<typename T>
+template <typename T>
 T Vec3<T>::dot(const Vec3<T> &v) const {
     return x * v.x + y * v.y + z * v.z;
 }
 
 // 叉积
-template<typename T>
+template <typename T>
 Vec3<T> Vec3<T>::cross(const Vec3<T>& v) const {
     T xx = y * v.z - z * v.y;
     T yy = z * v.x - x * v.z;
@@ -121,31 +135,31 @@ Vec3<T> Vec3<T>::cross(const Vec3<T>& v) const {
 }
 
 // 模
-template<typename T>
+template <typename T>
 T Vec3<T>::norm() const {
     return x * x + y * y + z * z;
 }
 
 // 长度
-template<typename T>
+template <typename T>
 T Vec3<T>::length() const {
     return sqrt(norm());
 }
 
 // 下标访问运算
-template<typename T>
+template <typename T>
 const T& Vec3<T>::operator[] (uint8_t i) const {
     assert(i < 3);
     return (&x)[i];
 }
-template<typename T>
+template <typename T>
 T& Vec3<T>::operator[] (uint8_t i) {
     assert(i < 3);
     return (&x)[i];
 }
 
 // 规范化
-template<typename T>
+template <typename T>
 Vec3<T>& Vec3<T>::normalize() { 
     T n = norm(); 
     if (n > 0) { 
@@ -156,7 +170,7 @@ Vec3<T>& Vec3<T>::normalize() {
 }
 
 // 旋转向量
-template<typename T>
+template <typename T>
 Vec3<T>& Vec3<T>::rotate(T angle, const Vec3<T>& axis) {
     const T sinHalfAngle = sin(toRadian(angle / 2));
     const T cosHalfAngle = cos(toRadian(angle / 2));
@@ -194,13 +208,19 @@ T Vec3<T>::dot(const Vec3<T>& u, const Vec3<T>& v) {
 }
 
 // 重载流输出运算符
-template<typename T>
+template <typename T>
 std::ostream& operator << (std::ostream &os, const Vec3<T> &v) {
     return os << '(' << v.x << ',' << v.y << ',' << v.z << ')';
 }
 
+// 左数乘运算符
+template <typename T>
+Vec3<T> operator * (const T& n, const Vec3<T>& v) {
+    return Vec3<T> (n * v.x, n * v.y, n * v.z);
+}
+
 // 单位球面坐标转换到单位（笛卡尔坐标）向量
-template<typename T> 
+template <typename T> 
 Vec3<T> sphericalToCartesian(const T &theta, const T &phi) { 
     T x = cos(phi) * sin(theta);
     T y = sin(phi) * sin(theta);
@@ -209,32 +229,33 @@ Vec3<T> sphericalToCartesian(const T &theta, const T &phi) {
 }
 
 // 计算单位（笛卡尔坐标）向量的单位球面坐标:Theta
-template<typename T> 
+template <typename T> 
 inline T sphericalTheta(const Vec3<T> &v) { 
     return acos(clamp<T>(v[2], -1, 1)); 
 }
 
 // 计算单位（笛卡尔坐标）向量的单位球面坐标:Phi
-template<typename T> 
+template <typename T> 
 inline T sphericalPhi(const Vec3<T> &v) { 
     T p = atan2(v[1], v[0]); 
     return (p < 0) ? p + 2 * M_PI : p; 
 }
 
 // 计算单位（笛卡尔坐标）向量在单位球面坐标的余弦
-template<typename T> inline T cosTheta(const Vec3<T> &w) { 
+template <typename T> 
+inline T cosTheta(const Vec3<T> &w) { 
     return w[2]; 
 } 
 
 // 计算单位（笛卡尔坐标）向量在单位球面坐标的正弦的平方
-template<typename T> 
+template <typename T> 
 inline T sinTheta2(const Vec3<T> &w) 
 { 
     return std::max(T(0), 1 - cosTheta(w) * cosTheta(w)); 
 } 
 
 // 计算单位（笛卡尔坐标）向量在单位球面坐标Theta的正弦
-template<typename T> 
+template <typename T> 
 inline T sinTheta(const Vec3<T> &w) 
 { 
     return sqrt(sinTheta2(w)); 
@@ -258,6 +279,6 @@ inline T sinPhi(const Vec3<T> &w)
     return clamp<T>(w[1] / sintheta, -1, 1); 
 } 
 
-}
+} // namespace cg
 
 #endif //_CG_VEC3_INL

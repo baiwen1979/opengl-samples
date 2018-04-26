@@ -36,7 +36,8 @@ static void renderSceneCB() {
     static float angle = 0.0f;
     // 旋转增量
     angle += 0.1f;
-    // 灯
+    
+    // 灯光环绕
     lightPos.x = 0.0f + sinf(angle / 10.0f) * 2.0f;
     lightPos.z = -4.0f + cosf(angle / 10.0f) * 2.0f;
 
@@ -187,10 +188,11 @@ static void init() {
     registerUIEvents();
 }
 
+/*
 void testOGLTutorial() {
     glw::openGlWindow(
         renderSceneCB, 
-        "OpenGL Tutorial 19 - Basic Lighting: Colors", 
+        "OpenGL Tutorial 19 - Lighting: Basic Lighting", 
         init, 
         reshape, 
         renderSceneCB,
@@ -198,3 +200,4 @@ void testOGLTutorial() {
         WIN_RECT
     );
 }
+*/

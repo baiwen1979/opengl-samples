@@ -2,6 +2,7 @@
 #define _CG_TEXTURE_HPP_
 
 #include <string>
+#include <GL/cgl.h>
 
 using std::string;
 
@@ -19,12 +20,15 @@ public:
         Height    // 高度纹理（贴图）
     };
 
+    Texture(const char* filePath, const Type& textureType);
     // 纹理（贴图）ID
     unsigned int getId() const;
     // 纹理（贴图）类型
     Type getType() const;
     // 纹理（贴图）路径
     const string& getPath() const;
+    // 应用纹理到指定纹理单元
+    void apply(GLenum textureUnit) const;
 
     ~Texture();
 
@@ -41,6 +45,8 @@ private:
     Type _type;
     string _path;
 };
+
+unsigned int loadTexture(const char* filePath);
 
 } //namespace cg
 

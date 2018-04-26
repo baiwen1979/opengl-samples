@@ -13,6 +13,11 @@ Texture::Texture(unsigned int id, const Type& texType):
 Texture::Texture(unsigned int id, const Type& texType, const string& path):
     _id(id), _type(texType), _path(path) {}
 
+Texture::Texture(const char* filePath, const Type& texType):
+    _type(texType) {   
+    _id = loadTexture(filePath);
+}
+
 unsigned int Texture::getId() const {
     return _id;
 }
@@ -23,6 +28,11 @@ Texture::Type Texture::getType() const {
 
 const string& Texture::getPath() const {
     return _path;
+}
+
+void Texture::apply(GLenum textureUnit) const {
+    glActiveTexture(textureUnit); // 激活纹理单元
+    glBindTexture(GL_TEXTURE_2D, _id);  // 绑定当前纹理对象
 }
 
 Texture::~Texture() {
@@ -36,6 +46,11 @@ Texture Texture::load(const string& filename, const string& directory, Type texT
 }
 
 Texture Texture::load(const char* filePath, Type texType) {
+    unsigned int texId = loadTexture(filePath);
+    return Texture(texId, texType);
+}
+
+unsigned int loadTexture(const char* filePath) {
     unsigned int texId;
     glGenTextures(1, &texId);
     int width, height, numOfChannels;
@@ -65,13 +80,11 @@ Texture Texture::load(const char* filePath, Type texType) {
         stbi_image_free(data);
     }
     else {
-        std::cout << "Texture::failed to load from file path: " << filePath << std::endl;
+        std::cout << "Texture Failed to load from file path: " << filePath << std::endl;
         stbi_image_free(data);
     }
-
-    return Texture(texId, texType);
+    return texId;
 }
 
-
-}
+} // namespace cg
 
