@@ -17,6 +17,11 @@ void drawPolygon(vector<Vec2f>& polygon, GLenum mode) {
     glEnd();
 }
 
+void drawPolygon(Vec2f* vertices, GLint numOfVertices) {
+    vector<Vec2f> polygon(vertices, vertices + numOfVertices);
+    drawPolygon(polygon, GL_TRIANGLES);
+}
+
 /******* 编程实例 3.6 ********/
 
 // 地图的坐标范围
@@ -103,10 +108,6 @@ void initExample3() {
 
 /******** 编程实例 4.4 ********/
 /* 绘制多边形 */
-void drawPolygon(Vec2f* vertices, GLint numOfVertices) {
-    vector<Vec2f> polygon(vertices, vertices + numOfVertices);
-    drawPolygon(polygon, GL_TRIANGLES);
-}
 
 Vec2f getPolygonCenter(Vec2f vertices[], GLint numOfVertices) {
     Vec2f sum(0.0f);
@@ -180,6 +181,7 @@ void renderExample5() {
     glColor3f(1.0f, 0.0f, 0.0f);
     // 在窗口右边(400,0)位置创建400X400大小的视口，并在其中绘制旋转90度的三角形
     glViewport(400, 0, 400, 400);
+    glRotatef(90.0, 0.0, 0.0, 1.0);
     drawPolygon(vertices, sizeof(vertices)/sizeof(Vec2f));
 
     glutSwapBuffers();
@@ -195,7 +197,7 @@ void initExample5() {
 /* 测试课程实验 */
 void testCGCourseLab() {
     // 测试编程实例3.6
-    // openGlWindow(renderExample3, "地图绘制", initExample3, reshapeExample3);
+    openGlWindow(renderExample3, "地图绘制", initExample3, reshapeExample3);
     // 测试编程实例4.4
     // openGlWindow(renderExample4, "三角形变换", initExample4, reshapeExample4);
     // 测试编程实例5.5

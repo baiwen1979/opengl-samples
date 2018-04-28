@@ -41,6 +41,8 @@ public:
 
     // 获取摄像机位置
     const Vec3f& getPosition() const;
+    // 获取摄像机前向量
+    const Vec3f& getFront() const;
     // 获取变焦度数
     float getZoom() const;
     // 获取宽高比

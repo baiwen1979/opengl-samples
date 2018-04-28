@@ -42,7 +42,7 @@ static void renderSceneCB() {
     static float angle = 0.0f;
     // 旋转增量
     angle += 0.1f;
-    
+
     // 环境光和漫反射
     Vec3f diffuseColor = lightColor * Vec3f(0.5f);
     Vec3f ambientColor = lightColor * Vec3f(0.2f);  
@@ -209,6 +209,7 @@ static void init() {
     registerUIEvents();
 }
 
+/*
 void testOGLTutorial() {
     glw::openGlWindow(
         renderSceneCB, 
@@ -220,3 +221,4 @@ void testOGLTutorial() {
         WIN_RECT
     );
 }
+*/

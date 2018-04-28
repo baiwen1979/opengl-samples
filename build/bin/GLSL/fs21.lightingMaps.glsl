@@ -46,8 +46,8 @@ void main()
     vec3 specular = light.specular * spec * texture(material.texture_specular, TexCoords).rgb;
 
     // 自发光
-    vec3 emission = texture(material.texture_emission, TexCoords).rgb;
+    // vec3 emission = texture(material.texture_emission, TexCoords).rgb;
         
-    vec3 result = ambient + diffuse + specular + emission;
+    vec3 result = ambient + diffuse + specular ; //+ emission;
     FragColor = vec4(result, 1.0);
 } 

@@ -199,7 +199,6 @@ static void init() {
     initMaterial();
     registerUIEvents();
 }
-
 /*
 void testOGLTutorial() {
     glw::openGlWindow(

@@ -39,6 +39,10 @@ const Vec3f& Camera::getPosition() const {
     return _position;
 }
 
+const Vec3f& Camera::getFront() const {
+    return _front;
+}
+
 float Camera::getZoom() const {
     return _zoom;
 }
