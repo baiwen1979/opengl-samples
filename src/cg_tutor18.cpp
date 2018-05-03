@@ -41,22 +41,19 @@ static void renderSceneCB() {
     model = Mat4f::rotateY(model, angle);
     model = Mat4f::rotateX(model, angle);
     model = Mat4f::translate(model, Vec3f(0.0f, 0.0f, -2.0f));
-    // 模型相对于摄像机移动
-    model = Mat4f::translate(model, pCamera -> getPosition() * -1);
     pLightingShader -> setMat4f("model", model);
     
     // 绘制立方体模型
-    pModel->render(*pLightingShader);
+    pModel->render(pLightingShader);
 
     // 灯
     pLampShader -> use();
     pLampShader -> setMat4f("projection", pCamera -> getPerspectiveMatrix());
     pLampShader -> setMat4f("view", pCamera -> getViewMatrix());
     model = Mat4f::scale(Mat4f(), Vec3f(0.15f));
-    model = Mat4f::translate(model, Vec3f(-3.0f, 1.0f, -1.0f));   
-    model = Mat4f::translate(model, pCamera -> getPosition() * -1);
+    model = Mat4f::translate(model, Vec3f(-3.0f, 1.0f, -1.0f));
     pLampShader -> setMat4f("model", model);
-    pModel->render(*pLampShader);
+    pModel->render(pLampShader);
 
     // 交换前后缓存
     glutSwapBuffers();

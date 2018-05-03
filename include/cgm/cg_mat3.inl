@@ -42,6 +42,15 @@ Mat3<T>::Mat3(const Mat3<T>& b) {
 }
 
 template <typename T>
+Mat3<T>::Mat3(const Mat4<T>& b) {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            m[i][j] = b[i][j];
+        }
+    }
+}
+
+template <typename T>
 Mat3<T> Mat3<T>::operator + (const Mat3<T>& b) const {
     return Mat3(
         m[0][0] + b[0][0], m[0][1] + b[0][1], m[0][2] + b[0][2],

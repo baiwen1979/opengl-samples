@@ -4,18 +4,18 @@
 #include <math.h>
 
 template <typename T>
-inline T toRadian(T x) {
+inline T toRadian(const T& x) {
     return x * M_PI / 180.0f;
 }
 
 template <typename T>
-inline T toDegree(T x) {
+inline T toDegree(const T& x) {
     return x * 180.0f / M_PI;
 }
 
 template <typename T>
-inline T clamp(T& v, T& min, T& max) {
-    return min(max(v, min), max);
+inline T clamp(const T& v, const T& minValue, const T& maxValue) {
+    return min(max(v, minValue), maxValue);
 }
 
 template <typename T>

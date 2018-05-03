@@ -26,6 +26,16 @@ Vec2<T>& Vec2<T>::operator = (const Vec2<T>& v) {
 }
 
 template <typename T>
+bool Vec2<T>::operator == (const Vec2<T>& v) const {
+    return (x == v.x && y == v.y);
+}
+
+template <typename T>
+bool Vec2<T>::operator != (const Vec2<T>& v) const {
+    return !(*this == v);
+}
+
+template <typename T>
 Vec2<T> Vec2<T>::operator + (const Vec2<T>& v) const {
     return Vec2<T>(x + v.x, y + v.y);
 }
@@ -46,6 +56,16 @@ template <typename T>
 Vec2<T>& Vec2<T>::operator -= (const Vec2<T>& v) {
     x -= v.x;
     y -= v.y;
+    return *this;
+}
+
+template <typename T>
+Vec2<T> Vec2<T>::operator - () const {
+    return Vec2<T>(-x, -y);
+}
+
+template <typename T>
+const Vec2<T>& Vec2<T>::operator +() const {
     return *this;
 }
 
@@ -80,14 +100,44 @@ Vec2<T> Vec2<T>::operator -- (int) {
 }
 
 template <typename T>
-Vec2<T> Vec2<T>::operator * (const T& v) const {
-    return Vec2<T>(x * v, y * v);
+Vec2<T> Vec2<T>::operator * (const T& n) const {
+    return Vec2<T>(x * n, y * n);
 }
 
 template <typename T>
-Vec2<T>& Vec2<T>::operator *= (const T& v) {
-    x *= v;
-    y *= v;
+Vec2<T>& Vec2<T>::operator *= (const T& n) {
+    x *= n;
+    y *= n;
+    return *this;
+}
+
+template <typename T>
+Vec2<T> Vec2<T>::operator / (const T& n) const {
+    assert( n != T(0));
+    T inv = T(1) / n;
+    return Vec2<T>(inv * x, inv * y);
+}
+
+template <typename T>
+Vec2<T>& Vec2<T>::operator /= (const T& n) {
+    assert( n != T(0));
+    T inv = T(1) / n;
+    x *= inv;
+    y *= inv;
+    return *this;
+}
+
+template <typename T>
+Vec2<T> Vec2<T>::operator / (const Vec2<T>& v) const {
+    assert(v.x != T(0) && v.y != T(0));
+    return Vec2<T>(T(1) / v.x, T(1) / v.y);
+}
+
+template <typename T>
+Vec2<T>& Vec2<T>::operator /= (const Vec2<T>& v) {
+    assert(v.x != T(0) && v.y != T(0));
+    x /= v.x;
+    y /= v.y;
     return *this;
 }
 
@@ -102,7 +152,6 @@ Vec2<T>& Vec2<T>::operator *= (const Vec2<T>& v) {
     y *= v.y;
     return *this;
 }
-
 
 template <typename T>
 const T& Vec2<T>::operator[] (uint8_t i) const {

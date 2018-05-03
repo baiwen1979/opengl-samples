@@ -48,29 +48,24 @@ static void renderSceneCB() {
 
     // 被照射模型
     Mat4f model = Mat4f::scale(Mat4f(), Vec3f(1.0f));
-    //model = Mat4f::rotateX(model, angle);
     model = Mat4f::rotateY(model, angle);
     model = Mat4f::translate(model, Vec3f(0.0f, 0.0f, -4.0f));
-    // 模型相对于摄像机反向移动
-    model = Mat4f::translate(model, pCamera -> getPosition() * -1);
 
     pLightingShader -> setMat4f("model", model);
     pLightingShader -> setMat4f("view", pCamera -> getViewMatrix());
     pLightingShader -> setMat4f("projection", pCamera -> getPerspectiveMatrix());    
     // 绘制立方体模型
-    pModel->render(*pLightingShader);
+    pModel->render(pLightingShader);
 
     // 灯具模型
     model = Mat4f::scale(Mat4f(), Vec3f(0.15f));
     model = Mat4f::translate(model, lightPos);
-    // 灯具模型相对于摄像机反向移动
-    model = Mat4f::translate(model, pCamera -> getPosition() * -1);
 
     pLampShader -> use();
     pLampShader -> setMat4f("projection", pCamera -> getPerspectiveMatrix());
     pLampShader -> setMat4f("view", pCamera -> getViewMatrix());
     pLampShader -> setMat4f("model", model);
-    pModel->render(*pLampShader);
+    pModel->render(pLampShader);
 
     // 交换前后缓存
     glutSwapBuffers();

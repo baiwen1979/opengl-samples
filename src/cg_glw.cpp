@@ -84,7 +84,7 @@ inline void createGlWindow(const char* title, Recti rect, bool usingGL3Mode = fa
     // 初始化GLUT/
     glutInit(&argc, argv);
     // 显示模式
-    GLuint displayMode = GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH;
+    GLuint displayMode = GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_STENCIL;
     // 是否使用OpenGL3模式
     if (usingGL3Mode) {
         displayMode |= GLUT_3_2_CORE_PROFILE;
@@ -125,9 +125,11 @@ inline bool initGLEW() {
 
 // 输出OpenGL的版本信息
 inline void printOpenGLInfo() {
+    cout << "-------------------------------------------" << endl;
     cout << "OpenGL Vender: " << glGetString(GL_VENDOR) << endl;
     cout << "OpenGL Renderer: " << glGetString(GL_RENDERER) << endl;
     cout << "OpenGL Version: " << glGetString(GL_VERSION) << endl;
+    cout << "-------------------------------------------" << endl;
 }
 
 // 初始化OpenGL窗口

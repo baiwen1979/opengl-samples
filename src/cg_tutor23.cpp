@@ -17,8 +17,10 @@ static bool firstMouse = true;
 static float lastX = WIN_RECT.w / 2.0f;
 static float lastY = WIN_RECT.h / 2.0f;
 
-// 网格对象
-static Model * pModel = NULL;
+// 模型
+static Model * pModelCube = NULL;
+static Model * pModelSphere = NULL;
+
 // 摄像机
 static Camera * pCamera = NULL;
 // 着色器
@@ -71,25 +73,21 @@ static void renderSceneCB() {
     Mat4f model;
     for (unsigned int i = 0; i < 10; i++) {        
         model = Mat4f::translate(Mat4f(), modelPositions[i]);
-        //float angle = 20.0f * i;
         model = Mat4f::rotate(model, angle * (i + 1), Vec3f(1.0f, 0.3f, 0.5f));
-        model = Mat4f::translate(model, -1.0f * pCamera -> getPosition());
         pLightingShader -> setMat4f("model", model);
         // 绘制模型
-        pModel->render(*pLightingShader);
+        pModelCube->render(pLightingShader);
     }
 
     // 灯具模型
     model = Mat4f::scale(Mat4f(), Vec3f(0.15f));
     model = Mat4f::translate(model, lightPos);
-    // 灯具模型相对于摄像机反向移动
-    model = Mat4f::translate(model, -1.0f * pCamera -> getPosition());
 
     pLampShader -> use();
     pLampShader -> setMat4f("projection", pCamera -> getPerspectiveMatrix());
     pLampShader -> setMat4f("view", pCamera -> getViewMatrix());
     pLampShader -> setMat4f("model", model);
-    pModel->render(*pLampShader);
+    pModelSphere->render(pLampShader);
 
     // 交换前后缓存
     glutSwapBuffers();
@@ -97,7 +95,8 @@ static void renderSceneCB() {
 
 /* 模型初始化 */
 static void initModel() {
-    pModel = new Model("models/cube.obj");
+    pModelCube = new Model("models/cube.obj");
+    pModelSphere = new Model("models/sphere.obj");
 }
 
 static void initTextures() {
@@ -130,6 +129,9 @@ static void initLight() {
     pLightingShader -> setFloat("light.constant", 1.0f);
     pLightingShader -> setFloat("light.linear", 0.07f);
     pLightingShader -> setFloat("light.quadratic", 0.017f);
+    
+    pLampShader -> use();
+    pLampShader -> setVec3f("lightColor", lightColor);
 }
 
 /* 初始化材质 */

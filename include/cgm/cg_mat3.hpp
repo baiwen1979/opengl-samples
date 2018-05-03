@@ -2,6 +2,7 @@
 #define _CG_MAT3_HPP_
 
 #include "cg_vec2.hpp"
+#include "cg_mat4.hpp"
 
 namespace cg {
 
@@ -19,6 +20,7 @@ public:
          const T& g, const T& h, const T& i);
     // 拷贝构造函数
     Mat3(const Mat3<T>& m);
+    Mat3(const Mat4<T>& m);
     
     /*** 成员运算符 ***/
     // 矩阵 +/- 矩阵， 如：Mat3 a,b; Mat3 c = a + b; Mat3 d = a - b;

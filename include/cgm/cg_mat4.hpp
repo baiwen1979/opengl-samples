@@ -8,6 +8,9 @@
 
 namespace cg {
 
+template <typename T>
+class Mat3;
+
 // 模板类：4x4矩阵
 template<typename T> 
 class Mat4 
@@ -23,6 +26,7 @@ public:
         const T& m, const T& n, const T& o, const T& p);
 
     Mat4(const Mat4<T>& m);
+    Mat4(const Mat3<T>& m);
 
     /* 成员运算符 */
     // 下标取值

@@ -18,7 +18,8 @@ static float lastX = WIN_RECT.w / 2.0f;
 static float lastY = WIN_RECT.h / 2.0f;
 
 // 网格对象
-static Model* pModel = NULL;
+static Model * pModelCube = NULL;
+static Model * pModelSphere = NULL;
 // 摄像机
 static Camera *pCamera = NULL;
 // 着色器
@@ -26,9 +27,9 @@ static Shader* pLightingShader = NULL;
 static Shader* pLampShader = NULL;
 
 // 灯光位置
-static Vec3f lightPos(-3.0f, 2.0f, -2.0f);
+static Vec3f lightPos(-1.0f, 1.0f, 0.0f);
 // 灯光颜色
-static Vec3f lightColor;
+static Vec3f lightColor(1.0f, 1.0f, 1.0f);
 
 /* 渲染回调函数 */
 static void renderSceneCB() {
@@ -38,10 +39,6 @@ static void renderSceneCB() {
     static float angle = 0.0f;
     // 旋转增量
     angle += 0.01f;
-
-    // 灯光环绕
-    //lightPos.x = 0.0f + sinf(angle / 10.0f) * 2.0f;
-    //lightPos.z = -4.0f + cosf(angle / 10.0f) * 2.0f;
     // 灯光颜色
     lightColor.x = sinf(angle * 2.0f);
     lightColor.y = sinf(angle * 0.7f);
@@ -62,26 +59,22 @@ static void renderSceneCB() {
     model = Mat4f::rotateX(model, -15.0f);
     model = Mat4f::rotateY(model, 45.0f);
     model = Mat4f::translate(model, Vec3f(0.0f, 0.0f, -4.0f));
-    // 模型相对于摄像机反向移动
-    model = Mat4f::translate(model, -1.0f * pCamera -> getPosition());
 
     pLightingShader -> setMat4f("model", model);
     pLightingShader -> setMat4f("view", pCamera -> getViewMatrix());
     pLightingShader -> setMat4f("projection", pCamera -> getPerspectiveMatrix());    
     // 绘制立方体模型
-    pModel->render(*pLightingShader);
+    pModelCube->render(pLightingShader);
 
     // 灯具模型
     model = Mat4f::scale(Mat4f(), Vec3f(0.15f));
     model = Mat4f::translate(model, lightPos);
-    // 灯具模型相对于摄像机反向移动
-    model = Mat4f::translate(model, -1.0f * pCamera -> getPosition());
 
     pLampShader -> use();
     pLampShader -> setMat4f("projection", pCamera -> getPerspectiveMatrix());
     pLampShader -> setMat4f("view", pCamera -> getViewMatrix());
     pLampShader -> setMat4f("model", model);
-    pModel->render(*pLampShader);
+    pModelSphere->render(pLampShader);
 
     // 交换前后缓存
     glutSwapBuffers();
@@ -89,7 +82,8 @@ static void renderSceneCB() {
 
 /* 模型初始化 */
 static void initModel() {
-    pModel = new Model("models/cube.obj");
+    pModelCube = new Model("models/cube.obj");
+    pModelSphere = new Model("models/sphere.obj");
 }
 
 /* 初始化着色器 */
@@ -107,6 +101,8 @@ static void initCamera() {
 static void initLight() {
     pLightingShader -> use();
     pLightingShader -> setColor3f("light.specular", Color3f(1.0f, 1.0f, 1.0f));
+    pLampShader -> use();
+    pLampShader -> setVec3f("lightColor", lightColor);
 }
 
 /* 初始化材质 */
@@ -115,7 +111,7 @@ static void initMaterial() {
     pLightingShader -> setColor3f("material.ambient", Color3f(0.2f, 0.2f, 0.2f));
     pLightingShader -> setColor3f("material.diffuse", Color3f(0.5f, 0.5f, 0.5f));
     pLightingShader -> setColor3f("material.specular", Color3f(1.0f, 1.0f, 1.0f));
-    pLightingShader -> setFloat("material.shininess", 64.0f);
+    pLightingShader -> setFloat("material.shininess", 32.0f);
 }
 
 // 特殊按键处理函数
@@ -199,6 +195,7 @@ static void init() {
     initMaterial();
     registerUIEvents();
 }
+
 /*
 void testOGLTutorial() {
     glw::openGlWindow(

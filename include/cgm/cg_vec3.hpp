@@ -18,11 +18,17 @@ public:
     Vec3(const Vec3<T>& v);
     // 赋值运算符
     Vec3<T>& operator = (const Vec3<T>& v);
+    // 比较运算符
+    bool operator == (const Vec3<T>& v) const;
+    bool operator != (const Vec3<T>& v) const;
     // 向量的+,-
     Vec3<T> operator + (const Vec3<T>& v) const;
     Vec3<T>& operator += (const Vec3<T>& v);
     Vec3<T> operator - (const Vec3<T>& v) const;
     Vec3<T>& operator -= (const Vec3<T>& v);
+    // 取正/反
+    Vec3<T> operator - () const;
+    const Vec3<T>& operator + () const;
     // ++ 和 --
     Vec3<T>& operator ++ ();   // ++v
     Vec3<T> operator ++ (int); // v++
@@ -31,9 +37,15 @@ public:
     // 向量的数乘 
     Vec3<T> operator * (const T& n) const;
     Vec3<T>& operator *= (const T& n);
+    // 向量的数除
+    Vec3<T> operator / (const T& n) const;
+    Vec3<T>& operator /= (const T& n);
     // 向量的分量积
     Vec3<T> operator * (const Vec3<T>& v) const;
     Vec3<T>& operator *= (const Vec3<T>& v);
+    // 向量的分量商
+    Vec3<T> operator / (const Vec3<T>& v) const;
+    Vec3<T>& operator /= (const Vec3<T>& v);
     // 向量的点积
     T dot(const Vec3<T> &v) const; 
     // 向量的叉积

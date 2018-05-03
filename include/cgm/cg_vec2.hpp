@@ -19,28 +19,40 @@ public:
     Vec2(const Vec2<T>& v);
 
     /*** 运算符 ***/
-    // 赋值运算符
+    // v1 = v2
     Vec2<T>& operator = (const Vec2<T>& v);
-    // + 和 +=
+    // v1 == v2 和 v1 != v2
+    bool operator == (const Vec2<T>& v) const;
+    bool operator != (const Vec2<T>& v) const;
+    // v1 + v2 和 v1 += v2
     Vec2<T> operator + (const Vec2<T>& v) const;
     Vec2<T>& operator += (const Vec2<T>& v);
-    // - 和 -=
+    // v1 - v2 和 v1 -= v2
     Vec2<T> operator - (const Vec2<T>& v) const;
     Vec2<T>& operator -= (const Vec2<T>& v);
-    // ++ 和 --
+    // -v 和 +v
+    Vec2<T> operator - () const;
+    const Vec2<T>& operator + () const;
+    // ++v, v++ 和 --v, v-- 
     Vec2<T>& operator ++ ();
     Vec2<T> operator ++ (int);
     Vec2<T>& operator -- ();
     Vec2<T> operator -- (int);
-    // 数乘
-    Vec2<T> operator * (const T& v) const;
-    Vec2<T>& operator *= (const T& v);
-    // 分量乘
+    // v * 2 和 v *= 2
+    Vec2<T> operator * (const T& n) const;
+    Vec2<T>& operator *= (const T& n);
+    // v / 2 和 v /= 2
+    Vec2<T> operator / (const T& n) const;
+    Vec2<T>& operator /= (const T& n);
+    // v1 * v2 和 v1 *= v2
     Vec2<T> operator * (const Vec2<T>& v) const;
     Vec2<T>& operator *= (const Vec2<T>& v);
-    // 下标取值运算符
+    // v1 / v2 和 v1 /= v2
+    Vec2<T> operator / (const Vec2<T>& v) const;
+    Vec2<T>& operator /= (const Vec2<T>& v);
+    // v1 = v[i]
     const T& operator [] (uint8_t i) const;
-    // 下标设值运算符
+    // v[i] = v1
     T& operator [] (uint8_t i);
 
     /*** 成员函数 ***/

@@ -42,6 +42,18 @@ Mat4<T>::Mat4(const Mat4<T>& m) {
             x[i][j] = m[i][j];
         }
     }
+    x[0][3] = 0; x[1][3] = 0; x[2][3] = 0;
+    x[3][0] = 0; x[3][1] = 0; x[3][2] = 0; x[3][3] = 0;  
+}
+
+template <typename T>
+Mat4<T>::Mat4(const Mat3<T>& m) {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            x[i][j] = m[i][j];
+        }
+    }
+    x[3][3] = 0;
 }
 
 template <typename T>
@@ -346,9 +358,9 @@ Mat4<T> Mat4<T>::lookAt(const Vec3<T>& eye, const Vec3<T>& target, const Vec3<T>
     const Vec3<T> v(Vec3<T>::cross(n, u));
 
     Mat4<T> vm(
-        T(u.x),   T(u.y),  T(u.z),  T(0),
-        T(v.x),   T(v.y),  T(v.z),  T(0),
-        T(n.x),   T(n.y),  T(n.z),  T(0),
+        T(u.x),   T(u.y),  T(u.z),  T(-Vec3<T>::dot(u, eye)),
+        T(v.x),   T(v.y),  T(v.z),  T(-Vec3<T>::dot(v, eye)),
+        T(n.x),   T(n.y),  T(n.z),  T(-Vec3<T>::dot(n, eye)),
         T(0),     T(0),    T(0),    T(1)
     );
     return vm;

@@ -30,6 +30,16 @@ Vec3<T>& Vec3<T>::operator = (const Vec3<T>& v) {
     return *this;
 }
 
+template <typename T>
+bool Vec3<T>::operator == (const Vec3<T>& v) const {
+    return (x == v.x && y == v.y && z == v.z);
+}
+
+template <typename T>
+bool Vec3<T>::operator != (const Vec3<T>& v) const {
+    return !(*this == v);
+}
+
 // + 和 -
 template <typename T>
 Vec3<T> Vec3<T>::operator + (const Vec3<T>& v) const {
@@ -54,6 +64,16 @@ Vec3<T>& Vec3<T>::operator -= (const Vec3<T>& v) {
     x -= v.x;
     y -= v.y;
     z -= v.z;
+    return *this;
+}
+
+template <typename T>
+Vec3<T> Vec3<T>::operator - () const {
+    return Vec3<T>(-x, -y, -z);
+}
+
+template <typename T>
+const Vec3<T>& Vec3<T>::operator +() const {
     return *this;
 }
 
@@ -105,6 +125,24 @@ Vec3<T>& Vec3<T>::operator *= (const T& n) {
     return *this;
 }
 
+// 数除
+template <typename T>
+Vec3<T> Vec3<T>::operator / (const T& n) const {
+    assert(n != 0);
+    T inv = T(1) / n;
+    return Vec3<T>(x * inv, y * inv, z * inv);
+}
+
+template <typename T>
+Vec3<T>& Vec3<T>::operator /= (const T& n) {
+    assert(n != 0);
+    T inv = T(1) / n;
+    x *= inv;
+    y *= inv;
+    z *= inv;
+    return *this;
+}
+
 // 按分量相乘
 template <typename T>
 Vec3<T> Vec3<T>::operator * (const Vec3<T>& v) const {
@@ -116,6 +154,22 @@ Vec3<T>& Vec3<T>::operator *= (const Vec3<T>& v) {
     x *= v.x;
     y *= v.y;
     z *= v.z;
+    return *this;
+}
+
+// 按分量相除
+template <typename T>
+Vec3<T> Vec3<T>::operator / (const Vec3<T>& v) const {
+    assert( v.x != 0 && v.y != 0 && v.z != 0);
+    return Vec3<T>(x / v.x, y / v.y, z / v.z);
+}
+
+template <typename T>
+Vec3<T>& Vec3<T>::operator /= (const Vec3<T>& v) {
+    assert( v.x != 0 && v.y != 0 && v.z != 0);
+    x /= v.x;
+    y /= v.y;
+    z /= v.z;
     return *this;
 }
 

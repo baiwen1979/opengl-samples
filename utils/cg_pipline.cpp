@@ -77,16 +77,14 @@ const Mat4f& Pipeline::getWorldTransform() {
 
 const Mat4f& Pipeline::getWVPTransform() {
     getWorldTransform();
-    Vec3f pos = _camera.pos * -1;
-    Mat4f cmt = Mat4f::translate(Mat4f(), pos.x, pos.y, pos.z);
-    Mat4f cmr = Mat4f::lookAt(_camera.pos, _camera.target, _camera.up);
-    Mat4f mp = Mat4f::perspective(
+    Mat4f view = Mat4f::lookAt(_camera.pos, _camera.target, _camera.up);
+    Mat4f projection = Mat4f::perspective(
         _persProjParams.fieldOfView,
         _persProjParams.aspectRatio,   
         _persProjParams.zNear,
         _persProjParams.zFar
     );
-    _transform = mp * cmr * cmt * _transform;
+    _transform = projection * view * _transform;
     return _transform;
 }
 

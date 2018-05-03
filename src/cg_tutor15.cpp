@@ -67,7 +67,6 @@ static void renderSceneCB() {
     glutSwapBuffers();
 }
 
-
 static void printVertices(const Vertex vertices[], int vertexCount) {
     for (int i = 0; i < vertexCount; i++) {
         cout << vertices[i].position << vertices[i].normal << endl;

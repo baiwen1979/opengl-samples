@@ -12,6 +12,10 @@ void Model::render(const Shader& shader) const {
     }
 }
 
+void Model::render(const Shader* pShader) const {
+    render(*pShader);
+}
+
 void Model::load(const string& path) {
     // 使用 ASSIMP 读取文件
     Assimp::Importer importer;

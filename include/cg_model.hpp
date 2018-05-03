@@ -18,6 +18,7 @@ public:
 
     /* 渲染模型：使用指定的着色器渲染模型 */
     void render(const Shader& shader) const;
+    void render(const Shader* pShader) const;
 
 private:
     /* 模型数据 */

@@ -2,6 +2,7 @@
 #define _CG_SHADER_HPP_
 
 #include "cg_types.h"
+#include "cgm/cg_math.h"
 #include <string>
 
 namespace cg {

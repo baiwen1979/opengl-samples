@@ -76,7 +76,6 @@ static void renderSceneCB() {
         model = Mat4f::translate(Mat4f(), modelPositions[i]);
         //float angle = 20.0f * i;
         model = Mat4f::rotate(model, angle * (i + 1), Vec3f(1.0f, 0.3f, 0.5f));
-        model = Mat4f::translate(model, -1.0f * pCamera -> getPosition());
         pLightingShader -> setMat4f("model", model);
         // 绘制模型
         pModel->render(*pLightingShader);

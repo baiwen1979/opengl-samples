@@ -80,7 +80,6 @@ static void renderSceneCB() {
         Mat4f model;
         model = Mat4f::translate(model, modelPositions[i]);
         model = Mat4f::rotate(model, angle * (i + 1), Vec3f(1.0f, 0.3f, 0.5f));
-        model = Mat4f::translate(model, -1.0f * pCamera -> getPosition());
         pLightingShader -> setMat4f("model", model);
         // 绘制模型
         pModel->render(*pLightingShader);

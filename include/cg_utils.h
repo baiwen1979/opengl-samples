@@ -10,5 +10,6 @@
 #include "cg_texture.hpp"
 #include "cg_mesh.hpp"
 #include "cg_model.hpp"
+#include "cg_outline.hpp"
 
 #endif //_CG_UTILS_H_

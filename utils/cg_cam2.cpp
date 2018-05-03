@@ -3,7 +3,7 @@
 
 namespace cg {
 
-const float CameraQuat::STEP_SCALE = 1.0f;
+const float CameraQuat::STEP_SCALE = 0.2f;
 const int CameraQuat::MARGIN = 10;
 const float CameraQuat::EDGE_STEP = 0.1f;
 
@@ -59,14 +59,14 @@ bool CameraQuat::onKeyboard(int key) {
             Vec3f left = _target.cross(_up);
             left.normalize();
             left *= STEP_SCALE;
-            _pos += left;
+            _pos -= left;
             ret = true;
         }
         break;
 
         case GLUT_KEY_RIGHT:
         {
-            Vec3f right = _up.cross(_target);
+            Vec3f right = _target.cross(_up);
             right.normalize();
             right *= STEP_SCALE;
             _pos += right;

@@ -106,7 +106,7 @@ GLuint LoadShaders(const char * vertex_file_path, const char * fragment_file_pat
 
 
 	// 编译顶点着色器
-	printf("Compiling shader : %s\n", vertex_file_path);
+	printf("Compiling Vertex Shader: %s\n", vertex_file_path);
 	char const * VertexSourcePointer = VertexShaderCode.c_str();
 	glShaderSource(VertexShaderID, 1, &VertexSourcePointer , NULL);
 	glCompileShader(VertexShaderID);
@@ -119,9 +119,12 @@ GLuint LoadShaders(const char * vertex_file_path, const char * fragment_file_pat
 		glGetShaderInfoLog(VertexShaderID, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
 		printf("%s\n", &VertexShaderErrorMessage[0]);
 	}
+	else {
+		printf("Vertex Shader Compiled Successfully.\n");
+	}
 
 	// 编译片元着色器
-	printf("Compiling shader : %s\n", fragment_file_path);
+	printf("Compiling Fragment Shader: %s\n", fragment_file_path);
 	char const * FragmentSourcePointer = FragmentShaderCode.c_str();
 	glShaderSource(FragmentShaderID, 1, &FragmentSourcePointer , NULL);
 	glCompileShader(FragmentShaderID);
@@ -134,9 +137,12 @@ GLuint LoadShaders(const char * vertex_file_path, const char * fragment_file_pat
 		glGetShaderInfoLog(FragmentShaderID, InfoLogLength, NULL, &FragmentShaderErrorMessage[0]);
 		printf("%s\n", &FragmentShaderErrorMessage[0]);
 	}
+	else {
+		printf("Fragment Shader Compiled Successfully.\n");
+	}
 
 	// 绑定并链接着色器程序
-	printf("Linking program\n");
+	printf("Linking Shader Program\n");
 	GLuint ProgramID = glCreateProgram();
 	glAttachShader(ProgramID, VertexShaderID);
 	glAttachShader(ProgramID, FragmentShaderID);
@@ -149,6 +155,9 @@ GLuint LoadShaders(const char * vertex_file_path, const char * fragment_file_pat
 		std::vector<char> ProgramErrorMessage(InfoLogLength+1);
 		glGetProgramInfoLog(ProgramID, InfoLogLength, NULL, &ProgramErrorMessage[0]);
 		printf("%s\n", &ProgramErrorMessage[0]);
+	}
+	else {
+		printf("Shader Program Linked Successfully.\n");
 	}
 
 	// 分离着色器

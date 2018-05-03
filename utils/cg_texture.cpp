@@ -55,6 +55,7 @@ unsigned int loadTexture(const char* filePath) {
     glGenTextures(1, &texId);
     int width, height, numOfChannels;
     stbi_set_flip_vertically_on_load(true);
+    std::cout << "Loading Texture from file: " << filePath << std::endl;
     unsigned char* data = stbi_load(filePath, &width, &height, &numOfChannels, 0);
     if (data) {
         GLenum format;
@@ -78,6 +79,7 @@ unsigned int loadTexture(const char* filePath) {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
         stbi_image_free(data);
+        std::cout << "Texture Loaded Successfully." << std::endl;
     }
     else {
         std::cout << "Texture Failed to load from file path: " << filePath << std::endl;

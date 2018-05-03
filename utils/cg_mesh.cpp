@@ -25,25 +25,43 @@ Mesh::Mesh(
    init(); 
 }
 
+Mesh::Mesh(
+    const vector<Vertex>& vertices,
+    const vector<Texture>& textures): 
+    _vertices(vertices), 
+    _indices(), 
+    _textures(textures) {
+    init();
+}
+
+Mesh::Mesh(const vector<Vertex>& vertices): 
+    _vertices(vertices), 
+    _indices(), 
+    _textures() {
+    init();
+}
+
 void Mesh::init() {
     // 生成顶点数组对象VAO
     glGenVertexArrays(1, &_VAO);
-    // 生成顶点缓存对象VBO
-    glGenBuffers(1, &_VBO);
-    // 生成索引（元素）缓存对象EBO
-    glGenBuffers(1, &_EBO);
-
     // 绑定顶点数组对象VAO
     glBindVertexArray(_VAO);
+
+    // 生成顶点缓存对象VBO
+    glGenBuffers(1, &_VBO);
     // 绑定顶点缓存对象VBO
     glBindBuffer(GL_ARRAY_BUFFER, _VBO);
     // 为当前绑定的顶点缓存对象分配内存空间，并存储顶点数据
     glBufferData(GL_ARRAY_BUFFER, _vertices.size() * sizeof(Vertex), &_vertices[0], GL_STATIC_DRAW);  
 
-    // 绑定元素（索引）缓存对象EBO
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _EBO);
-    // 为当前绑定的元素（索引）缓存对象分配内容空间，并存储元素（索引）数据
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, _indices.size() * sizeof(unsigned int), &_indices[0], GL_STATIC_DRAW);
+    if (_indices.size() > 0) {
+        // 生成索引（元素）缓存对象EBO
+        glGenBuffers(1, &_EBO);
+        // 绑定元素（索引）缓存对象EBO
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _EBO);
+        // 为当前绑定的元素（索引）缓存对象分配内容空间，并存储元素（索引）数据
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, _indices.size() * sizeof(unsigned int), &_indices[0], GL_STATIC_DRAW);
+    }
 
     // 启用并指定顶点位置属性
     glEnableVertexAttribArray(0);	
@@ -98,8 +116,17 @@ void Mesh::render(const Shader& shader) const {
 
     // 绘制网格
     glBindVertexArray(_VAO);
-    glDrawElements(GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, 0);
+    if (_indices.size() > 0) {
+        glDrawElements(GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, 0);
+    }
+    else {
+        glDrawArrays(GL_TRIANGLES, 0, _vertices.size());
+    }
     glBindVertexArray(0);
+}
+
+void Mesh::render(const Shader* pShader) const {
+    render(*pShader);
 }
 
 void calcNormals(const GLuint indices[], GLuint indexCount, Vertex vertices[], GLuint vertexCount)

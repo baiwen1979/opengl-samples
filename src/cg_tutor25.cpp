@@ -250,11 +250,11 @@ static void init() {
     registerUIEvents();
 }
 
-
+/*
 void testOGLTutorial() {
     glw::openGlWindow(
         renderSceneCB, 
-        "OpenGL Tutorial 24 - Lighting: Spot Light", 
+        "OpenGL Tutorial 25 - Lighting: Multiple Lights", 
         init, 
         reshape, 
         renderSceneCB,
@@ -262,3 +262,4 @@ void testOGLTutorial() {
         WIN_RECT
     );
 }
+*/

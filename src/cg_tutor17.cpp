@@ -47,8 +47,6 @@ static void renderSceneCB() {
     Mat4f model = Mat4f::scale(Mat4f(), Vec3f(0.2f));
     model = Mat4f::rotateY(model, angle);
     model = Mat4f::translate(model, Vec3f(0.0f, -1.5f, -8.0f));
-    // 模型相对于摄像机移动
-    model = Mat4f::translate(model, pCamera -> getPosition() * -1);
     pLightingShader -> setMat4f("model", model);
     // 观察位置
     pLightingShader -> setVec3f("viewPos", pCamera -> getPosition());

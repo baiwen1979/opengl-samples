@@ -31,8 +31,11 @@ public:
     /*** 成员函数  ***/
     // 构造函数
     Mesh(const vector<Vertex>& vertices, const vector<unsigned int>& indices, const vector<Texture>& textures);
+    Mesh(const vector<Vertex>& vertices, const vector<Texture>& textures);
+    Mesh(const vector<Vertex>& vertices);
     // 使用指定的着色器进行渲染（绘制）
     void render(const Shader& shader) const;
+    void render(const Shader* pShader) const;
 
 private:
     /*** 网格数据 ***/
@@ -45,6 +48,7 @@ private:
     void init();
 };
 
+// 计算顶点法线
 void calcNormals(const GLuint indices[], GLuint indexCount, Vertex vertices[], GLuint vertexCount);
 
 
