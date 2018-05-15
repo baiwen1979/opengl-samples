@@ -121,7 +121,7 @@ static void passiveMouseCB(int x, int y) {
         firstMouse = false;
     }
 
-    float xoffset = lastX - x;
+    float xoffset = x - lastX;
     float yoffset = lastY - y;
 
     lastX = x;
@@ -142,7 +142,7 @@ static void initGl() {
     // 启用深度测试
     glEnable(GL_DEPTH_TEST);
     // 设置前向面
-    glFrontFace(GL_CW);
+    glFrontFace(GL_CCW);
     // 背面剔除
     glCullFace(GL_BACK);
     // 启用背面剔除

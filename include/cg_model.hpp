@@ -20,6 +20,9 @@ public:
     void render(const Shader& shader) const;
     void render(const Shader* pShader) const;
 
+    const vector<Mesh>& getMeshes() const;
+    const vector<Texture>& getTexturesLoaded() const;
+
 private:
     /* 模型数据 */
     vector<Texture> _texturesLoaded;

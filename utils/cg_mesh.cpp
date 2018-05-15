@@ -129,6 +129,14 @@ void Mesh::render(const Shader* pShader) const {
     render(*pShader);
 }
 
+unsigned int Mesh::getVAO() const {
+    return _VAO;
+}
+
+const vector<unsigned int>& Mesh::getIndices() const {
+    return _indices;
+}
+
 void calcNormals(const GLuint indices[], GLuint indexCount, Vertex vertices[], GLuint vertexCount)
 {
     for (GLuint i = 0 ; i < indexCount ; i += 3) {

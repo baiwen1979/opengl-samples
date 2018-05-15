@@ -175,7 +175,7 @@ static void passiveMouseCB(int x, int y) {
         lastY = y;
         firstMouse = false;
     }
-    float xoffset = lastX - x;
+    float xoffset = x - lastX;
     float yoffset = lastY - y;
 
     lastX = x;
@@ -208,9 +208,9 @@ static void initGl() {
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
     // 设置前向面
-    glFrontFace(GL_CW);
+    //glFrontFace(GL_CCW);
     // 背面剔除
-    glCullFace(GL_BACK);
+    //glCullFace(GL_BACK);
     // 启用背面剔除
     glEnable(GL_CULL_FACE);
     // 背景颜色

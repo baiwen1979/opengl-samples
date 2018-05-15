@@ -68,13 +68,14 @@ void main()
     */
 
     // 边缘检测
-    
+    /*
     float edgeKernel[9] = float[](
         1,  1,  1,
         1, -8,  1,
         1,  1,  1
     );
     col = kernelFilter(edgeKernel, offsets);
+    */
     
     FragColor = vec4(col, 1.0);
 } 

@@ -122,7 +122,7 @@ static void passiveMouseCB(int x, int y) {
         firstMouse = false;
     }
 
-    float xoffset = lastX - x;
+    float xoffset = x - lastX;
     float yoffset = lastY - y;
 
     lastX = x;
@@ -142,12 +142,16 @@ static void registerUIEvents() {
 static void initGl() {
     // 启用深度测试
     glEnable(GL_DEPTH_TEST);
-    // 设置前向面
-    glFrontFace(GL_CW);
-    // 背面剔除
-    glCullFace(GL_BACK);
+
     // 启用背面剔除
     glEnable(GL_CULL_FACE);
+    // 设置前向面
+    glFrontFace(GL_CCW);
+    // 背面剔除
+    glCullFace(GL_BACK);
+
+    glEnable(GL_MULTISAMPLE_ARB);
+
     // 背景颜色
     glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
 }

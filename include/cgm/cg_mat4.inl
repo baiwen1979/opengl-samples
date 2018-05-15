@@ -331,22 +331,21 @@ Mat4<T> Mat4<T>::rotate(const Mat4<T>&m, T angle, const Vec3<T>& v) {
 template <typename T>
 Mat4<T> Mat4<T>::ortho(T left, T right, T top, T bottom, T zNear, T zFar) {
     return Mat4<T>(
-        T(2 / (right - left)), 0,                     0,                   (right + left) / (left - right),
-        0,                     T(2 / (top - bottom)), 0,                   (top + bottom) / (bottom - top),
-        0,                     0,                     T(2/(zNear - zFar)), (zFar + zNear) / (zNear - zFar),
-        0,                     0,                     0,                   1
+        T(2) / (right - left), 0,                     0,                     (right + left) / (left - right),
+        0,                     T(2) / (top - bottom), 0,                     (top + bottom) / (bottom - top),
+        0,                     0,                     T(2) / (zNear - zFar), (zFar + zNear) / (zNear - zFar),
+        0,                     0,                     0,                     T(1)
     );
 }
 
 template <typename T>
 Mat4<T> Mat4<T>::perspective(T fov, T aspect, T zNear, T zFar) {
-    const T zRange = zNear - zFar;
     const T tanHalfFov = tan(toRadian(fov / 2.0));
     Mat4<T> mp(
-        T(1 / (tanHalfFov * aspect)),  T(0),              T(0),                        T(0),
-        T(0),                          T(1 / tanHalfFov), T(0),                        T(0),
-        T(0),                          T(0),              T((-zNear - zFar) / zRange), T(2 * zNear * zFar / zRange),
-        T(0),                          T(0),              T(1),                        T(0)
+        T(1) / (tanHalfFov * aspect),  T(0),               T(0),                             T(0),
+        T(0),                          T(1) / tanHalfFov,  T(0),                             T(0),
+        T(0),                          T(0),              -(zFar + zNear) / (zFar - zNear), -T(2) * zNear * zFar / (zFar - zNear),
+        T(0),                          T(0),              -T(1),                             T(0)
     );
     return mp;
 }
@@ -354,14 +353,14 @@ Mat4<T> Mat4<T>::perspective(T fov, T aspect, T zNear, T zFar) {
 template <typename T>
 Mat4<T> Mat4<T>::lookAt(const Vec3<T>& eye, const Vec3<T>& target, const Vec3<T>& up) {
     const Vec3<T> n(Vec3<T>::normalize(target - eye));
-    const Vec3<T> u(Vec3<T>::normalize(Vec3<T>::cross(up, n)));
-    const Vec3<T> v(Vec3<T>::cross(n, u));
+    const Vec3<T> u(Vec3<T>::normalize(Vec3<T>::cross(n, up)));
+    const Vec3<T> v(Vec3<T>::cross(u, n));
 
     Mat4<T> vm(
-        T(u.x),   T(u.y),  T(u.z),  T(-Vec3<T>::dot(u, eye)),
-        T(v.x),   T(v.y),  T(v.z),  T(-Vec3<T>::dot(v, eye)),
-        T(n.x),   T(n.y),  T(n.z),  T(-Vec3<T>::dot(n, eye)),
-        T(0),     T(0),    T(0),    T(1)
+         u.x,   u.y,   u.z,  -Vec3<T>::dot(u, eye),
+         v.x,   v.y,   v.z,  -Vec3<T>::dot(v, eye),
+        -n.x,  -n.y,  -n.z,   Vec3<T>::dot(n, eye),
+         T(0),  T(0),  T(0),  T(1)
     );
     return vm;
 }

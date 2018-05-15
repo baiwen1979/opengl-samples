@@ -49,7 +49,7 @@ static void renderSceneCB() {
     scale += 0.5f;
  
     Pipeline p;
-    p.posit(0.0f, 0.0f, 3.0f);
+    p.posit(0.0f, 0.0f, -3.0f);
     p.rotate(0.0f, scale, 0.0f);
     // 设置摄像机
     p.setCamera(*pCamera);
@@ -114,14 +114,14 @@ static void initShaders() {
 static void initPersProjParams() {
     persProjParams.aspectRatio = WIN_RECT.w / WIN_RECT.h;
     persProjParams.fieldOfView = 60.0f;
-    persProjParams.zNear = 1.0f;
+    persProjParams.zNear = 0.1f;
     persProjParams.zFar = 100.0f;
 }
 
 static void initCamera() {
     pCamera = new CameraQuat(WIN_RECT.w, WIN_RECT.h);
-    pCamera -> setPos(Vec3f(0.0f, 0.2f, 0.0f));
-    pCamera -> setTarget(Vec3f(0.0f, 0.0f, 3.0f));
+    pCamera -> setPos(Vec3f(0.0f, 0.0f, 0.0f));
+    pCamera -> setTarget(Vec3f(0.0f, 0.0f, -3.0f));
 }
 
 static void initLight() {
@@ -176,12 +176,14 @@ static void registerUIEvents() {
 static void initGl() {
     // 启用深度测试
     glEnable(GL_DEPTH_TEST);
-    // 设置前向面
-    glFrontFace(GL_CW);
-    // 背面剔除
-    glCullFace(GL_BACK);
+
     // 启用背面剔除
     glEnable(GL_CULL_FACE);
+    // 设置前向面
+    glFrontFace(GL_CCW);
+    // 背面剔除
+    glCullFace(GL_BACK);
+
     // 背景颜色
     glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
 }

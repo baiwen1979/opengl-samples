@@ -6,7 +6,7 @@ const float Camera::YAW = -90.0f;
 const float Camera::PITCH = 0.0f;
 const float Camera::SPEED = 2.5f;
 const float Camera::SENSITIVITY = 0.05f;
-const float Camera::ZOOM = 45.0f;
+const float Camera::ZOOM = 48.0f;
 const float Camera::ASPECT = 4.0f / 3.0f;
 
 Camera::Camera(float aspect, const Vec3f& position, const Vec3f& up, float yaw, float pitch):
@@ -56,7 +56,7 @@ Mat4f Camera::getViewMatrix() const {
 }
 
 Mat4f Camera::getPerspectiveMatrix() const {
-    return Mat4f::perspective(_zoom, _aspect, 1.0f, 100.0f);
+    return Mat4f::perspective(_zoom, _aspect, 0.1f, 1000.0f);
 }
 
 void Camera::processKeyboardInput(MovementDirection direction, float deltaTime) {
@@ -69,10 +69,10 @@ void Camera::processKeyboardInput(MovementDirection direction, float deltaTime) 
         _position -= _front * velocity;
     }
     if (direction == LEFT) {
-        _position += _right * velocity;
+        _position -= _right * velocity;
     }
     if (direction == RIGHT) {
-        _position -= _right * velocity;
+        _position += _right * velocity;
     }
 }
 

@@ -194,12 +194,62 @@ void initExample5() {
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
+/****** 编程实例 6.5 *******/
+void lookAt (const Vec3f& cameraPos, const Vec3f& target, const Vec3f& up) {
+     gluLookAt(cameraPos.x, cameraPos.y, cameraPos.z, target.x, target.y, target.z, up.x, up.y, up.z);
+}
+
+void initExample6() {
+    glEnable(GL_MULTISAMPLE);
+    glClearColor(1.0, 1.0, 1.0, 0.0);
+
+    Vec3f cameraPos(0.0f, 0.0f, 5.0f);
+    Vec3f target(0.0f, 0.0f, 0.0f);
+    Vec3f up(0.0f, 1.0f, 0.0f);
+
+    /* 观察变换 */
+    lookAt(cameraPos, target, up);
+    
+    /* 模型变换 */
+    glMatrixMode(GL_MODELVIEW);
+    glScalef(2.0f, 2.0f, 2.0f);
+    Vec3f axis(1.0f, 0.0f, 0.0f); // 旋转轴向量
+    glRotatef(90.0f, axis.x, axis.y, axis.z);
+
+    /* 投影变换 */
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glFrustum(-1.0, 1.0, -1.0, 1.0, 1.5, 20);
+}
+
+void renderExample6() {
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glColor3f(0.0, 1.0, 0.0);
+    //glutSolidCube(1.0);
+    glutSolidSphere(1.0f, 12, 12);
+
+    glColor3f(0.0, 0.0, 1.0);
+    glLineWidth(2.0);
+    //glutWireCube(1.0);
+    glutWireSphere(1.0f, 12, 12);
+
+    glutSwapBuffers();
+}
+
+void reshapeExample6(GLint w, GLint h) {
+    glViewport(0, 0, w, h);
+}
+
+
 /* 测试课程实验 */
 void testCGCourseLab() {
     // 测试编程实例3.6
-    openGlWindow(renderExample3, "地图绘制", initExample3, reshapeExample3);
+    // openGlWindow(renderExample3, "地图绘制", initExample3, reshapeExample3);
     // 测试编程实例4.4
     // openGlWindow(renderExample4, "三角形变换", initExample4, reshapeExample4);
     // 测试编程实例5.5
     // openGlWindow(renderExample5, "红蓝三角形", initExample5);
+    // 测试编程实例6.5
+    openGlWindow(renderExample6, "立方体透视投影", initExample6, reshapeExample6);
 }

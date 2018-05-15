@@ -54,7 +54,7 @@ static void renderSceneCB() {
  
     Pipeline p;    
     p.rotate(0.0f, scale, 0.0f);
-    p.posit(0.0f, 0.0f, 5.0f);   
+    p.posit(0.0f, 0.0f,  -5.0f);   
     // 设置透视投影变换参数
     p.setPersProjParams(persProjParams);
     // 获得世界坐标透视投影变换矩阵
@@ -146,12 +146,14 @@ static void initPersProjInfo() {
 static void initGl() {
     // 启用深度测试
     glEnable(GL_DEPTH_TEST);
-    // 设置前向面
-    glFrontFace(GL_CW);
-    // 背面剔除
-    glCullFace(GL_BACK);
+
     // 启用背面剔除
     glEnable(GL_CULL_FACE);
+    // 设置前向面
+    glFrontFace(GL_CCW);
+    // 背面剔除
+    glCullFace(GL_BACK);
+
     // 背景颜色
     glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
 }
@@ -177,8 +179,3 @@ void testOGLTutorial() {
     );
 }
 */
-
-
-
-
-

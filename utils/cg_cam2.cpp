@@ -9,7 +9,7 @@ const float CameraQuat::EDGE_STEP = 0.1f;
 
 CameraQuat::CameraQuat(int w, int h): 
     _pos(Vec3f(0.0f)), 
-    _target(Vec3f(0.0f, 0.0f, 1.0f)), 
+    _target(Vec3f(0.0f, 0.0f, -1.0f)), 
     _up(Vec3f(0.0f, 1.0f, 0.0f)),
     _winWidth(w), _winHeight(h),
     _onTopEdge(false), 
@@ -59,7 +59,7 @@ bool CameraQuat::onKeyboard(int key) {
             Vec3f left = _target.cross(_up);
             left.normalize();
             left *= STEP_SCALE;
-            _pos -= left;
+            _pos += left;
             ret = true;
         }
         break;
@@ -69,7 +69,7 @@ bool CameraQuat::onKeyboard(int key) {
             Vec3f right = _target.cross(_up);
             right.normalize();
             right *= STEP_SCALE;
-            _pos += right;
+            _pos -= right;
             ret = true;
         }
         break;
@@ -131,7 +131,7 @@ void CameraQuat::init() {
 
 void CameraQuat::onMouse(int x, int y) {
     // 鼠标移动距离
-    const int dx = x - _mousePos.x;
+    const int dx = _mousePos.x - x;
     const int dy = y - _mousePos.y;
     // 当前鼠标位置
     _mousePos.x = x;

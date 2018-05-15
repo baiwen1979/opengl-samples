@@ -13,9 +13,9 @@ Texture::Texture(unsigned int id, const Type& texType):
 Texture::Texture(unsigned int id, const Type& texType, const string& path):
     _id(id), _type(texType), _path(path) {}
 
-Texture::Texture(const char* filePath, const Type& texType):
+Texture::Texture(const char* filePath, const Type& texType, bool gammaCorrection):
     _type(texType) {   
-    _id = loadTexture(filePath);
+    _id = loadTexture(filePath, gammaCorrection);
 }
 
 unsigned int Texture::getId() const {
@@ -39,18 +39,18 @@ Texture::~Texture() {
     // nothing to do;
 }
 
-Texture Texture::load(const string& filename, const string& directory, Type texType) {
-    Texture tex = load((directory + '/' + filename).c_str(), texType);
+Texture Texture::load(const string& filename, const string& directory, Type texType, bool gammaCorrection) {
+    Texture tex = load((directory + '/' + filename).c_str(), texType, gammaCorrection);
     tex._path;
     return tex;
 }
 
-Texture Texture::load(const char* filePath, Type texType) {
-    unsigned int texId = loadTexture(filePath);
+Texture Texture::load(const char* filePath, Type texType, bool gammaCorrection) {
+    unsigned int texId = loadTexture(filePath, gammaCorrection);
     return Texture(texId, texType);
 }
 
-unsigned int loadTexture(const char* filePath) {
+unsigned int loadTexture(const char* filePath, bool gammaCorrection) {
     unsigned int texId;
     glGenTextures(1, &texId);
     int width, height, numOfChannels;
@@ -58,19 +58,22 @@ unsigned int loadTexture(const char* filePath) {
     std::cout << "Loading Texture from file: " << filePath << std::endl;
     unsigned char* data = stbi_load(filePath, &width, &height, &numOfChannels, 0);
     if (data) {
-        GLenum format;
+        GLenum internalFormat;
+        GLenum dataFormat;
         if (numOfChannels == 1) {
-            format = GL_RED;
+            internalFormat = dataFormat = GL_RED;
         }
         if (numOfChannels == 3) {
-            format = GL_RGB;
+            internalFormat = gammaCorrection ? GL_SRGB: GL_RGB;
+            dataFormat = GL_RGB;
         }
         if (numOfChannels == 4) {
-            format = GL_RGBA;
+            internalFormat = gammaCorrection ? GL_SRGB_ALPHA : GL_RGBA;
+            dataFormat = GL_RGBA;
         }
 
         glBindTexture(GL_TEXTURE_2D, texId);
-        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+        glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, dataFormat, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);

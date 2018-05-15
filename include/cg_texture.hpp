@@ -20,7 +20,7 @@ public:
         Height    // 高度纹理（贴图）
     };
 
-    Texture(const char* filePath, const Type& textureType);
+    Texture(const char* filePath, const Type& textureType, bool gammaCorrection = false);
     // 纹理（贴图）ID
     unsigned int getId() const;
     // 纹理（贴图）类型
@@ -33,9 +33,9 @@ public:
     ~Texture();
 
     // 从指定的完整文件路径中加载指定类型的纹理贴图
-    static Texture load(const char* filePath, Type textureType);
+    static Texture load(const char* filePath, Type textureType, bool gammaCorrection = false);
     // 从指定目录的指定文件中加载指定类型的纹理贴图
-    static Texture load(const string& filename, const string& directory, Type textureType);
+    static Texture load(const string& filename, const string& directory, Type textureType, bool gammaCorrection = false);
 private:
     // 构造函数
     Texture(unsigned int id, const Type& textureType);
@@ -46,7 +46,7 @@ private:
     string _path;
 };
 
-unsigned int loadTexture(const char* filePath);
+unsigned int loadTexture(const char* filePath, bool gammaCorrection = false);
 
 } //namespace cg
 

@@ -37,6 +37,9 @@ public:
     void render(const Shader& shader) const;
     void render(const Shader* pShader) const;
 
+    unsigned int getVAO() const;
+    const vector<unsigned int>& getIndices() const;
+
 private:
     /*** 网格数据 ***/
     vector<Vertex> _vertices;      // 网格顶点集合

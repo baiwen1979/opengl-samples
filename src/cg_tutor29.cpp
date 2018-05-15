@@ -74,7 +74,7 @@ static void passiveMouseCB(int x, int y) {
         lastY = y;
         firstMouse = false;
     }
-    float xoffset = lastX - x;
+    float xoffset = x - lastX;
     float yoffset = lastY - y;
 
     lastX = x;
@@ -107,18 +107,20 @@ static void renderModel() {
 
     pShader -> use();
     pShader -> setMat4f("view", pCamera -> getViewMatrix());
-    pShader -> setMat4f("projection", pCamera -> getPerspectiveMatrix());
+    Mat4f projection = pCamera -> getPerspectiveMatrix();
+    projection = Mat4f::ortho(-2.0f, 2.0f, 2.0f, -2.0f, -10.0f, 10.0f);
+    pShader -> setMat4f("projection", projection);
     
     // 渲染立方体
     Mat4f model;
     model = Mat4f::rotateY(model, angle);
-    model = Mat4f::translate(model, Vec3f(-1.0f, 0.0f, -3.0f));
+    model = Mat4f::translate(model, Vec3f(-1.0f, 0.0f, -5.0f));
     pShader -> setMat4f("model", model);
     pCubeTexture -> apply(GL_TEXTURE0);
     pModelCube -> render(pShader);
 
     model = Mat4f::rotateY(Mat4f(), angle);
-    model = Mat4f::translate(model, Vec3f(1.0f, 0.0f, 0.0f));
+    model = Mat4f::translate(model, Vec3f(1.0f, 0.0f, -3.0f));
     pShader -> setMat4f("model", model);
     pModelCube -> render(pShader);
 
@@ -180,7 +182,7 @@ static void initShaders() {
 
 /* 初始化摄像机 */
 static void initCamera() {
-    pCamera = new Camera((float)WIN_RECT.w / (float)WIN_RECT.h, Vec3f(0.0f, 0.0f, 3.0f));
+    pCamera = new Camera((float)WIN_RECT.w / (float)WIN_RECT.h, Vec3f(0.0f, 0.0f, 5.0f), Vec3f(0.0f, 1.0f, 0.0f));
 }
 
 /* 初始化灯光 */
@@ -252,12 +254,6 @@ static void initGl() {
     glEnable(GL_DEPTH_TEST);
     // 深度测试函数
     glDepthFunc(GL_LESS);
-    // 启用背面剔除
-    //glEnable(GL_CULL_FACE);
-    // 设置前向面
-    //glFrontFace(GL_CW);
-    // 背面剔除
-    //glCullFace(GL_BACK);
 }
 
 // 窗口调整回调函数
@@ -283,7 +279,6 @@ static void init() {
 
     registerUIEvents();
 }
-
 /*
 void testOGLTutorial() {
     glw::openGlWindow(

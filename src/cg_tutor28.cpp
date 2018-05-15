@@ -196,7 +196,7 @@ static void passiveMouseCB(int x, int y) {
         lastY = y;
         firstMouse = false;
     }
-    float xoffset = lastX - x;
+    float xoffset = x - lastX;
     float yoffset = lastY - y;
 
     lastX = x;
@@ -230,8 +230,8 @@ static void initGl() {
     glEnable(GL_CULL_FACE);
     // 指定要剔除的面(背面)
     glCullFace(GL_BACK);
-    // 设置前向面（顺时针）
-    glFrontFace(GL_CW);
+    // 设置前向面（逆时针）
+    glFrontFace(GL_CCW);
 
     // 背景颜色
     glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
