@@ -51,9 +51,9 @@ public:
     Vec2<T> operator / (const Vec2<T>& v) const;
     Vec2<T>& operator /= (const Vec2<T>& v);
     // v1 = v[i]
-    const T& operator [] (uint8_t i) const;
+    const T& operator [] (unsigned char i) const;
     // v[i] = v1
-    T& operator [] (uint8_t i);
+    T& operator [] (unsigned char i);
 
     /*** 成员函数 ***/
     // 点积

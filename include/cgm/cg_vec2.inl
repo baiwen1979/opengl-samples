@@ -154,13 +154,13 @@ Vec2<T>& Vec2<T>::operator *= (const Vec2<T>& v) {
 }
 
 template <typename T>
-const T& Vec2<T>::operator[] (uint8_t i) const {
+const T& Vec2<T>::operator[] (unsigned char i) const {
     assert(i < 2);
     return (&x)[i];
 }
 
 template<typename T>
-T& Vec2<T>::operator[] (uint8_t i) {
+T& Vec2<T>::operator[] (unsigned char i) {
     assert(i < 2);
     return (&x)[i];
 }

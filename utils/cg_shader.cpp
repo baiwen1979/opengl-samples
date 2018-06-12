@@ -126,10 +126,7 @@ GLuint LoadShaders(
         stringstream vShaderStream, fShaderStream;
         // 读取文件内容到文本流中
         vShaderStream << vShaderFile.rdbuf();
-        fShaderStream << fShaderFile.rdbuf();		
-        // 关闭文件
-        vShaderFile.close();
-        fShaderFile.close();
+        fShaderStream << fShaderFile.rdbuf();
         // 将文本流转为字符串
         vertexCode = vShaderStream.str();
         fragmentCode = fShaderStream.str();			
@@ -139,15 +136,12 @@ GLuint LoadShaders(
             gShaderFile.open(geometryPath);
             std::stringstream gShaderStream;
             gShaderStream << gShaderFile.rdbuf();
-            gShaderFile.close();
             geometryCode = gShaderStream.str();
         }
 		const char* vShaderCode = vertexCode.c_str();
 		const char * fShaderCode = fragmentCode.c_str();
 		// 2. 编译着色器
 		unsigned int vertex, fragment;
-		int success;
-		char infoLog[512];
 		// 编译顶点着色器
 		cout << "Compiling Vertex Shader: " << vertexPath << endl;
 		vertex = glCreateShader(GL_VERTEX_SHADER);
@@ -184,7 +178,11 @@ GLuint LoadShaders(
 		glDeleteShader(fragment);
 		if(geometryPath != NULL) {
 			glDeleteShader(geometry);
+			gShaderFile.close();
 		}
+		// 关闭文件
+        vShaderFile.close();
+        fShaderFile.close();
     }
     catch (ifstream::failure e) {
         cout << "ERROR: Failed to Open Shader file: ";

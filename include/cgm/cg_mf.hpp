@@ -1,7 +1,11 @@
 #ifndef _CG_MF_HPP_
 #define _CG_MF_HPP_
 
+#define _USE_MATH_DEFINES
+
 #include <math.h>
+
+namespace cg {
 
 template <typename T>
 inline T toRadian(const T& x) {
@@ -19,7 +23,7 @@ inline T clamp(const T& v, const T& minValue, const T& maxValue) {
 }
 
 template <typename T>
-T min(T * from, T * to) {
+T findMin(T * from, T * to) {
     T m = *from;
     for (T *p = from; p < to; p++) {
         if (m > *p) {
@@ -30,7 +34,7 @@ T min(T * from, T * to) {
 }
 
 template <typename T>
-T max(T * from, T * to) {
+T findMax(T * from, T * to) {
     T m = *from;
     for (T *p = from; p < to; p++) {
         if (m < *p) {
@@ -39,4 +43,7 @@ T max(T * from, T * to) {
     }
     return m;
 }
+
+} //namespace cg
+
 #endif //_CG_MF_HPP_

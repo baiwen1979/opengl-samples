@@ -234,7 +234,7 @@ static void initTextures() {
 /* 初始化着色器 */
 static void initShaders() {
     pSimpleDepthShader = new Shader(
-        "GLSL/pointShadow.vs",
+        "GLSL/vs41.pointShadowD.glsl",
         "GLSL/fs41.pointShadowD.glsl",
         "GLSL/gs41.pointShadowD.glsl"
     );
@@ -294,6 +294,7 @@ static void init() {
     initDepthCubeMap();
     registerUIEvents();
 }
+
 
 void testOGLTutorial() {
     glw::openGlWindow(
