@@ -3,6 +3,7 @@
 #define _CG_VEC3_INL
 
 #include <cmath>
+#include <cassert>
 #include "cg_vec3.hpp"
 #include "cg_quat.hpp"
 

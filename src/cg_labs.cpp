@@ -30,17 +30,17 @@ static float xMax = 0, yMax = 0;
 // 地图内边距
 const float PADDING = 0.1f;
 // 多边形（县城地图）
-struct Polygon {
+struct MyPolygon {
     vector<Vec2f> vertices;
 };
 //多边形集合（各县地图）
-static vector<Polygon*> mapOfCountries; 
+static vector<MyPolygon *> mapOfCountries; 
 // 加载地图
-vector<Polygon*> loadMap(const char* filename) {
+vector<MyPolygon*> loadMap(const char* filename) {
     // 每个县城的顶点个数
     int vertexCount;
     // 由多个县城（多边形）构成的整个地图（列表），初始为空
-    vector<Polygon*> mapOfCountries;
+    vector<MyPolygon*> mapOfCountries;
     // 打开地图文件
     ifstream fs(filename);
     if (!fs.is_open()) {
@@ -51,7 +51,7 @@ vector<Polygon*> loadMap(const char* filename) {
     }
     // 读取地图文件
     while (!fs.eof()) {
-        Polygon *country = new Polygon;
+        MyPolygon *country = new MyPolygon;
         // 读取当前县城（多边形）的顶点个数
         fs >> vertexCount;
         cout << "Vertex Count:" << vertexCount << endl;

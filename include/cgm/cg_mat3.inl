@@ -3,6 +3,7 @@
 
 #include <iomanip>
 #include <iostream>
+#include <cassert>
 
 #include "cg_mat3.hpp"
 

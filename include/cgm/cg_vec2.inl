@@ -2,6 +2,7 @@
 #define _CG_VEC2_INL
 
 #include <iostream>
+#include <cassert>
 #include "cg_vec2.hpp"
 
 namespace cg {
