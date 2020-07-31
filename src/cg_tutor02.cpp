@@ -67,10 +67,9 @@ static void init() {
     createVertexBuffer();
 }
 
-/*
+
 void testOGLTutorial() {
     glw::openGlWindow(renderSceneCB, 
         "OpenGL Tutorial 02 - First Triangle", 
         init, NULL, NULL,true, Recti(100,100,1024, 768));
 }
-*/

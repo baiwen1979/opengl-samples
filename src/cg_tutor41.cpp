@@ -295,7 +295,7 @@ static void init() {
     registerUIEvents();
 }
 
-
+/*
 void testOGLTutorial() {
     glw::openGlWindow(
         renderSceneCB, 
@@ -307,3 +307,4 @@ void testOGLTutorial() {
         WIN_RECT
     );
 }
+*/

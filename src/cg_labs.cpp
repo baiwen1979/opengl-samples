@@ -245,11 +245,11 @@ void reshapeExample6(GLint w, GLint h) {
 /* 测试课程实验 */
 void testCGCourseLab() {
     // 测试编程实例3.6
-    // openGlWindow(renderExample3, "地图绘制", initExample3, reshapeExample3);
+    //openGlWindow(renderExample3, "地图绘制", initExample3, reshapeExample3);
     // 测试编程实例4.4
-    // openGlWindow(renderExample4, "三角形变换", initExample4, reshapeExample4);
+    openGlWindow(renderExample4, "三角形变换", initExample4, reshapeExample4);
     // 测试编程实例5.5
     // openGlWindow(renderExample5, "红蓝三角形", initExample5);
     // 测试编程实例6.5
-    openGlWindow(renderExample6, "立方体透视投影", initExample6, reshapeExample6);
+    // openGlWindow(renderExample6, "立方体透视投影", initExample6, reshapeExample6);
 }
